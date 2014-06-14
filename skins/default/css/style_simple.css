@@ -1,0 +1,182 @@
+/* -------------------------------------------------- */
+/* 
+	Original Style Sheet for myUPB v2.2.1
+	copyright: PHP Outburst 2002 - 2008
+	http://www.myupb.com
+
+	Skin Title: Frostworks
+	Created By: The_Ripper
+	W3C CSS Compliancy: Yes
+*/
+/* -------------------------------------------------- */
+
+
+/* This is where you set the basic properties for the iframe page
+	such as the background color and image */
+body { 
+	font-family : Verdana, Tahoma, Arial, Sans-Serif, Georgia, Courier, Serif;
+	font-size : 12px;
+	margin : 0px;
+	padding : 0px;
+	background-color : #ffffff;
+	color : #333333;
+}
+
+/* Standard text link style when not controlled by another element */
+a:link, a:visited, a:active {
+	background : transparent;
+	color : #222222;
+	text-decoration : underline;
+}
+a:hover {
+	background : transparent;
+}
+
+/* This eliminates the border that some browsers place around an image
+	when it is used as a link */
+img {
+	border : 0;
+}
+
+/* This sets the default font style and bg color for the main content container. kind of a substitute for the body attribute */
+#simple_border	{
+	font-family : Verdana, Tahoma, Arial, Sans-Serif, Georgia, Courier, Serif;
+	margin : 0 auto 0 auto;
+	background-color : #ffffff;
+	padding : 1px;
+}
+
+/* This controls the header areas that contains the post subject line or area title */
+.simple_head	{
+	font-family : Verdana, Tahoma, Arial, Sans-Serif, Georgia, Courier, Serif;
+	background-color : #fafafa;
+	background-image : url(../images/smilieheader_bg.png);
+	background-repeat : repeat-x;
+	border : 2px solid #5b5b5b;
+	padding : 8px;
+	font-size : 11px;
+	line-height : 15px;
+	font-weight : bold;
+	text-align : center;
+	color : #333333;
+}
+
+/* This sets the style for the main content area ...post content etc... */
+.simple_content {
+	margin-bottom : 10px;
+	border-bottom : 1px dashed #ced8d9;
+	font-size : 11px;
+	color : #333333;
+	padding : 12px;
+}
+
+/* This sets the style for the additional smilie top description area */
+.simple_sub_smilie	{
+	background-color : #ffffff;
+	padding : 8px;
+	font-size : 11px;
+	font-weight : normal;
+	line-height : 15px;
+	text-align : center;
+	color : #333333;
+}
+/* This controls the look of the pagination area of the topic review box */
+.simple_pages {
+	font-family : Arial, Verdana, Tahoma, Sans-Serif, Georgia, Courier, Serif;
+	font-size : 11px;
+	line-height : 30px;
+	text-indent : 15px;
+	font-weight : bold;
+	color : #333333;
+	height : 30px;
+	background-color : #transparent;
+	background-image : url(../images/simple_pages_bg.png);
+	background-repeat : no-repeat;
+}
+.simple_pages a:link, .simple_pages a:visited, .simple_pages a:active {
+	color : #333333;
+	text-decoration : underline;
+}
+.simple_pages a:hover {
+	color : #eeeeee;
+	text-decoration : none;
+}
+
+/* Contains the additional smilie boxes  and  the view pm simple row */
+#simple_table	{
+	width : 100%;
+}
+
+/* This controls the boxes which contain each additional smilie image for the show more smilies area */
+.simple_smilie_box	{
+	background-color : transparent;
+	background-image : url(../images/smiliebox_bg.png);
+	border : 2px solid #6d89bf;
+	padding : 4px;
+	font-size : 11px;
+	color : #222;
+	text-align : center;
+	font-weight : bold;
+}
+
+/* Establishes the right border line for the avatar, and poster information area */
+.simple_avarea {
+	border-right : 1px dashed #ced8d9;
+}
+
+/* This controls the style of the date posted text */
+.simple_date {
+	font-family : Arial, Verdana, Tahoma, Sans-Serif, Georgia, Courier, Serif;
+	font-size : 11px;
+	color : #333333;
+	padding : 4px;
+}
+
+/* author information displayed in their post */
+.simple_pinfo {
+	font-family : Arial, Verdana, Tahoma, Sans-Serif, Georgia, Courier, Serif;
+	font-size : 11px;
+	color : #333333;
+	padding : 4px 4px 4px 4px;
+	margin: 2px 0px 2px 0px;
+	text-align:left;
+}
+.simple_pinfo a:link, .simple_pinfo a:visited, .simple_pinfo a:active { 
+	color : #ccc;
+	text-decoration : underline;
+}
+.simple_pinfo a:hover { 
+	color : #ffffff;
+	text-decoration : none;
+}
+
+/* the style for the area containing the msn, icq...etc links in posts */
+/* no style applied by default but placed here to give you the option since the class is coded into the template*/
+.simple_pinfo_x {
+}
+
+/* This is the style for the profile, website, and send pm button types within each post */
+.simple_button {
+	cursor: pointer;
+	position : relative;
+	float : left;
+	font-size : 9px;
+	font-weight : bold;
+	color : #ffffff;
+
+	line-height : 13px;
+	background-color : #9ca7cc;
+	background-image : url(../images/button_pro2.png);
+	border : 1px solid #666666;
+	height : 13px;
+	margin-left : 2px;
+	padding : 2px 8px 2px 8px;
+}
+.simple_button a:link, .simple_button a:visited, .simple_button a:active { 
+	color : #333333;
+	text-decoration : none;
+}
+.simple_button a:hover { 
+	color : #111111;
+	text-decoration : none;
+}

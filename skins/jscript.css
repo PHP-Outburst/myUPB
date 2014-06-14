@@ -1,0 +1,5 @@
+/* CSS Document */
+/* For showing and hiding jscript dependent content*/
+#show-with-script {
+	display: inline;
+}

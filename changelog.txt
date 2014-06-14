@@ -1,0 +1,129 @@
+This is the changelog for this product's working copy.
+
+v2.2.7 Changelog - 23/12/2010
+
+== BUG FIXES ==
+# Strip slashes bug in forum and category titles
+# Admin configuration of file upload types was missing
+# PHP notices for undefined variables in the installer
+# Fixed BBcode bug related to [left], [center] and [right] tags
+# Fixed bug which prevented an admin from changing a users email address or timezone
+# Subscribe to this post feature has been fixed
+# Corrected several login links so they redirect back to the appropriate post
+# An error message is now displayed if a upload does not meet the size restriction
+# Fixed exploit allowing unintentional admin accounts
+# Fixed a bug in monitor topics that was caused if a user changed their email address
+# Fixed a bug that was causing our anti-XSS to be applied in place it shouldn't
+# Fixed a security hole allowing any user to download attachements
+
+== NEW FEATURES ==
+# UPB API has begun to form, several classes have been added in the includes/api folder
+
+
+
+-------------------------
+
+v2.2.6 Changelog - 25/05/2009
+
+== BUG FIXES ==
+# Error message supressed if getimagesize doesn't work on avatars
+# Removed IM background images from admin members
+# AIM field added to Admin Members page
+# Cancel button for forum deletion works
+# Topic and post counts corrected when forums or categories are removed.
+# Delete post button no longer appears on first post in a topic after quick reply.
+# File attachment sizes now displayed in bytes, KB or MB
+# Possible short-tag bug fixed in post.inc.php (Thanks Jim)
+# Strip slashes bug in pm reply box
+
+
+== NEW FEATURES ==
+# Geshi Highlighting added for better code highlighting and multiple languages
+# New images for instant messaging profile fields
+# Skype profile field added
+# Uploads removed when post, topic or category is removed
+# Multiple file uploads (up to 5)
+# Custom Profile Fileds (up to 5)
+# Password Strength Meter
+# Skin selection now dropdown based on skin directory name
+# Configurable file upload extensions
+# Loading new captcha image no longer resets registration form
+# Administrators can change usernames
+# Extended colors available for bbcode to 40 using color swatch
+
+------------------------
+
+v2.2.5 Changelog - 16/05/2009
+
+== IMPORTANT ==
+License has been added. Please read license.txt before continuing
+
+
+== BUG FIXES ==
+# Incorrect last post details showing after post deletion
+# Broken PM system
+# Fixed pagination and member listing on page
+# Topic and post counts corrected if needed
+# Add forum link not showing up for Super Administrators
+
+== NEW FEATURES ==
+
+# Unconfirmed members no longer appear in members list
+# Rank images (created by Nightmare)
+# Slightly modified layout of member details next to post
+# Preview Post for Edit
+
+------------------------------
+
+v2.2.4 Changelog - 06/05/2009
+
+== SECURITY FIX ==
+# Possible use of XSS attack using quick edit
+
+== BUG FIXES ==
+# <x> display bug fixed
+# Foreign language characters should work in all sections
+# Minor bug in upb.initialise.php.
+# Move topics bug
+# Stripped slashes on config page.
+# Attach file section of form is not displayed if filesize and/or location is 0 or not set and dependent of new forum permissions.
+# Fixed broken signature preview
+# Javascript detection bugs fixed.
+# Attached file information no longer disappears after Quick Edit
+# Fixed new category order not being displayed correctly after changing
+# Fixed wide images and text breaking forum layout
+# Fixed possible bug with IIS not using $_SERVER['REQUEST_URI'] properly
+# Incorrect page count after post deletion
+
+== NEW FEATURES ==
+# Sending a PM from the PM system rather than having to find a user and click on the Send PM button has been added.
+# The IPlog view has download and delete options courtesy of Jono
+# Version number displayed in footer
+# New BB code buttons courtesy of Nightmare
+# Removed some BB code buttons for signatures and forum descriptions (lists and videos)
+# Page navigation rewritten and working at the top and bottom of pages.
+# Removed ICQ, MSN, Yahoo and AIM logos from profile editing to make it easier for skinning
+# New file upload display and deletion feature.
+# Option to allow both link and upload avatar options
+# Avatar file upload size independent of file upload size
+# Maximum dimensions for avatars can be set.
+# Avatar image size check for linked and local images and resized if appropriate.
+# New topic creation now redirects to the topic rather than the forum
+# Preview Post
+
+== SKIN CHANGES ==
+Skin changes need to be made in style.css which is located in skins/[SKIN FOLDER NAME]/css/
+
+textarea#newedit: 
+	width changed to 600
+
+.image_block:
+	removed 
+		max-height
+	added 
+		max-width: 650px;
+	
+added .pagination_title
+added .msg_block
+
+

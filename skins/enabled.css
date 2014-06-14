@@ -1,0 +1,9 @@
+/* CSS Document */
+/* For showing and hiding jscript dependent content*/
+#disabled_msg{
+display: none;
+}
+
+#enabled_msg{
+display: inline;
+}
