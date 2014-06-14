@@ -18,9 +18,9 @@ echo "Powered by myUPB v".UPB_VERSION."</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
 <br>
 <a rel="license"
 	href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img
-	alt="Creative Commons License" style="border-width: 0;"
-	src="http://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png"
-	align='absmiddle' /></a></div>
+	alt="Creative Commons License"
+	src="http://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png"/>
+	</a></div>
 </div>
 
 </body>

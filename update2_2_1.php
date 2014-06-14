@@ -34,7 +34,7 @@ if($_POST['next'] != $last_step) echo "
 	<div class='main_cat_wrapper'>
 		<div class='cat_area_1'>Update to v2.2.1</div>
 		<form method='POST' action='".$_SERVER['PHP_SELF']."'>
-    <table class='main_table' cellspacing='1'><tbody>";
+    <table class='main_table'><tbody>";
 if ($_POST['next'] == 0) {
 	echo "<tr>
 				<th colspan='2'><strong>Welcome to myUPB v2.2.1</strong></th>

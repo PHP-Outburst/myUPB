@@ -61,7 +61,7 @@ a:hover {
 	when it is used as a link */
 img {
 	border : 0;
-	text-align: absmiddle;
+	display:inline;  /*vertical-align:absmiddle is in html, not in css*/
 }
 
 /* Some browsers leave differing gaps around form elements.
@@ -151,6 +151,7 @@ textarea#newentry {
 .main_table_2 {
 	width : 100%;
 	background-color : #f9f9f9;
+	border-spacing: 1px;
 }
 /* The area that the logo image resides in */
 #logo {
@@ -197,6 +198,7 @@ textarea#newentry {
 	font-family : Verdana, Tahoma, Arial, Sans-Serif, Georgia, Courier, Serif;
 	width : 100%;
 	background-color : #f9f9f9;
+	border-spacing: 1px;
 }
 
 /* This is the default sub area below the header or title area */
@@ -1170,7 +1172,7 @@ vertical-align: middle;
 	font-weight : bold;
 	color : #333333;
 	height : 30px;
-	background-color : #transparent;
+	background-color :transparent; /*deleted # after :*/
 	background-image : url(../images/simple_pages_bg.png);
 	background-repeat : no-repeat;
 }
@@ -1446,7 +1448,7 @@ vertical-align: middle;
 .smilie
 {
   text-align: center;
-  vertical-align: center;
+  vertical-align: middle; /*for vertical use middle, not center*/
 }
 
 .more_smilie
@@ -1491,7 +1493,7 @@ color:#ffffff;
 
 background:#131313 url(../images/announcement/tl.png) no-repeat;
 
-//float: right;
+/*float: right;*/
 }
 
 .announce2 {

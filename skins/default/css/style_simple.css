@@ -89,7 +89,7 @@ img {
 	font-weight : bold;
 	color : #333333;
 	height : 30px;
-	background-color : #transparent;
+	background-color :transparent;
 	background-image : url(../images/simple_pages_bg.png);
 	background-repeat : no-repeat;
 }

@@ -177,11 +177,11 @@ if (empty($tRecs[0]['id'])) {
 				<div class='box_posts'><strong>Views:</strong>&nbsp;".$tRec["views"]."</div>
 				<div class='box_posts'><strong>Replies:</strong>&nbsp;".$tRec["replies"]."</div></td>
 			<td class='area_1' style='text-align:center;'>
-				<img src='".SKIN_DIR."/icons/post_icons/".$tRec["icon"]."' class='post_image'>
+				<img src='".SKIN_DIR."/icons/post_icons/".$tRec["icon"]."' class='post_image' alt=''/>
 				<span class='latest_topic'><span class='date'>".gmdate("M d, Y g:i:s a", user_date($tRec["last_post"]))."</span>
 				<br />
 				<strong>By:</strong> ";
-			if ($tRec["user_id"] != "0") echo "<span class='link_2'><a href='profile.php?action=get&id=".$tRec["user_id"]."' style='color : #".$status_config['statuscolor'].";'>".$tRec["user_name"]."</a></span></td>
+			if ($tRec["user_id"] != "0") echo "<span class='link_2'><a href='profile.php?action=get&amp;id=".$tRec["user_id"]."' style='color : #".$status_config['statuscolor'].";'>".$tRec["user_name"]."</a></span></span></td>
 		</tr>";
 			else echo "a ".$tRec["user_name"]."</span></td>
 		</tr>";

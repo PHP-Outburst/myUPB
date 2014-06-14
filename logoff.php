@@ -44,7 +44,7 @@ setcookie("id_env", "", time() - 3600);
 <body>
 <div id='upb_container'>
 <div class='main_cat_wrapper2'>
-<table class='main_table_2' cellspacing='1'>
+<table class='main_table_2'>
 	<tr>
 		<td id='logo'><img src='<?php print $_CONFIG['logo'];?>' alt=''
 			title='' /></td>

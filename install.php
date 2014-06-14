@@ -82,7 +82,7 @@ if ($_POST["add"] == "2auth") {
 <body>
 <div id='upb_container'>
 <div class='main_cat_wrapper2'>
-<table class='main_table_2' cellspacing='1'>
+<table class='main_table_2'>
 	<tr>
 		<td id='logo'><img src='skins/default/images/logo.png' alt='' title='' /></td>
 	</tr>
@@ -103,7 +103,7 @@ switch($_POST["add"]{0}) {
 	break;
 }
 ?></div>
-<table class='main_table' cellspacing='1'>
+<table class='main_table'>
 	<tr>
 		<th style='text-align: center;'>&nbsp;</th>
 	</tr>
@@ -592,7 +592,7 @@ switch($_POST["add"]{0}) {
 				echo "
 <form method='POST' action='".$_SERVER['PHP_SELF']."'>";
 				echo "
-		<table class='main_table' cellspacing='1'>
+		<table class='main_table'>
 			<tr>
 				<th colspan='2'><strong><span style='color:$required;'>*</span> is a required field</strong></th>
 			</tr>
@@ -722,7 +722,7 @@ switch($_POST["add"]{0}) {
 				echo "</table>";
 				echo "
 <form method='post' action='".$_SERVER['PHP_SELF']."'>";
-				echo "<table class='main_table' cellspacing='1'>
+				echo "<table class='main_table'>
 			<tr>
 				<th colspan='2'>Basic Forum Settings</td>
 			</tr>

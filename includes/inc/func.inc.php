@@ -260,7 +260,7 @@ function echoTableHeading($display, $_CONFIG) {
 	echo "
 	<div class='main_cat_wrapper'>
 		<div class='cat_area_1'>".$display."</div>
-		<table class='main_table' cellspacing='1'>
+		<table class='main_table'>
 		<tbody>";
 }
 

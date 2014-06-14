@@ -53,7 +53,7 @@ $pRecs = $posts_tdb->getPosts("posts", (($_CONFIG["posts_per_page"] * $vars['pag
 if (empty($pRecs)) {
 	$msg = 'No posts could be found for this topic';
 	if ((int)$_COOKIE["power_env"] >= 2)
-	$msg .= "<br>To delete this topic click <a href='managetopic.php?id=2&t_id=2'>here</a>";
+	$msg .= "<br>To delete this topic click <a href='managetopic.php?id=2&amp;t_id=2'>here</a>";
 	die(str_replace('__TITLE__', 'Fatal Error:', str_replace('__MSG__', $msg, ALERT_MSG)).MINIMAL_BODY_FOOTER);
 
 	require_once('./includes/footer.php');
@@ -79,12 +79,12 @@ echo "<div name='current_posts' id='current_posts'>";
 
 foreach($pRecs as $pRec) {
 	// display each post in the current topic
-	echo "
-			<a name='{$pRec['id']}'>
+	//deleted "<a name='{$pRec['id']}'>" from first echo line, seems unused
+	echo "	
       <div name='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>
       <div class='main_cat_wrapper'>
 			<div class='cat_area_1' style='text-align:center;'>Posted: ".gmdate("M d, Y g:i:s a", user_date($pRec["date"]))."</div>
-			<table class='main_table' cellspacing='1'>";
+			<table class='main_table'>";
 	if ($x == 0) {
 		$table_color = 'area_1';
 
@@ -127,20 +127,20 @@ foreach($pRecs as $pRec) {
 		$edit .= "<a href=\"javascript:getPost('{$pRec["user_id"]}','{$_GET["id"]}-{$_GET["t_id"]}-{$pRec["id"]}','edit');\">";
 		$edit .= "Edit</a></div>";
 		$edit .= "<div class='button_pro1' id='disabled_msg'>";
-		$edit .= "<a href='editpost.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&p_id=".$pRec["id"]."'>";
+		$edit .= "<a href='editpost.php?id=".$_GET["id"]."&amp;t_id=".$_GET["t_id"]."&amp;p_id=".$pRec["id"]."'>";
 		$edit .= "Edit</a></div>
       ";
 
 	}
 	else $edit = "";
-	if ((($_COOKIE["id_env"] == $pRec["user_id"] && $tdb->is_logged_in()) || (int)$_COOKIE["power_env"] >= 2) && $pRec['id'] != $first_post) $delete = "<div class='button_pro1'><a href='delete.php?action=delete&t=0&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&p_id=".$pRec["id"]."'>X</a></div>";
+	if ((($_COOKIE["id_env"] == $pRec["user_id"] && $tdb->is_logged_in()) || (int)$_COOKIE["power_env"] >= 2) && $pRec['id'] != $first_post) $delete = "<div class='button_pro1'><a href='delete.php?action=delete&amp;t=0&id=".$_GET["id"]."&amp;t_id=".$_GET["t_id"]."&amp;p_id=".$pRec["id"]."'>X</a></div>";
 	else $delete = "";
 
 	if ((int)$_COOKIE["power_env"] >= (int)$fRec[0]["reply"] and $tRec[0]['locked'] != 1)
-	$quote = "<div class='button_pro1'><a href='newpost.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&q_id=".$pRec['id']."&page=".$vars["page"]."'>Quote</a></div>";
+	$quote = "<div class='button_pro1'><a href='newpost.php?id=".$_GET["id"]."&amp;t_id=".$_GET["t_id"]."&amp;q_id=".$pRec['id']."&amp;page=".$vars["page"]."'>Quote</a></div>";
 	else $quote = "";
 
-	if ((int)$_COOKIE["power_env"] >= (int)$fRec[0]["reply"] and $tRec[0]['locked'] != 1) $reply = "<div class='button_pro1'><a href='newpost.php?id=".$_GET["id"]."&t=0&t_id=".$_GET["t_id"]."&page=".$vars['page']."'>Add Reply</a></div>";
+	if ((int)$_COOKIE["power_env"] >= (int)$fRec[0]["reply"] and $tRec[0]['locked'] != 1) $reply = "<div class='button_pro1'><a href='newpost.php?id=".$_GET["id"]."&amp;t=0&amp;t_id=".$_GET["t_id"]."&amp;page=".$vars['page']."'>Add Reply</a></div>";
 	else $reply = "";
 
 	$msg = display_msg($pRec['message']);
@@ -148,21 +148,21 @@ foreach($pRecs as $pRec) {
 	echo "
 			<tr>
 				<th><div class='post_name'>";
-	if ($pRec["user_id"] != "0") echo "<a href='profile.php?action=get&amp;id=".$pRec["user_id"]."'>".$pRec["user_name"]."</b>";
+	if ($pRec["user_id"] != "0") echo "<a href='profile.php?action=get&amp;id=".$pRec["user_id"]."'>".$pRec["user_name"]."</a>";
 	else echo $pRec["user_name"];
 	echo "</div></th>
-				<th><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pRec["icon"]."'></div><div align='right'>$delete $edit $quote $reply</div></th>
+				<th><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pRec["icon"]."' alt=''></div><div style='align:right;'>$delete $edit $quote $reply</div></th>
 			</tr>
 			<tr>
-				<td class='$table_color' valign='top' style='width:15%;'>";
+				<td class='$table_color' style='width:15%; vertical-align:top;'>";
 	if (@$user[0]["avatar"] != "")
 	{
 		$resize = resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
-		echo "<br /><center><img src=\"".$user[0]["avatar"]."\" border='0' $resize alt='' title=''></center><br />";
+		echo "<br /><style='align:center'><img src=\"".$user[0]["avatar"]."\" border='0' $resize alt='' title=''></style><br />";
 	}
 	else if ($pRec["user_id"] != "0")
 	echo "<br /><br />";
-	print "<div class='post_info'><center><span style='color:#".$statuscolor."'><img src='".$statusrank."'><br><strong>".$status."</strong></span></center></div>";
+	print "<div class='post_info' style='align:center'><span style='color:#".$statuscolor."'><img src='".$statusrank."'><br><strong>".$status."</strong></span></div>";
 	if ($pRec["user_id"] != "0") echo "
 					<div class='post_info'>
 						<strong>Posts:</strong> ".$user[0]["posts"]."
@@ -176,11 +176,11 @@ foreach($pRecs as $pRec) {
 	if ($user[0]["aim"] != "") echo "&nbsp;<a href='aim:goim?screenname=".$user[0]["aim"]."'><img src='images/aol.gif' border='0' alt='AIM: ".$user[0]["aim"]."'></a>&nbsp;&nbsp;";
 	if ($user[0]["msn"] != "") echo "&nbsp;<a href='http://members.msn.com/".$user[0]["msn"]."' target='_blank'><img src='images/msn.gif' border='0' alt='MSN: ".$user[0]["msn"]."'></a>&nbsp;&nbsp;";
 	if ($user[0]["icq"] != "") echo "&nbsp;<a href='http://wwp.icq.com/scripts/contact.dll?msgto=".$user[0]["icq"]."&action=message'><img src='images/icq.gif' border='0' alt='ICQ: ".$user[0]["icq"]."'></a>&nbsp;&nbsp;";
-	if ($user[0]["yahoo"] != "") echo "&nbsp;<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$user[0]["yahoo"]."&.src=pg'><img border=0 src='http://opi.yahoo.com/online?u=".$user[0]["yahoo"]."&m=g&t=0' alt='Y!: ".$user[0]["yahoo"]."'></a>";
+	if ($user[0]["yahoo"] != "") echo "&nbsp;<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$user[0]["yahoo"]."&.src=pg'><img border=0 src='http://opi.yahoo.com/online?u=".$user[0]["yahoo"]."&amp;m=g&t=0' alt='Y!: ".$user[0]["yahoo"]."'></a>";
 
 	echo"</div>";
 	echo "</td>
-				<td class='$table_color' valign='top'>
+				<td class='$table_color' style='vertical-align:top;'>
 					<div class='msg_block' id='{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' name='{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>$msg</div>
 					<div style='padding:12px;'>".$sig."</div></td>
 			</tr>
@@ -191,13 +191,13 @@ foreach($pRecs as $pRec) {
 
 	//echo "<div name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' style='float: right;'>";
 	if (!empty($pRec['edited_by']) && !empty($pRec['edited_by_id']) && !empty($pRec['edited_date'])) echo "
-					<div class='post_edited' name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>Last edited by: <a href='profile.php?action=get&id=".$pRec['edited_by_id']." target='_blank'><strong>".$pRec['edited_by']."</strong></a> on ".gmdate("M d, Y g:i:s a", user_date($pRec['edited_date']))."</div>";
+					<div class='post_edited' name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>Last edited by: <a href='profile.php?action=get&amp;id=".$pRec['edited_by_id']." target='_blank'><strong>".$pRec['edited_by']."</strong></a> on ".gmdate("M d, Y g:i:s a", user_date($pRec['edited_date']))."</div>";
 	else
 	echo "<div name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' class='post_edited'></div>";
 	if ($pRec['user_id'] != 0)
 	{
 		echo "
-					<div class='button_pro2'><a href='profile.php?action=get&id=".$pRec["user_id"]."'>Profile</a></div>";
+					<div class='button_pro2'><a href='profile.php?action=get&amp;id=".$pRec["user_id"]."'>Profile</a></div>";
 		if (isValidUrl($user[0]['url']))
 		echo "<div class='button_pro2'><a href='".$user[0]["url"]."' target = '_blank'>Homepage</a></div>";
 		if ($_CONFIG['email_mode'])
@@ -213,9 +213,9 @@ echo "<div id='pagelink2' name='pagelink2'>" . $posts_tdb->d_posting($email_mode
 if (!($_COOKIE["power_env"] < $fRec[0]["post"] && $_GET["t"] == 1 || $_COOKIE["power_env"] < $fRec[0]["reply"] && $_GET["t"] == 0 ) and $tRec[0]['locked'] != 1)
 {
 	echo "<br><div id='enabled_msg'><div id='quickreplyform' name='quickreplyform'>";
-	echo "<form name='quickreplyfm' action='newpost.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$vars["page"]."' id='quickreplyfm' method='POST'>\n";
+	echo "<form name='quickreplyfm' action='newpost.php?id=".$_GET["id"]."&amp;t_id=".$_GET["t_id"]."&amp;page=".$vars["page"]."' id='quickreplyfm' method='POST'>\n";
 	echoTableHeading("Quick Reply", $_CONFIG);
-	echo "<table class='main_table' cellspacing='1'>";
+	echo "<table class='main_table'>";
 	foreach ($_GET as $key => $value)
 	{
 		if ($key != 'page')
@@ -223,14 +223,14 @@ if (!($_COOKIE["power_env"] < $fRec[0]["post"] && $_GET["t"] == 1 || $_COOKIE["p
 	}
 	echo "<input type='hidden' id='page' name='page' value='".$vars['page']."'>\n";
 	echo "<input type='hidden' id='user_id' name='user_id' value='{$_COOKIE['id_env']}'>\n";
-	echo "<input type='hidden' id='icon' name='icon' value='icon1.gif'>\n";
+	echo "<input type='hidden' id='icon' name='icon' value='icon1.gif' alt=''>\n";
 	echo "<input type='hidden' id='username' name='username' value='{$_COOKIE["user_env"]}'>\n";
 	echo "
 		<tr><td class='area_1' style='padding:8px;'><strong>User Name:</strong></td><td class='area_2'>".$_COOKIE["user_env"]."</td></tr>\n
 		<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>
-		<tr><td class='area_1' style='padding:8px;' valign='top'><strong>Message:</strong></td>
+		<tr><td class='area_1' style='padding:8px; vertical-align:top;'><strong>Message:</strong></td>
     <td class='area_2'>\n
     <textarea id=\"newentry\" name=\"newentry\" value=\"\" cols=\"60\" rows=\"18\"></textarea>\n
     </td></tr>\n";

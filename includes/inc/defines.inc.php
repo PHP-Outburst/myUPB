@@ -30,7 +30,7 @@ define('MINIMAL_BODY_HEADER', "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Stri
 <body>
 <div id='upb_container'>
 	<div class='main_cat_wrapper2'>
-		<table class='main_table_2' cellspacing='1'>
+		<table class='main_table_2'>
 			<tr>
 				<td id='logo'><img src='skins/default/images/logo.png' alt='' title='' /></td>
 			</tr>

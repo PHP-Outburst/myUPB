@@ -265,7 +265,7 @@ if ($_POST["a"] == "1") {
 		$iframe = "<br />
 					<div class='main_cat_wrapper'>
 						<div class='cat_area_1'>Topic overview:</div>
-						<table class='main_table' cellspacing='1'>
+						<table class='main_table'>
 							<tr>
 								<td class='review_container'><div class='review_sub'>
 									<iframe src='viewtopic_simple.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"]."' class='review_frame' scrolling='auto' frameborder='0'></iframe></div></td>

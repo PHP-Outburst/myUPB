@@ -686,7 +686,7 @@ var http_request = false;
         waitwhat = 'Forums';
       else
         waitwhat = 'Categories';
-      html = "<div class='main_cat_wrapper'><div class='cat_area_1'>Quick Reply</div><table class='main_table' cellspacing='1'><tbody><td class='area_2' style='text-align:center'><img src='images/spinner.gif' alt='' title='' style='vertical-align: middle;'>&nbsp;<strong>Sorting "+waitwhat+"</strong></td></tr></tbody></table><div class='footer'></div></div>";
+      html = "<div class='main_cat_wrapper'><div class='cat_area_1'>Quick Reply</div><table class='main_table'><tbody><td class='area_2' style='text-align:center'><img src='images/spinner.gif' alt='' title='' style='vertical-align: middle;'>&nbsp;<strong>Sorting "+waitwhat+"</strong></td></tr></tbody></table><div class='footer'></div></div>";
       document.getElementById(div).innerHTML = html;
       }
       if (http_request.readyState == 4) {
@@ -739,7 +739,7 @@ var http_request = false;
       
       if (http_request.readyState == 3)
       {
-        html = "<div class='main_cat_wrapper'><div class='cat_area_1'>Quick Reply</div><table class='main_table' cellspacing='1'><tbody><td class='area_2' style='text-align:center'><img src='images/spinner.gif' alt='' title='' style='vertical-align: middle;'>&nbsp;<strong>Adding Quick Reply....Please Wait</strong></td></tr></tbody></table><div class='footer'></div></div>";
+        html = "<div class='main_cat_wrapper'><div class='cat_area_1'>Quick Reply</div><table class='main_table'><tbody><td class='area_2' style='text-align:center'><img src='images/spinner.gif' alt='' title='' style='vertical-align: middle;'>&nbsp;<strong>Adding Quick Reply....Please Wait</strong></td></tr></tbody></table><div class='footer'></div></div>";
         document.getElementById('quickreplyform').innerHTML = html;
       }
       if (http_request.readyState == 4) {

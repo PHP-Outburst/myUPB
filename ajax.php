@@ -184,7 +184,7 @@ switch ($ajax_type)
       <div name='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>
       <div class='main_cat_wrapper'>
 			<div class='cat_area_1' style='text-align:center;'>Posted: ".gmdate("M d, Y g:i:s a", user_date($pRec["date"]))."</div>
-			<table class='main_table' cellspacing='1'>";
+			<table class='main_table'>";
 			if ($x == 0)
 			{
 				$table_color = "area_1";
@@ -312,9 +312,9 @@ switch ($ajax_type)
 			$qrform .= "<form name='quickreplyfm' action='newpost.php?id=".$_POST['id']."&t_id=".$_POST['id']."&page=".$page."' method='POST' name='quickreply'>\n";
 			$qrform .= "<div class='main_cat_wrapper'>
 		<div class='cat_area_1'>Quick Reply</div>
-		<table class='main_table' cellspacing='1'>
+		<table class='main_table'>
 		<tbody>";
-			$qrform .= "<table class='main_table' cellspacing='1'>";
+			$qrform .= "<table class='main_table'>";
 			$qrform .= "<input type='hidden' id='id' name='id' value='".$_POST['id']."'>\n";
 			$qrform .= "<input type='hidden' id='t_id' name='t_id' value='".$_POST['t_id']."'>\n";
 			$qrform .= "<input type='hidden' id='page' name='page' value='".$_POST['page']."'>\n";
@@ -411,7 +411,7 @@ switch ($ajax_type)
 
 		$output .= "<div class='main_cat_wrapper'>
 		<div class='cat_area_1'>Forum Control</div>
-		<table class='main_table' cellspacing='1'>
+		<table class='main_table'>
 		<tbody>";
 
 		$output .= "

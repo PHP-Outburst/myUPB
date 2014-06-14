@@ -573,7 +573,7 @@ elseif($_GET["action"] == "delete") {
 				echo "
 			<tr>
 				<td class='area_1' style='padding:8px;'><strong>".$user["id"]."</strong></td>
-				<td class='area_2'><span class='link_1'><a href='profile.php?action=get&id=".$user["id"]."' style='color:#".$statuscolor."'>".$user["user_name"]."</a></span></td>
+				<td class='area_2'><span class='link_1'><a href='profile.php?action=get&amp;id=".$user["id"]."' style='color:#".$statuscolor."'>".$user["user_name"]."</a></span></td>
 				<td class='area_1' style='text-align:center;'>".createUserPowerMisc($user["level"], 4)."</td>";
 				if ($user['view_email']) echo "
 				<td class='area_2'>".$user["email"]."</td>";

@@ -26,7 +26,7 @@ if (!empty($_POST))
 <body>
 <div id='upb_container'>
 <div class='main_cat_wrapper2'>
-<table class='main_table_2' cellspacing='1'>
+<table class='main_table_2'>
 	<tr>
 		<td id='logo'><img src='./skins/default/images/logo.png' alt=''
 			title='' /></td>
@@ -37,7 +37,7 @@ if (!empty($_POST))
 <br />
 <div class='main_cat_wrapper'>
 <div class='cat_area_1'>myUPB v2.2.5 Updater</div>
-<table class='main_table' cellspacing='1'>
+<table class='main_table'>
 	<tr>
 		<th style='text-align: center;'>&nbsp;</th>
 	</tr>
@@ -92,7 +92,7 @@ else
 <body>
 <div id='upb_container'>
 <div class='main_cat_wrapper2'>
-<table class='main_table_2' cellspacing='1'>
+<table class='main_table_2'>
 	<tr>
 		<td id='logo'><img src='./skins/default/images/logo.png' alt=''
 			title='' /></td>
@@ -103,7 +103,7 @@ else
 <br />
 <div class='main_cat_wrapper'>
 <div class='cat_area_1'>myUPB v2.2.5 Updater</div>
-<table class='main_table' cellspacing='1'>
+<table class='main_table'>
 	<tr>
 		<th style='text-align: center;' colspan='2'>&nbsp;</th>
 	</tr>
