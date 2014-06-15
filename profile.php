@@ -44,7 +44,7 @@ if (isset($_POST["u_edit"])) {
 		$rec['sig'] = "";
 		if (substr(trim(strtolower($_POST["u_site"])), 0, 7) != "http://") $_POST["u_site"] = "http://".$_POST["u_site"];
 		if ($user[0]["url"] != $_POST["u_site"])
-		$rec["url"] = $_POST["u_site"];
+		$rec["url"] = xml_clean($_POST["u_site"]);
 		if ($_POST['u_site'] == "http://" or $rec['url'] == 'http://')
 		$rec['url'] = "";
 		for ($i = 1;$i <= 5; $i++)
@@ -52,7 +52,7 @@ if (isset($_POST["u_edit"])) {
 			if (array_key_exists("custom_profile$i",$_POST))
 			{
 				if ($user[0]["custom_profile$i"] != $_POST["custom_profile$i"])
-				$rec["custom_profile$i"] = $_POST["custom_profile$i"];
+				$rec["custom_profile$i"] = xml_clean($_POST["custom_profile$i"]);
 			}
 		}
 
@@ -61,35 +61,60 @@ if (isset($_POST["u_edit"])) {
 		if ($_POST["email_list"] != "1") $_POST["email_list"] = "0";
 		if ($user[0]["view_email"] != $_POST["show_email"]) $rec["view_email"] = $_POST["show_email"];
 		if ($user[0]["mail_list"] != $_POST["email_list"]) $rec["mail_list"] = $_POST["email_list"];
-		if ($user[0]["location"] != $_POST["u_loca"]) $rec["location"] = $_POST["u_loca"];
+		if ($user[0]["location"] != $_POST["u_loca"]) $rec["location"] = xml_clean($_POST["u_loca"]);
 		
-		if (isset($_FILES['avatar2file']['tmp_name']))
-		{
-			$dim = getimagesize($_FILES['avatar2file']['tmp_name']);
-		}
-		else
-		{
-			$dim = array(0, 0);
-		}
+		$exts = array('gif','jpg','png','jpeg');
 		
-		if (isset($_FILES["avatar2file"]["name"]) && trim($_FILES["avatar2file"]["name"]) != "") {
-			if($_FILES['avatar2file']['size'] > $_REGIST['avatarupload_size']*1024)
+		//dump($FILES);
+		
+		if ($FILES !== NULL)
+		{
+			if (isset($_FILES['avatar2file']['tmp_name']))
 			{
-				$upload_err = "The filesize of the uploaded avatar is too big.<br>The maximum filesize is ".$_REGIST['avatarupload_size']."KB<br>The file you uploaded was ".ceil($_FILES['avatar2file']['size']/1024)."KB";
+				$dim = getimagesize($_FILES['avatar2file']['tmp_name']);
 			}
-			else if ($dim[0] > $_REGIST["avatarupload_dim"] or $dim[1] > $_REGIST["avatarupload_dim"])
-			$upload_err = "The dimensions of the uploaded avatar are too big.<br>The maximum dimensions are ".$_REGIST['avatarupload_dim']."px by ".$_REGIST['avatarupload_dim']."px";
 			else
 			{
-				$upload = new upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
-				$uploadId = $upload->storeFile($_FILES["avatar2file"]);
+				$dim = array(0, 0);
+			}
+		
+			$exts = array('gif','jpg','png','jpeg');
+			$upload_ext = pathinfo($_FILES["avatar2file"]["name"], PATHINFO_EXTENSION);
+		
+		
+			if (isset($_FILES["avatar2file"]["name"]) && trim($_FILES["avatar2file"]["name"]) != "") {
+				if (!in_array($upload_ext,$exts) or $upload_ext == "")
+					$upload_err = "The file is not a valid image file for an avatar. File must be a gif,jpg,jpeg or png";
+				else if($_FILES['avatar2file']['size'] > $_REGIST['avatarupload_size']*1024)
+				{
+					$upload_err = "The filesize of the uploaded avatar is too big.<br>The maximum filesize is ".$_REGIST['avatarupload_size']."KB<br>The file you uploaded was ".ceil($_FILES['avatar2file']['size']/1024)."KB";
+				}
+				else if ($dim[0] > $_REGIST["avatarupload_dim"] or $dim[1] > $_REGIST["avatarupload_dim"])
+				$upload_err = "The dimensions of the uploaded avatar are too big.<br>The maximum dimensions are ".$_REGIST['avatarupload_dim']."px by ".$_REGIST['avatarupload_dim']."px";
+				else
+				{
+					$upload = new upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
+					$uploadId = $upload->storeFile($_FILES["avatar2file"]);
+				}
 			}
 		}
 		elseif(isset($_POST['avatar2url']) && $_POST['avatar2url'] != '') {
-			$rec['avatar'] = $_POST['avatar2url'];
+			$new_av = xml_clean($_POST['avatar2url']);
+			$ext = pathinfo($new_av, PATHINFO_EXTENSION);
+			//dump($ext);
+			//die();
+			if (!in_array($ext,$exts) or $ext == "")
+				$upload_err = "The url is not a valid image file for an avatar. File must be a gif,jpg, jpeg or png. Avatar has not been updated";
+			else
+				$rec['avatar'] = $new_av;
 		}
 		elseif(isset($_POST['avatar']) && $_POST['avatar'] != '') {
-			$rec['avatar'] = $_POST['avatar'];
+			$new_av = xml_clean($_POST['avatar']);
+			$ext = pathinfo($new_av, PATHINFO_EXTENSION);
+			if (!in_array($new_av,$exts) or $ext == "")
+				$upload_err = "The avatar is not a valid image file. File must be a gif,jpg, jpeg or png. Avatar has not been updated";
+			else
+				$rec['avatar'] = $new_av;
 		}
 	  
 		if(isset($rec['avatar']) && FALSE !== strpos($user[0]['avatar'], 'downloadattachment.php?id=')) {
@@ -102,14 +127,15 @@ if (isset($_POST["u_edit"])) {
 				$upload->deleteFile($id);
 			}
 		}
-		if ($user[0]["icq"] != $_POST["u_icq"]) $rec["icq"] = $_POST["u_icq"];
-		if ($user[0]["aim"] != $_POST["u_aim"]) $rec["aim"] = $_POST["u_aim"];
-		if ($user[0]["yahoo"] != $_POST["u_yahoo"]) $rec["yahoo"] = $_POST["u_yahoo"];
-		if ($user[0]["msn"] != $_POST["u_msn"]) $rec["msn"] = $_POST["u_msn"];
-		if ($user[0]["skype"] != $_POST["u_skype"]) $rec["skype"] = $_POST["u_skype"];
+		if ($user[0]["icq"] != $_POST["u_icq"]) $rec["icq"] = xml_clean($_POST["u_icq"]);
+		if ($user[0]["aim"] != $_POST["u_aim"]) $rec["aim"] = xml_clean($_POST["u_aim"]);
+		if ($user[0]["yahoo"] != $_POST["u_yahoo"]) $rec["yahoo"] = xml_clean($_POST["u_yahoo"]);
+		if ($user[0]["msn"] != $_POST["u_msn"]) $rec["msn"] = xml_clean($_POST["u_msn"]);
+		if ($user[0]["skype"] != $_POST["u_skype"]) $rec["skype"] = xml_clean($_POST["u_skype"]);
+    if ($user[0]["twitter"] != $_POST["u_twitter"]) $rec["twitter"] = xml_clean($_POST["u_twitter"]);
 		if ($user[0]["timezone"] != $_POST["u_timezone"]) {
-			$rec["timezone"] = $_POST["u_timezone"];
-			setcookie("timezone", $_POST["u_timezone"], (time() + (60 * 60 * 24 * 7)));
+			$rec["timezone"] = (int) $_POST["u_timezone"];
+			setcookie("timezone", $rec["timezone"], (time() + (60 * 60 * 24 * 7)));
 		}
 		$tdb->edit("users", $_COOKIE["id_env"], $rec);
 		require_once('./includes/header.php');
@@ -123,7 +149,7 @@ if (isset($_POST["u_edit"])) {
 		else
 		echo "<div class='alert'>
 				<div class='alert_text'>
-				<strong>Avatar Upload Error:</strong></div><div style='padding:4px;'>$upload_err<br><br>All other changes to your user profile has been made.<br>Click <a href='".$_GET['ref']."'>here</a> to continue.
+				<strong>Avatar Upload Error:</strong></div><div style='padding:4px;'>$upload_err<br><br>All other changes to your user profile have been made.<br>Click <a href='".$_GET['ref']."'>here</a> to continue.
 				</div>
 				</div>";
 
@@ -211,8 +237,8 @@ if (isset($_POST["u_edit"])) {
 		echo "<div class='pro_area_1'><div class='pro_area_2'><img src='images/aol.gif' border='0' align='absmiddle'>&nbsp;<strong>AIM:</strong></div>".$rec[0]["aim"]."&nbsp;</div>";
 		echo "<div class='pro_area_1'><div class='pro_area_2'><img src='images/yahoo.gif' border='0' align='absmiddle'>&nbsp;<strong>Yahoo!:</strong></div>".$rec[0]["yahoo"]."&nbsp;</div>";
 		echo "<div class='pro_area_1'><div class='pro_area_2'><img src='images/msn.gif' border='0' align='absmiddle'>&nbsp;<strong>MSN:</strong></div>".$rec[0]["msn"]."&nbsp;</div>";
+    echo "<div class='pro_area_1'><div class='pro_area_2'><img src='images/twitter.png' border='0' align='absmiddle'>&nbsp;<strong>Twitter:</strong></div>".$rec[0]["twitter"]."&nbsp;</div>";
 		echo "<div class='pro_area_1'><div class='pro_area_2'><img src='images/skype.gif' border='0' align='absmiddle'>&nbsp;<strong>Skype:</strong></div>".$rec[0]["skype"]."&nbsp;</div>";
-		echo "<div class='pro_area_1'>&nbsp;</div>";
 		echo "</div></td></tr>
 
 				<tr>
@@ -229,7 +255,7 @@ if (isset($_POST["u_edit"])) {
 						<div class='pro_sig_name'>".$rec[0]["user_name"]."'s Signature:</div>
 						<div class='pro_sig_area'>
 							<div class='pro_signature'>".format_text(UPBcoding(filterLanguage($rec[0]["sig"], $_CONFIG)))."</div>
-						</div>"; #
+						</div>"; 
 		echo "              </div>
                         </td>
                     </tr>";
@@ -322,32 +348,32 @@ if (isset($_POST["u_edit"])) {
 		echoTableHeading("Account settings - Edit profile information", $_CONFIG);
 		echo "
 			<tr>
-				<td class='area_1' style='width:45%;'><strong>login:</strong></td>
+				<td class='area_1' style='width:45%;'><strong>Username:</strong></td>
 				<td class='area_2'>".$rec[0]["user_name"]."</td>
 			</tr>
 			<tr>
-				<td class='area_1'><strong>Old password:</strong><br /><i>Submit your old password only if you are changing your password</i></td>
-				<td class='area_2'><input type='password' name='u_oldpass' /></td>
+				<td class='area_1'><strong>Old password:</strong><br /><i>Use only if you are changing your password</i></td>
+				<td class='area_2'><input type='password' name='u_oldpass' size='50'/></td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>New password:</strong></td>
-				<td class='area_2'><input type='password' name='u_newpass' /></td>
+				<td class='area_2'><input type='password' name='u_newpass' size='50' /></td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>New password confirmation:</strong></td>
-				<td class='area_2'><input type='password' name='u_newpass2' /></td>
+				<td class='area_2'><input type='password' name='u_newpass2' size='50' /></td>
 			</tr>";
 		if ($_COOKIE["power_env"] >= 2) {
 			echo "
 			<tr>
-				<td class='area_1'><strong>email:</strong></td>
-				<td class='area_2'><input type='text' name='u_email' value='".$rec[0]["email"]."' />&nbsp;".$rec[0]["email"]."</td>
+				<td class='area_1'><strong>Email:</strong></td>
+				<td class='area_2'><input type='text' name='u_email'  size='50' value='".$rec[0]["email"]."' /><br />Current email address: ".$rec[0]["email"]."</td>
 			</tr>";
 		} else {
 			echo "
 			<tr>
-				<td class='area_1'><strong>email:</strong><br /><font size='1' face='$font_face'>Email the Forum Administrator to change your email address.</a></td>
-				<td class='area_2'><input type='hidden' name='u_email' value='".$rec[0]["email"]."' />&nbsp;".$rec[0]["email"]."</td>
+				<td class='area_1'><strong>Email:</strong><br /><font size='1' face='$font_face'>Email the Forum Administrator to change your email address.</a></td>
+				<td class='area_2'><input type='hidden' name='u_email'  size='50' value='".$rec[0]["email"]."' />&nbsp;".$rec[0]["email"]."</td>
 			</tr>";
 		}
 		if ((bool) $rec[0]["view_email"]) $email_checked = "CHECKED";
@@ -360,7 +386,7 @@ if (isset($_POST["u_edit"])) {
 				<td class='area_2'><input type='checkbox' name='show_email' value = '1' $email_checked /></td>
 			</tr>
 			<tr>
-				<td class='area_1'><strong>location:</strong></td>
+				<td class='area_1'><strong>Location:</strong></td>
 				<td class='area_2'><input type='text' name='u_loca' value='".$rec[0]["location"]."' /></td>
 			</tr>
 			<tr>
@@ -402,7 +428,7 @@ if (isset($_POST["u_edit"])) {
 			echo "<tr><td class='area_1'><strong>Custom Avatar:</strong><p>Maximum avatar size is ".$_REGIST["avatarupload_dim"]."px by ".$_REGIST["avatarupload_dim"]."px";
 
 			if ($_REGIST['custom_avatars'] > '2' and $_REGIST['avatarupload_size'] > 0)
-			echo '<br>Valid filetypes are jpg, jpeg and gif.<br>Maximum filesize is '.$_REGIST["avatarupload_size"].'KB.';
+			echo '<br>Valid filetypes are jpg, jpeg, png and gif.<br>Maximum filesize is '.$_REGIST["avatarupload_size"].'KB.';
 			echo "<td class='area_2' valign='middle' style='text-align:center;padding:20px;height:150px;'>";
 
 			echo "You may upload a custom image using the control(s) below.";
@@ -431,8 +457,8 @@ if (isset($_POST["u_edit"])) {
 		echoTableHeading("Other Information", $_CONFIG);
 		echo "
 			<tr>
-				<td class='area_1' style='width:20%;'><strong>Homepage:</strong></td>
-				<td class='area_2'><input type='text' name='u_site' size='50' value='";
+				<td class='area_1' style='width:20%;' ><strong>Homepage:</strong></td>
+				<td class='area_2' colspan='3'><input type='text' name='u_site' size='50' value='";
 		if ($rec[0]["url"] == '')
 		echo "http://";
 		else
@@ -440,27 +466,25 @@ if (isset($_POST["u_edit"])) {
 		echo "' /></td>
 			</tr>
 			<tr>
-				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
+				<td class='footer_3' colspan='4'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>
 			<tr>
 				<td class='area_1'><img src='images/icq.gif' border='0' align='absmiddle'>&nbsp;<strong>ICQ:</strong></td>
-				<td class='area_2'><input type='text' name='u_icq' size='50' value='".$rec[0]["icq"]."' /></td>
-			</tr>
-			<tr>
+				<td class='area_2'><input type='text' name='u_icq' size='25' value='".$rec[0]["icq"]."' /></td>
 				<td class='area_1'><img src='images/aol.gif' border='0' align='absmiddle'>&nbsp;<strong>AIM:</strong></td>
-				<td class='area_2'><input type='text' name='u_aim' size='50' value='".$rec[0]["aim"]."' /> </td>
+				<td class='area_2'><input type='text' name='u_aim' size='25' value='".$rec[0]["aim"]."' /> </td>
 			</tr>
 			<tr>
 				<td class='area_1'><img src='images/yahoo.gif' border='0' align='absmiddle'>&nbsp;<strong>Yahoo!:</strong></td>
-				<td class='area_2'><input type='text' name='u_yahoo' size='50' value='".$rec[0]["yahoo"]."' /></td>
-			</tr>
-			<tr>
+				<td class='area_2'><input type='text' name='u_yahoo' size='25' value='".$rec[0]["yahoo"]."' /></td>
 				<td class='area_1'><img src='images/msn.gif' border='0' align='absmiddle'>&nbsp;<strong>MSN:</strong></td>
-				<td class='area_2'><input type='text' name='u_msn' size='50' value='".$rec[0]["msn"]."' /></td>
+				<td class='area_2'><input type='text' name='u_msn' size='25' value='".$rec[0]["msn"]."' /></td>
 			</tr>
 			<tr>
+				<td class='area_1'><img src='images/twitter.png' border='0' align='absmiddle'>&nbsp;<strong>Twitter:</strong></td>
+				<td class='area_2'><input type='text' name='u_twitter' size='25' value='".$rec[0]["twitter"]."' /></td>
 				<td class='area_1'><img src='images/skype.gif' border='0' align='absmiddle'>&nbsp;<strong>Skype:</strong></td>
-				<td class='area_2'><input type='text' name='u_skype' size='50' value='".$rec[0]["skype"]."' /></td>
+				<td class='area_2'><input type='text' name='u_skype' size='25' value='".$rec[0]["skype"]."' /></td>
 			</tr>
 			";
 		for ($i=1;$i<=5;$i++)
@@ -469,31 +493,31 @@ if (isset($_POST["u_edit"])) {
 			if (trim($custom[0]['value']) != "")
 			echo "<tr>
 				<td class='area_1'><strong>{$custom[0]['value']}</strong></td>
-				<td class='area_2'><input size='50' name='custom_profile$i' value='".$rec[0]["custom_profile$i"]."'/></td>
+				<td class='area_2' colspan='3'><input size='50' name='custom_profile$i' value='".$rec[0]["custom_profile$i"]."'/></td>
 			</tr>";
 		}
 		echo "<tr>
-				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
+				<td class='footer_3' colspan='4'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>
     <tr>
 				<td class='area_1' valign='top'><strong>Signature:</strong></td>
-				<td class='area_2'>".bbcodebuttons('u_sig','sig')."<textarea id='u_sig' name='u_sig' cols='45' rows='10'>".format_text(encode_text($rec[0]["sig"]),'edit')."</textarea><br /><input type='button' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','set');\" value='Preview Signature' /></td></tr>
+				<td class='area_2'  colspan='3'>".bbcodebuttons('u_sig','sig')."<textarea id='u_sig' name='u_sig' cols='45' rows='10'>".format_text($rec[0]["sig"],'edit')."</textarea><br /><input type='button' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','set');\" value='Preview Signature' /></td></tr>
       <tr>
 				<td class='area_1' valign='top'><div id='sig_title'><strong>Current Signature:</strong></div></td>
-				<td class='area_2'><div style='display:inline;' id='sig_preview'>".display_msg($rec[0]["sig"])."</div></td>
+				<td class='area_2'  colspan='3'><div style='display:inline;' id='sig_preview'>".display_msg($rec[0]["sig"])."</div></td>
 			</tr>
 			<tr>
-				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
+				<td class='footer_3' colspan='4'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Timezone Setting:</strong></td>
-				<td class='area_2'>";
+				<td class='area_2' colspan='3'>";
 		print timezonelist($rec[0]["timezone"]);
 		echo "</td></tr>
 			<tr>
-				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='reset' name='reset' value='Reset' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','reset');\" /><input type='submit' name='u_edit' value='Submit' /></td>
+				<td class='footer_3a' colspan='4' style='text-align:center;'><input type='reset' name='reset' value='Reset' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','reset');\" /><input type='submit' name='u_edit' value='Submit' /></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		echoTableFooter(SKIN_DIR,4);
 		echo "</form>";
 		require_once('./includes/footer.php');
 	}

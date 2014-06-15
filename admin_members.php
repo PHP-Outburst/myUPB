@@ -14,8 +14,9 @@ if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) exitPage("
 if(!isset($_GET["action"])) $_GET["action"] = '';
 if($_GET['action'] == 'confirm') {
 	$users = $tdb->query('users', "reg_code?'reg_'", 1, -1);
+ 
 	$_SESSION['reg_approval_count'] = ((!empty($users[0])) ? count($users) : 0);
-
+ 
 	if(isset($_POST['verify'])) {
 		if($_POST['verify'] == 'Cancel') $_POST = array(); //do nothing, show the confirm menu
 		elseif($_POST['verify'] == 'Ok') {
@@ -30,12 +31,17 @@ if($_GET['action'] == 'confirm') {
 					$e_hed .= "Bcc: ".$bbc."\r\n"; //More efficient to send one e-mail with everyone on a BLANK CARBON COPY (see php.net's mail())
 					@mail("", $_POST['subject'], $_POST['message'], $e_hed);
 				}
-
+ 
 			}
+			
+			
 			for($i=0;$i<count($users);$i++) {
 				if(in_array($users[$i]['id'], $_POST['ids'])) {
-					if($_POST['a'] == 'Validate') $tdb->edit('users', $users[$i]['id'], array('reg_code'=>''));
-					elseif($_POST['a'] == 'Reject') $tdb->delete('users', $users[$i]['id']);
+					if($_POST['a'] == 'Validate') 
+						$tdb->edit('users', $users[$i]['id'], array('reg_code'=>''));
+					elseif($_POST['a'] == 'Reject') {
+						$tdb->delete('users', $users[$i]['id']);
+					}
 					unset($users[$i]);
 					$_SESSION['reg_approval_count']--;
 				}
@@ -43,16 +49,15 @@ if($_GET['action'] == 'confirm') {
 			array_reset_keys($users);
 			$msg = "<div class='alert_confirm'>
 					<div class='alert_confirm_text'>
-					<strong>Attention:</strong></div><div style='padding:4px;'>Successfully ".(($_POST['a']=='Reject')?'rejected':'approved').' '.count($_POST['ids']).' user(s)</div></div>';
+					<strong>Attention:</strong></div><div style='padding:4px;'>Successfully ".(($_POST['a']=='Reject')?'rejected':'approved').' '.count($_POST['ids']).' user(s)</div></div><br />';
 		}
 	} elseif(isset($_POST['a']) && ($_POST['a'] == 'Validate' || $_POST['a'] == 'Reject')) {
 		$ids = array();
 		reset($_POST);
-		while(list($key, $val) = each($_POST)) {
-			if(substr($key, 0 , 4) != 'sel_') continue;
-			$tmp = substr($key, 4);
-			if(ctype_digit($tmp)) $ids[] = $tmp;
-		}
+		
+		foreach ($_POST['id'] as $id)
+			if(ctype_digit($id)) $ids[] = $id;
+		
 		if(!empty($ids)) {
 			print '<form action="'.$_SERVER['PHP_SELF'].'?action=confirm#skip_nav" method="POST">';
 			$hidden = '<input type="hidden" name="a" value="'.$_POST['a'].'">';
@@ -73,7 +78,7 @@ if($_GET['action'] == 'confirm') {
 				print '<tr>
             			    <td class="area_1" style="width:50%;"><strong>Email Message</strong><br />This is the message for confirmation of registration.</td>
             				<td class="area_2" style="width:50%;"><textarea cols=30 rows=10 name="message">';
-
+ 
 				if($_POST['a'] == 'Validate') {
 					print "Hello user,\n\nYou are receiving this e-mail because an administrator at http://".$_SERVER['SERVER_NAME'].dirname($_SERVER['PHP_SELF'])." has approved your account!  You may log in at any time!\n\n--UPB Team";
 				} elseif($_POST['a'] == 'Reject') {
@@ -103,38 +108,59 @@ if($_GET['action'] == 'confirm') {
 	echo "</td>
 		</tr>";
 	echoTableFooter(SKIN_DIR);
-
+ 
 	print '<a name="skip_nav">'.((isset($msg)) ? $msg : '&nbsp;').'</a><form action="'.$_SERVER['PHP_SELF'].'?action=confirm#skip_nav" method="POST">';
+	
+	
+	
+	$page = ((isset($_GET['page'])) ? $_GET['page'] : '1');
+	if (!empty($users) or count($users) > $_CONFIG['topics_per_page'])
+	{
+		$page = ((isset($_GET['page'])) ? $_GET['page'] : '1');
+		$num_pages = ceil((count($users) + 1) / $_CONFIG['topics_per_page']);
+		$p = createPageNumbers($page, $num_pages, $_SERVER['QUERY_STRING']);
+		echo "<div id='pagelink1' name='pagelink1'><table><tr><td class='pagination_title'>Pages ($num_pages):</td>$p</tr></table><div style='clear:both;'></div>";
+	}
 	echo "
-        <div id='tabstyle_2'>
+        <div id='tabstyle_1' class='tabstyle_1'>
         	<ul>
         		<li><a href='register.php' title='Add Member'><span>Add Member</span></a></li>
                 <li><a href='admin_members.php#skip_nav' title='Manage Members'><span>Manage Members</span></a></li>
                 <li><a href='admin_banuser.php#skip_nav' title='Manage Banned Members'><span>Manage Banned Members</span></a></li>
         	</ul>
         </div>
-        <div style='clear:both;'></div>";
+        <div style='clear:both;'></div></div>";
+	
 	echoTableHeading('Unconfirmed Users', $_CONFIG);
+	
 	echo "
 			<tr>
-			    <th style='width:5%;'>&nbsp;</th>
+			    <th style='width:5%;padding:8px;'><input type='checkbox' onClick='check_all_confirm(this)';></th>
 				<th style='width:20%;'>Username</th>
 				<th style='width:20%;'>Email</th>
 				<th style='width:10%;text-align:center;'>Registered</th>
 				<th style='width:15%;'>Homepage</th>
 				<th style='width:30%;'>Signature</th>
 			</tr>";
-	if (empty($users[0])) {
+	if (empty($users)) {
 		echo "
 			<tr>
 				<td class='area_2' style='text-align:center;font-weight:bold;padding:12px;line-height:20px;' colspan='6'>No Users need to be confirmed at this time.</td>
 			</tr>";
 	} else {
-		foreach($users as $user) {
+		if ($page == 1)
+			$start = 0;
+		else
+			$start = ($page - 1)*$_CONFIG['topics_per_page'];
+		
+		$sub_users = array_slice($users,$start,$_CONFIG['topics_per_page']);
+		
+		
+		foreach($sub_users as $user) {
 			echo "
 			<tr>
-				<td class='area_1' style='padding:8px;'><input type='checkbox' name='sel_{$user['id']}'></td>
-				<td class='area_2'><a href='{$_SERVER['PHP_SELF']}?action=edit&id={$user['id']}'>{$user["user_name"]}</a></td>";
+				<td class='area_1' style='padding:8px;'><input type='checkbox' name='id[]' value='{$user['id']}'></td>
+				<td class='area_2'>{$user["user_name"]}</td>";
 			if ($user['view_email']) echo "
 				<td class='area_1'>".$user["email"]."</td>";
 			else echo "
@@ -147,7 +173,7 @@ if($_GET['action'] == 'confirm') {
 			echo "<i>yesterday</i>";
 			else
 			echo gmdate("Y-m-d", user_date($user['date_added']))."</td>";
-			$sig = str_replace('<br><br>', '',format_text(filterLanguage(UPBcoding($user["sig"]))));
+			$sig = str_replace('<br><br>', '',format_text(filterLanguage($user["sig"])));
 			print "<td class='area_1'><a href='{$user['homepage']}' target='_blank'>{$user['homepage']}</a></td>
                 <td class='area_2'><i>".substr($sig, 0, (50 - strlen(strip_tags($sig)))).(((50 - strlen(strip_tags($sig))) > 0) ? '': "...")."</i></td>
 			</tr>";
@@ -155,9 +181,9 @@ if($_GET['action'] == 'confirm') {
 		print "<tr>
         			<td class='footer_3' colspan='6'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
         		</tr>";
-		print "<tr><td class='area_2' colspan=6><input type='submit' name='a' value='Validate'>&nbsp;&nbsp;&nbsp;<input type='submit' name='a' value='Reject'></td></tr>";
+		print "<tr><td class='area_2' colspan='6'><input type='submit' name='a' value='Validate'>&nbsp;&nbsp;&nbsp;<input type='submit' name='a' value='Reject'></td></tr>";
 	}
-	echoTableFooter(SKIN_DIR);
+	echoTableFooter(SKIN_DIR,6);
 } elseif ($_GET["action"] == "edit") {
 	if (!isset($_GET["id"])) exitPage("
 				<div class='alert'><div class='alert_text'>
@@ -181,18 +207,19 @@ if($_GET['action'] == 'confirm') {
 		$_POST["u_timezone"] = substr($_POST["u_timezone"], 1);
 		$new = array();
 		if ($_POST["level"] != $rec[0]["level"]) $new["level"] = $_POST["level"];
-		if ($_POST["email"] != $rec[0]["email"]) $new["email"] = $_POST["email"];
-		if ($_POST["status"] != $rec[0]["status"]) $new["status"] = $_POST["status"];
-		if ($_POST["location"] != $rec[0]["location"]) $new["location"] = $_POST["location"];
-		if ($_POST["url"] != $rec[0]["url"]) $new["url"] = $_POST["url"];
-		if ($_POST["avatar"] != $rec[0]["avatar"]) $new["avatar"] = $_POST["avatar"];
-		if ($_POST["icq"] != $rec[0]["icq"]) $new["icq"] = $_POST["icq"];
-		if ($_POST["yahoo"] != $rec[0]["yahoo"]) $new["yahoo"] = $_POST["yahoo"];
-		if ($_POST["msn"] != $rec[0]["msn"]) $new["msn"] = $_POST["msn"];
-		if ($_POST["aim"] != $rec[0]["aim"]) $new["aim"] = $_POST["aim"];
-		if ($_POST["skype"] != $rec[0]["skype"]) $new["skype"] = $_POST["skype"];
-		if (chop($_POST["sig"]) != $rec[0]["sig"]) $new["sig"] = chop($_POST["sig"]);
-		if ($_POST["timezone"] != $rec[0]["timezone"]) $new["timezone"] = $_POST["timezone"];
+		if ($_POST["email"] != $rec[0]["email"]) $new["email"] = xml_clean($_POST["email"]);
+		if ($_POST["status"] != $rec[0]["status"]) $new["status"] = xml_clean($_POST["status"]);
+		if ($_POST["location"] != $rec[0]["location"]) $new["location"] = xml_clean($_POST["location"]);
+		if ($_POST["url"] != $rec[0]["url"]) $new["url"] = xml_clean($_POST["url"]);
+		if ($_POST["avatar"] != $rec[0]["avatar"]) $new["avatar"] = xml_clean($_POST["avatar"]);
+		if ($_POST["icq"] != $rec[0]["icq"]) $new["icq"] = xml_clean($_POST["icq"]);
+		if ($_POST["yahoo"] != $rec[0]["yahoo"]) $new["yahoo"] = xml_clean($_POST["yahoo"]);
+		if ($_POST["msn"] != $rec[0]["msn"]) $new["msn"] = xml_clean($_POST["msn"]);
+		if ($_POST["aim"] != $rec[0]["aim"]) $new["aim"] = xml_clean($_POST["aim"]);
+		if ($_POST["skype"] != $rec[0]["skype"]) $new["skype"] = xml_clean($_POST["skype"]);
+    if ($_POST["twitter"] != $rec[0]["twitter"]) $new["twitter"] = xml_clean($_POST["twitter"]);
+		if (chop($_POST["sig"]) != $rec[0]["sig"]) $new["sig"] = xml_clean(chop($_POST["sig"]));
+		if ($_POST["timezone"] != $rec[0]["timezone"]) $new["timezone"] = (int) $_POST["timezone"];
 		if (!empty($new)) $tdb->edit("users", $_GET["id"], $new);
 		echo "
 				<div class='alert_confirm'>
@@ -289,6 +316,10 @@ if($_GET['action'] == 'confirm') {
 				<td class='area_2'><input type='text' name='icq' size='20' value='".$rec[0]["aim"]."' /></td>
 			</tr>
       <tr>
+				<td class='area_1' style='padding:8px;'><img src='images/twitter.png' border='0' align='absmiddle'>&nbsp;<strong>Twitter:</strong></td>
+				<td class='area_2'><input type='text' name='twitter' size='20' value='".$rec[0]["twitter"]."' /></td>
+			</tr>
+      <tr>
 				<td class='area_1' style='padding:8px;'><img src='images/skype.gif' border='0' align='absmiddle'>&nbsp;<strong>Skype:</strong></td>
 				<td class='area_2'><input type='text' name='skype' size='20' value='".$rec[0]["skype"]."' /></td>
 			</tr>
@@ -342,7 +373,7 @@ if($_GET['action'] == 'confirm') {
 		$tdb->edit("users", $_GET["id"], array("password" => generateHash($_POST["pass"])));
 		$msg = "You Password was changed by ".$_COOKIE["user_env"]." on the website ".$_CONFIG["homepage"]." to \"".$_POST["pass"]."\"";
 		if (isset($_POST["reason"])) $msg .= "\n\n".$_COOKIE["user_env"]."'s reason was this:\n".$_POST["reason"];
-
+ 
 		if(!@mail($user[0]["email"], "Password Change Notification", "Password Changed by :".$_COOKIE["user_env"]."\n\n".$msg, "From: ".$_REGISTER["admin_email"]))
 		if(!$_CONFIG['email_mode']) $config_tdb->editVars('config', array('email_mode' => '0'));
 		else
@@ -412,7 +443,7 @@ elseif($_GET['action'] == "changeuser" && isset($_GET["id"])) {
 		$tdb->edit("users", $_GET["id"], array("user_name" => $_POST["username"]));
 		$msg = "Your Username was changed by ".$_COOKIE["user_env"]." on the website ".$_CONFIG["homepage"]." to \"".$_POST["pass"]."\"";
 		if (isset($_POST["reason"])) $msg .= "\n\n".$_COOKIE["user_env"]."'s reason was this:\n".$_POST["reason"];
-
+ 
 		if(!@mail($user[0]["email"], "Username Change Notification", "Username changed by :".$_COOKIE["user_env"]."\n\n".$msg, "From: ".$_REGISTER["admin_email"]))
 		if(!$_CONFIG['email_mode']) $config_tdb->editVars('config', array('email_mode' => '0'));
 		else
@@ -526,12 +557,12 @@ elseif($_GET["action"] == "delete") {
 		} else {
 			$users = $tdb->query('users', "user_name?'{$_GET['u']}'", $start, $_CONFIG['topics_per_page']);
 		}
-
+ 
 		$num_pages = ceil(($c + 1) / $_CONFIG["topics_per_page"]);
-
+ 
 		$p = createPageNumbers($_GET["page"], $num_pages, $_SERVER['QUERY_STRING']);
 		echo pagination($p,$_GET['page'],$num_pages);
-
+ 
 		echo "<div id='tabstyle_2'>
             <ul>
               <li><a href='register.php' title='Add Member'><span>Add Member</span></a></li>";
@@ -560,7 +591,7 @@ elseif($_GET["action"] == "delete") {
 				<td colspan='10' class='area_2' style='padding:8px;text-align:center'>No records found</td>
 			</tr>";
 		} else {
-
+ 
 			$bList = file(DB_DIR."/banneduser.dat");
 			foreach($users as $user) {
 				$lastvisit = $user['lastvisit'];
@@ -573,7 +604,7 @@ elseif($_GET["action"] == "delete") {
 				echo "
 			<tr>
 				<td class='area_1' style='padding:8px;'><strong>".$user["id"]."</strong></td>
-				<td class='area_2'><span class='link_1'><a href='profile.php?action=get&amp;id=".$user["id"]."' style='color:#".$statuscolor."'>".$user["user_name"]."</a></span></td>
+				<td class='area_2'><span class='link_1'><a href='profile.php?action=get&id=".$user["id"]."' style='color:#".$statuscolor."'>".$user["user_name"]."</a></span></td>
 				<td class='area_1' style='text-align:center;'>".createUserPowerMisc($user["level"], 4)."</td>";
 				if ($user['view_email']) echo "
 				<td class='area_2'>".$user["email"]."</td>";
