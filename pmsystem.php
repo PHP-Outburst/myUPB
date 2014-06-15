@@ -40,7 +40,7 @@ elseif($_GET['section'] != '') {
 					<th>&nbsp;</th>
 				</tr>
 				<tr>
-					<td class='area_2' style='text-align:center;font-weight:bold;padding:12px;line-height:20px;' colspan='3'>No Messages in your ".$_GET["section"]."</td>
+					<td class='area_2' style='text-align:center;font-weight:bold;padding:12px;line-height:20px;'>No Messages in your ".$_GET["section"]."</td>
 				</tr>";
 	echoTableFooter(SKIN_DIR);
 	require_once('./includes/footer.php');

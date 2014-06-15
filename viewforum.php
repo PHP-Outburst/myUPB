@@ -121,7 +121,7 @@ echo "
 if (empty($tRecs[0]['id'])) {
 	echo "
 		<tr>
-			<td colspan='6' class='area_2' style='text-align:center;font-weight:bold;padding:20px;'>no posts</td>
+			<td colspan='2' class='area_2' style='text-align:center;font-weight:bold;padding:20px;'>no posts</td>
 		</tr>";
 } else {
 	foreach($tRecs as $tRec) {

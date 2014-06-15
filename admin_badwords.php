@@ -6,7 +6,7 @@
 // Using textdb Version: 4.3.2
 require_once("./includes/upb.initialize.php");
 $words = array();
-$where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin_badwords.php'>Manage Filtered Lanuage</a>";
+$where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin_badwords.php'>Manage Filtered Language</a>";
 require_once('./includes/header.php');
 if (!(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["power_env"]) && isset($_COOKIE["id_env"]))) {
 	echo "

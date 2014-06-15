@@ -311,7 +311,7 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 			</tr>
 			<tr>
 				<td class='area_1' style='width:45%;'><strong>Location:</strong><br />Where are you from? (it can be anything)</td>
-				<td class='area_2'><input type=text name='u_loca' size='4';</td>
+				<td class='area_2'><input type=text name='u_loca' size='40';</td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Website URL:</strong><br />please include the http:// in front of url</td>
