@@ -79,11 +79,11 @@ if (!$tdb->is_logged_in() != "") {
 	echo "
 			<tr>
 				<td class='area_1' style='width:40%;text-align:right;'><strong>User Name:</strong></td>
-				<td class='area_2'><input class='txtBox' type='text' name='u_name' size='30' value='".$_POST["u_name"]."' /></td>
+				<td class='area_2'><input class='txtBox' type='text' name='u_name' style='width:30em'  value='".$_POST["u_name"]."' /></td>
 			</tr>
 			<tr>
 				<td class='area_1' style='text-align:right;'><strong>Password:</strong></td>
-				<td class='area_2'><input class='txtBox' type='password' name='u_pass' size='30' /></td>
+				<td class='area_2'><input class='txtBox' type='password' name='u_pass' style='width:30em' ' /></td>
 			</tr>
 			<tr>
 				<td class='area_1' style='text-align:right;'>&nbsp;</td>
