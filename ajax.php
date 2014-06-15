@@ -242,7 +242,7 @@ switch ($ajax_type)
 			$output .= "
 			<tr>
 				<th><div class='post_name'>";
-			if ($pRec["user_id"] != "0") $output .= "<a href='profile.php?action=get&id=".$pRec["user_id"]."'>".$pRec["user_name"]."</b>";
+			if ($pRec["user_id"] != "0") $output .= "<a href='profile.php?action=get&id=".$pRec["user_id"]."'>".$pRec["user_name"]."</a>";
 			else $output .= $pRec["user_name"];
 			$output .= "</div></th>
 				<th><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pRec["icon"]."'></div><div align='right'>$delete $edit $quote $reply</div></th>
