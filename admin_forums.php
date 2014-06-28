@@ -241,7 +241,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Forum description</strong></td>
-				<td class='area_2'><textarea cols=30 rows=5 maxlength=50 name=des>".$fRec[0]["des"]."</textarea></td>
+				<td class='area_2'><textarea cols=30 rows=5 maxlength=105 name=des>".$fRec[0]["des"]."</textarea></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='2'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
@@ -415,7 +415,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Forum description</strong></td>
-				<td class='area_2'><textarea cols=30 rows=5 maxlength=70 name=des></textarea></td>
+				<td class='area_2'><textarea cols=30 rows=5 maxlength=105 name=des></textarea></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='2'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
