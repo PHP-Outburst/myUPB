@@ -128,7 +128,7 @@ if(function_exists("date_default_timezone_set")) {
 
 require_once("./includes/inc/defines.inc.php");
 require_once("./includes/class/error.class.php");
-$errorHandler = &new errorhandler();
+$errorHandler = new errorhandler();
 //set_error_handler(array(&$errorHandler, 'add_error'));
 error_reporting(E_ALL ^ E_NOTICE);
 
