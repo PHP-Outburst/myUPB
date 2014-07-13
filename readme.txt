@@ -39,3 +39,17 @@ If current version is 2.2.6
 DELETE update.php, update1_0.php, update1.x-2.0.php, update2_2_1.php, update2_2_2.php, update2_2_3.php,update2_2_4.php, update2_2_5.php,complete_update.php and install.php, they are a security risk
 
 See the changelog.txt file for details of bug fixes, new features and skin changes
+
+== Used Engines ==
+
+http://www.xajax-project.org/
+https://github.com/Xajax/Xajax
+--
+ smarty-php
+Smarty Template Language for PHP 
+http://www.smarty.net/
+http://www.smarty.net/download
+https://code.google.com/p/smarty-php/
+http://code.google.com/p/smarty-php/source/browse/trunk/distribution/change_log.txt
+from  Monte Ohrt <monte at ohrt dot com > and Uwe Tews
+
