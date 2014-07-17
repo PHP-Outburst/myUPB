@@ -133,7 +133,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 				</tr>
 				<tr>
 					<td class='footer_3a' colspan='2'>
-						<div class='button_pro2'><a href='profile.php?action=get&id=".$pmRec["user_id"]."'>Profile</a></div>
+						<div class='button_pro2'><a href='profile.php?action=get&id=".$user[0]["id"]."'>Profile</a></div>
 						<div class='button_pro2'><a href='".$user[0]["url"]."' target = '_blank'>Homepage</a></div>";
 	if ($_CONFIG['email_mode'])
 	echo "
