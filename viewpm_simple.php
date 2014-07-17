@@ -13,7 +13,7 @@ $PrivMsg = new functions(DB_DIR."/", "privmsg.tdb");
 $PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 $pmRec = $PrivMsg->get("CuBox", $_GET["id"]);
 echo "
-		<div class='simple_head' colspan='2'><div style='float:left;margin-right:4px;'><img src='icon/".$pmRec[0]["icon"]."'></div><div style='line-height:15px;'>".$pmRec[0]["subject"]."</div></td>";
+		<div class='simple_head' colspan='2'><div style='float:left;margin-right:4px;'><img src='./skins/default/icons/post_icons/".$pmRec[0]["icon"]."'></div><div style='line-height:15px;'>".$pmRec[0]["subject"]."</div></td>";
 $table_color = "area_1";
 
 $user = $tdb->get("users", $pmRec[0]["from"]);
