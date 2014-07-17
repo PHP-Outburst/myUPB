@@ -17,7 +17,7 @@ class functions extends tdb {
 	function login_user($user, $pass, $key, &$error) {
 		if($this->fp['users'] != 'members') $this->setFp("users", "members");
 		$rec = $this->query("users", "user_name='".$user."'", 1, 1);
-		if($rec[0]["user_name"] != $user) {
+		if(strtolower($rec[0]["user_name"]) != strtolower($user)) {
 			$error = 'Either your Username or your Password was incorrect.';
 			return false;
 		}
