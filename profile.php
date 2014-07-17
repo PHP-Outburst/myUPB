@@ -381,7 +381,7 @@ if (isset($_POST["u_edit"])) {
 		echo "
 			<tr>
 				<td class='area_1'>Make email address public in profile?&nbsp;&nbsp;&nbsp;
-					<a href=\"javascript: window.open('privacy.php','','status=no, width=800,height=50'); void('');\">
+					<a href=\"javascript: window.open('privacy.php','','status=no, width=850,height=700'); void('');\">
 					Privacy Policy</a></td>
 				<td class='area_2'><input type='checkbox' name='show_email' value = '1' $email_checked /></td>
 			</tr>
