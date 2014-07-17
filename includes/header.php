@@ -123,8 +123,8 @@ if (!$tdb->is_logged_in()) {
 	fseek($f, (((int)$_COOKIE["id_env"] * 2) - 2));
 	$new_pm = fread($f, 2);
 	fclose($f);
-	if ((int)$new_pm != 0) $pm_alert = "-&nbsp;<a href='pmsystem.php?section=inbox'><strong>".$new_pm."</strong> new PMs in your inbox</a>";
-	else $pm_alert = "-&nbsp;No new messages";
+	if ((int)$new_pm != 0) $pm_alert = "-&nbsp;<img src=\"images/new.gif\"> <a href='pmsystem.php?section=inbox'><strong>".$new_pm."</strong> new PMs in your inbox</a>";
+	else $pm_alert = "-&nbsp;<img src=\"images/old.gif\"> No new messages";
 	$mark_all_read = "<a href='setallread.php'>Mark all posts read</a>";
 	if ($_COOKIE["power_env"] >= 3) {
 		$adminlink = "<a href='admin.php'>Admin Panel</a>&nbsp;&middot;";
