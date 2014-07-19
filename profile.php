@@ -310,7 +310,7 @@ if (isset($_POST["u_edit"])) {
 									$page = ceil($countpost / $_CONFIG["posts_per_page"]);
 								}
 
-								$msg = display_msg($pRec['message']);
+								$msg = display_msg($pRec['message'], '', true);
 								$msg .= $tdb->getUploads($_GET['id'],$_GET['t_id'],$pRec['id'],$pRec['upload_id'],$_CONFIG['fileupload_location'],$pRec['user_id']);
 								echo "
                                 <tr>

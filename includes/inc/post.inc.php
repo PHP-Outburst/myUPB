@@ -62,13 +62,16 @@ function filterLanguage($text) {
 	return $msg;
 }
 
-function display_msg($text,$type = '')
+function display_msg($text,$type = '',$removeMeta=false)
 {
 	$text = filterLanguage(format_text(UPBcoding($text)), $_CONFIG);
 	$text = str_replace('&lt;x&gt;','',$text);
-	if(get_magic_quotes_gpc())
-	return stripslashes($text);
-	else
+	$text = (get_magic_quotes_gpc()) ? stripslashes($text) : $text;
+	
+	//Do we need to remove meta data?
+	if ($removeMeta) $text = preg_replace("/<meta (.*?)>/i", "\n", $text);
+	
+	//Our output.
 	return $text;
 }
 
