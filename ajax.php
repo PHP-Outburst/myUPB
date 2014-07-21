@@ -627,15 +627,6 @@ switch ($ajax_type)
 		}
 		break 1;
 
-	case "captcha":
-		$string = md5(rand(0, microtime() * 1000000));
-		$verify_string = substr($string, 3, 7);
-		$key = md5(rand(0, 999));
-		$encid = urlencode(md5_encrypt($verify_string, $key));
-		// rather than the hidden field we have
-		$_SESSION['u_keycheck'] = $verify_string;
-		echo "<img src='./includes/image.php?id=$encid&key=$key'>";
-
 	case "validate":
 		break 1;
 

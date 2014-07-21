@@ -6,6 +6,8 @@
 // Version: 2.2.7
 // Using textdb Version: 4.4.1
 
+require_once 'includes/inc/func.inc.php';
+
 ignore_user_abort();
 if(!isset($_POST['add'])) $_POST['add'] = '0';
 if ($_POST["add"] == "2auth") {
@@ -183,7 +185,7 @@ switch($_POST["add"]{0}) {
 
 				//Set the errorHandler
 				require_once('./includes/class/error.class.php');
-				$errorHandler = &new errorhandler();
+				$errorHandler = new errorhandler();
 				set_error_handler(array(&$errorHandler, 'add_error'));
 				error_reporting(E_ALL ^ E_NOTICE);
 
@@ -243,6 +245,7 @@ switch($_POST["add"]{0}) {
         "regist".chr(30)."7".chr(30)."New Users' Confirmation E-mail".chr(31).
         "regist".chr(30)."10".chr(30)."Registration Settings".chr(31).
         "regist".chr(30)."8".chr(30)."Users' Avatars".chr(31));
+        //"regist".chr(30)."11".chr(30)."New User Post Settings".chr(31)); //what is this? Maybe I should left it as it is.
 				//.type.chr(30).minicat.chr(30).cat name.chr(31)
 				fclose($f);
 				?><?php
@@ -381,7 +384,8 @@ switch($_POST["add"]{0}) {
 				$config_tdb->addVar('register_msg', '', 'regist', 'text', 'textarea', '7', '3', 'Register Email Message', 'This is the message for confirmation of registration.<br>(options: &lt;login&gt;, &lt;password&gt;, and &lt;url&gt;)');
 
 				$config_tdb->addVar('disable_reg', '0', 'regist', 'bool', 'checkbox', '10', '1', 'Disable Registration', 'Checking this will disable public registration (deny access to register.php), and only admins will be able to add users (Add button on "Manage Members" section)');
-				$config_tdb->addVar('security_code', ((extension_loaded('gd')) ? '1' : '0'), 'regist', 'bool', 'checkbox', '10', '2', 'Enable Security Code', 'Enable the CAPTCHA security code image for new user registration<br><strong>Enabling this is recommended.</strong>');
+				//rather useless since we have new captcha since 2.2.8
+				//$config_tdb->addVar('security_code', ((extension_loaded('gd')) ? '1' : '0'), 'regist', 'bool', 'checkbox', '10', '2', 'Enable Security Code', 'Enable the CAPTCHA security code image for new user registration<br><strong>Enabling this is recommended.</strong>');
 				$config_tdb->addVar('reg_approval', '0', 'regist', 'bool', 'checkbox', '10', '3', 'Approve New Users', 'Checking this will mean after new users register, their account will be disabled until an admin approves their account via "Manage Members"');
 
 				$config_tdb->addVar('newuseravatars', '50', 'regist', 'number', 'text', '8', '1', 'New User Avatars', 'Prevent new users from choosing their own avatars (if "Custom Avatars" is enabled), by defining a minimum post count they must have (Set to 0 to disable)');
@@ -480,7 +484,9 @@ switch($_POST["add"]{0}) {
 					$filename = 'icon'.$i.'.gif';
 					$tdb->add('icons',array("filename"=>$filename));
 				}
-
+        //$config_table = $config_tdb->query("config","id>'0'");//maybe this will be helpful?
+       //
+       // dump($config_table);//I'm just copying code without thinking how it works
 				//SMILIES
 				$tdb->add('smilies',array("bbcode"=>" :)","replace"=> " <img src='./smilies/smile.gif' border='0' alt=':)'> ","type" => "main"));
 				$tdb->add('smilies',array("bbcode"=>" :(", "replace"=>" <img src='./smilies/frown.gif' border='0' alt=':('> ","type" => "main"));

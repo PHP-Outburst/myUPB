@@ -53,4 +53,7 @@ https://code.google.com/p/smarty-php/
 http://code.google.com/p/smarty-php/source/browse/trunk/distribution/change_log.txt
 https://github.com/smarty-php/smarty
 from  Monte Ohrt <monte at ohrt dot com > and Uwe Tews
+--
+ cool-php-captcha
+https://code.google.com/p/cool-php-captcha/
 

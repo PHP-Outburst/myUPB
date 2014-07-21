@@ -249,7 +249,8 @@ if ($_POST['next'] == 0) {
 	$avatar_setting_id = $config_tdb->addMiniCategory("Users' Avatars", 'regist', false);
 
 	/*  Correct way to edit values in config */
-	$config_tdb->add('security_code', '1', 'regist', 'bool', 'checkbox', $reg_setting_id, '2', 'Enable Security Code', 'Enable the CAPTCHA security code image for new user registration<br><strong>Enabling this is recommended</strong>');
+	//rather useless since we have new captcha since 2.2.8
+	//$config_tdb->add('security_code', '1', 'regist', 'bool', 'checkbox', $reg_setting_id, '2', 'Enable Security Code', 'Enable the CAPTCHA security code image for new user registration<br><strong>Enabling this is recommended</strong>');
 	$config_tdb->add('banned_words', 'shit,fuck,cunt,pussy,bitch,arse', 'config', 'text', 'hidden', '', '', '', '');
 	$config_tdb->add('email_mode', '1', 'config', 'bool', 'hidden', '', '', '', '');
 	$config_tdb->add('custom_avatars', '1', 'regist', 'number', 'dropdownlist', $avatar_setting_id, '2', 'Custom Avatars', 'Allow users to link or upload their own avatars instead of choosing them locally in images/avatars/', 'a:3:{i:0;s:7:"Disable";i:1;s:4:"Link";i:2;s:6:"Upload";}');
