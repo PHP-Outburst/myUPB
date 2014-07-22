@@ -88,10 +88,8 @@ if (!isset($_POST["submit"])) $_POST["submit"] = "";
 require_once('./includes/inc/encode.inc.php');
 
 if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
-	if ((bool)$_REGIST['security_code'] && !$tdb->is_logged_in() && $_POST['s_key'] !== $_SESSION["u_keycheck"])
-	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You failed the CAPTCHA check.  Please enter the code <b>exactly</b> as it appears.', ALERT_MSG)), true);
-	unset($_SESSION['u_keycheck']);
-
+	if (empty($_SESSION['captcha']) || strtolower(trim($_REQUEST['captcha'])) != $_SESSION['captcha']) //checks cool php captcha
+	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You failed the CAPTCHA check.  Please enter the code <b>exactly</b> as it appears.', ALERT_MSG)), true);//captcha failed
 	$_POST["u_login"] = strip_tags($_POST["u_login"]);
 	$_POST["u_login"] = trim($_POST["u_login"]);
 
@@ -272,18 +270,21 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 					<strong>Make email address visible to everyone?</strong></td>
 				<td class='area_2'><input type=checkbox name=show_email value='1'></td>
 			</tr>";
-	if ((bool)$_REGIST['security_code'] && !$tdb->is_logged_in())
+	if (!$tdb->is_logged_in())
 	{
-		print "<tr>
+		echo "<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>
 			<tr>
-				<td class='area_1'><strong>Security Code:</strong> <span style='color:$required;'>*</span><br />Please enter the code in the image: (all lower case)<br />
-          <a href='#' onclick='changeCaptcha();'>Load new image?</a></td>
-				<td class='area_2'><div id='captcha'><img src='./includes/image.php?id=$encid&key=$key'></div><input type=text name=s_key maxlength=7 size=12></td>
+				<td class='area_1'><strong>Security Code:</strong> <span style='color:$required;'>*</span><br />Please enter the code in the image:<br />
+          <a href=\"#\" onclick=\"document.getElementById('captcha').src='./includes/thirdparty/cool-php-captcha-0.3.1/captcha.php?'+Math.random();
+		  document.getElementById('captcha-form').focus();\" 
+		  id=\"change-image\">Load new image?</a></td>
+				<td class='area_2'><div><img src=\"./includes/thirdparty/cool-php-captcha-0.3.1/captcha.php\" id=\"captcha\"></div>
+				<input type=\"text\" name=\"captcha\" id=\"captcha-form\" autocomplete=\"off\" size=\"40\"/></td>
 			</tr>";
 	}
-	if(!$tdb->is_logged_in()) print "<tr>
+	if(!$tdb->is_logged_in()) echo "<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>
 			<tr>
@@ -297,7 +298,7 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 				<td class='area_1'><strong>Confirm Password:</strong> <span style='color:$required;'>*</span></td>
 				<td class='area_2'><input type='password' name='u_pass2' size='40'></td>
 			</tr>";
-	print "<tr>
+	echo "<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>";
 
