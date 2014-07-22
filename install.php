@@ -755,7 +755,7 @@ switch($_POST["add"]{0}) {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Size limits for file upload</strong><br />
-					In kilobytes, type in the maximum size allowed for file uploads.</td>
+					In kilobytes, type in the maximum size allowed for file uploads.<br>Note: Setting to 0 will <b>disable</b> uploads</td>
 				<td class='area_2'><input type='text' name='fileupload_size' size='40' value='".$_POST["fileupload_size"]."' tabindex='5'></td>
 			</tr>
 			<tr>
