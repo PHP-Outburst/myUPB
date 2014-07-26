@@ -15,7 +15,7 @@ Details can be found in the license.txt file.
 == INSTALLATION==
 
 Upload all the files from upb2.2.7.zip or upb2.2.7.tar.gz
-  CHMOD the root UPB directory to 0777
+  CHMOD the folder and the root UPB directory to 0777
   Execute the install.php
   Follow the directions in the installer
 
