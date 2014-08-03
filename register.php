@@ -88,7 +88,7 @@ if (!isset($_POST["submit"])) $_POST["submit"] = "";
 require_once('./includes/inc/encode.inc.php');
 
 if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
-	if (!$tdb->is_logged_in() && empty($_SESSION['captcha']) || strtolower(trim($_REQUEST['captcha'])) != $_SESSION['captcha']) //checks cool php captcha, repaired registering as admin/mod
+	if (!$tdb->is_logged_in() && (empty($_SESSION['captcha']) || strtolower(trim($_REQUEST['captcha'])) != $_SESSION['captcha'])) //checks cool php captcha, repaired registering as admin/mod
 	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You failed the CAPTCHA check.  Please enter the code <b>exactly</b> as it appears.', ALERT_MSG)), true);//captcha failed
 	$_POST["u_login"] = strip_tags($_POST["u_login"]);
 	$_POST["u_login"] = trim($_POST["u_login"]);
