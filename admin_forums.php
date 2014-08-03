@@ -50,7 +50,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			</tr>";
 				echo "</td></tr><tr>
 				<td class='footer_3' colspan='2'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
-			</tr><tr><td class='footer_3a' style='text-align:center;' colspan='2'><input type='submit' value='Edit'></td></tr>";
+			</tr><tr><td class='footer_3a' style='text-align:center;' colspan='2'><input type='submit' value='Submit'></td></tr>";
 
 				echoTableFooter(SKIN_DIR);
 				echo "</form>";
@@ -247,7 +247,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 				<td class='footer_3' colspan='2'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
 			</tr>
 			<tr>
-				<td class='footer_3a' colspan='2' style='text-align:center;'><input type=submit value='Edit'></td>
+				<td class='footer_3a' colspan='2' style='text-align:center;'><input type=submit value='Submit'></td>
 			</tr>
 		";
 		  echoTableFooter(SKIN_DIR);
