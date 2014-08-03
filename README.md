@@ -20,7 +20,7 @@ Although the team continued to expand its features MySQL based forums had become
 <br>
 Progress since then has been slow with the original team retiring from the project leaving just Clark who continued to develop the forum with localisation and various other additions until he too left the project in May 2014.<br>
 <br>
-With Clark's departure future development of the project to v.2.2.8 is uncertain and there is no longer any official support. At this time endstand a loose group then but myupb further and led to github was the actuelle code
+With Clark's departure future development of the project to v.2.2.8 is uncertain and there is no longer any official support. At this time finalScore a loose group then but myupb further and led to github was the actuelle code
 then just stored for further developing unter GPL and CC :) <br>
 <br>
 MyUPB is still a great forum package that is ideal for smaller websites that don't require a 'feature rich' forum and can be even better providing some of the errors and configuration issues can be corrected.<br>
