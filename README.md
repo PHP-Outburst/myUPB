@@ -1,5 +1,6 @@
-myUPB 
+My PHP Bulletin Board
 ========
+or short myUPB <br>
 Ultimate PHP Board is completely text based making it easy for <br>
 anybody who has access to PHP can run a messageboard of thier <br>
 own without the need for MySQL.
