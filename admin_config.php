@@ -160,7 +160,7 @@ if(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'>";
 
-		echo "<input type=submit value='Edit'>";
+		echo "<input type=submit value='Submit'>";
 		echo "</td>
 			</tr>";
 		echoTableFooter(SKIN_DIR);
