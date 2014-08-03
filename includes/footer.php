@@ -13,7 +13,7 @@ if (!isset($script_end_time)) {
 ?>
 <div class='copy'><a href='http://forum.myupb.com/'> <?php
 echo "Powered by myUPB v".UPB_VERSION."</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
-	&copy; PHP Outburst 2002 - ".date("Y",time());
+	&copy; <a href=\"https://github.com/PHP-Outburst\" target=\"_blank\" title=\"at GitHub.com\">PHP Outburst</a> 2002 - ".date("Y",time());
 ?><br>
 <br>
 <a rel="license"
