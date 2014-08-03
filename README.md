@@ -1,4 +1,4 @@
-My PHP Bulletin Board
+My Ultimate PHP Bulletin Board
 ========
 or short myUPB <br>
 Ultimate PHP Board is completely text based making it easy for <br>
