@@ -49,7 +49,7 @@ if($_GET['action'] == 'confirm') {
 			array_reset_keys($users);
 			$msg = "<div class='alert_confirm'>
 					<div class='alert_confirm_text'>
-					<strong>Attention:</strong></div><div style='padding:4px;'>Successfully ".(($_POST['a']=='Reject')?'rejected':'approved').' '.count($_POST['ids']).' user(s)</div></div><br />';
+					<strong>Attention:</strong></div><div style='padding:4px;'>Successfully ".(($_POST['a']=='Reject')?'rejected':'approved').' '.count($_POST['ids']).' user(s)</div></div><br /><br />';
 		}
 	} elseif(isset($_POST['a']) && ($_POST['a'] == 'Validate' || $_POST['a'] == 'Reject')) {
 		$ids = array();
