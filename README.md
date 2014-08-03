@@ -23,14 +23,14 @@ Progress since then has been slow with the original team retiring from the proje
 <br>
 Now, since may 2014 new group of developers is working on myUPB v.2.2.8.
 We decided to store code on Github where you can see how much work we did since 2.2.7 version.
+<br>
 Some of the new things are:<br>
 - new Captcha (thanks for Cool-php-captcha team)
 - many bugfixes (there is still much to do)
 - html5 and css3 (in 2.2.8 we want to use new technologies)
   - partially changed obsolete html tags to new ones (or css)
 <br>
-<br>
-Todo:
+Todo:<br>
 - fix all errors! :)
 - new skins
 - internationalisation
