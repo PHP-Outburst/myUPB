@@ -129,7 +129,7 @@ if($_GET['action'] == 'confirm') {
                 <li><a href='admin_banuser.php#skip_nav' title='Manage Banned Members'><span>Manage Banned Members</span></a></li>
         	</ul>
         </div>
-        <div style='clear:both;'></div></div>";
+        <div style='clear:both;'></div>";
 	
 	echoTableHeading('Unconfirmed Users', $_CONFIG);
 	
