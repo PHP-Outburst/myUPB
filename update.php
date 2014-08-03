@@ -1,10 +1,8 @@
 <?php
 if (TRUE !== is_writable('./config.php')) die('Unable to continue with the installation process.  "config.php" in the root upb directory MUST exist and MUST BE writable.');
-if (filesize('./config.php') > 0) {
-	require_once('./config.php');
-}
+if (filesize('./config.php') > 0) {	require_once('./config.php');}
 
-$current_update = '2.2.6';
+$current_update = '2.2.8';
 
 if (substr(UPB_VERSION,0,1) == 1)
 {
@@ -41,7 +39,7 @@ $files = get_updates();
 ?>
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
-<title>UPB v2.2.5 Updater</title>
+<title>UPB Updater</title>
 <link rel='stylesheet' type='text/css'
 	href='skins/default/css/style.css' />
 </head>
@@ -63,7 +61,7 @@ if (empty($_POST))
 	?>
 <form action='<?php print $_SERVER['PHP_SELF']; ?>' method='post'>
 <div class='main_cat_wrapper'>
-<div class='cat_area_1'>myUPB v2.2.5 Updater</div>
+<div class='cat_area_1'>myUPB Updater</div>
 <table class='main_table'>
 	<tr>
 		<th style='text-align: center;'>&nbsp;</th>
@@ -115,7 +113,7 @@ else
 	{
 		?>
 <div class='main_cat_wrapper'>
-<div class='cat_area_1'>myUPB v2.2.5 Updater</div>
+<div class='cat_area_1'>myUPB Updater</div>
 <table class='main_table'>
 	<tr>
 		<th style='text-align: center;'>&nbsp;</th>
@@ -177,7 +175,7 @@ else
 	{
 		?>
 <div class='main_cat_wrapper'>
-<div class='cat_area_1'>myUPB v2.2.5 Updater</div>
+<div class='cat_area_1'>myUPB Updater</div>
 <table class='main_table'>
 	<tr>
 		<th style='text-align: center;'>&nbsp;</th>
