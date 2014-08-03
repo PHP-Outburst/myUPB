@@ -135,7 +135,7 @@ if($_GET['action'] == 'confirm') {
 	
 	echo "
 			<tr>
-			    <th style='width:5%;padding:8px;'><input type='checkbox' onClick='check_all_confirm(this)';></th>
+			    <th style='width:5%;padding:8px;'><input type='checkbox' onClick='check_all_confirm(this)'></th>
 				<th style='width:20%;'>Username</th>
 				<th style='width:20%;'>Email</th>
 				<th style='width:10%;text-align:center;'>Registered</th>
