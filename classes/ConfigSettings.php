@@ -8,7 +8,8 @@
 /**
  * Class ConfigSettings
  */
-class ConfigSettings extends tdb {
+class ConfigSettings extends tdb
+{
     private $_cache = array();  //cache the vars
     private $_cache_ext = array();
 
