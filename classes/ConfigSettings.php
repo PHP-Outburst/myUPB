@@ -1,410 +1,383 @@
 <?php
 /**
  *
+ * @author J. Moore, Rouven Wachhaus <rouven@wachhaus.xyz>
  * @todo doc
  * @todo cc wrt variable names
- * @todo cc overall l 223+
- * @todo cc overall quotes ^
  */
 /**
- * Class configSettings
+ * Class ConfigSettings
  */
-// Configuration Class
-// Author: J. Moore aka Rebles
-// Website: http://www.myupb.com
-// Version: 2.0
-// Using textdb Version: 4.x
-
-/* Notes
- $tdb->createTable("config", array(
- array("name", "memo"),
- array("value", "memo"),
- array("type", "string", 6),
- array("id", "id"),
- array("title", "memo"),
- array("description", "memo"),
- array("form_object", "string", 8),
- //form_name = "name"
- //for link "name" = text
- //form_value = "value"
- //for link "value" = URL
- //size predetermined (40)
- //rows predetermined (10)
- //cols predetermined (30)
- array("data_type", "string", 7)
- //Determines what kind of data is acceptable in the object.  Options: "number", "text" aka "string", "_blank", "_parent", bool, or boolean
- //"data_type" is the target of links.
- //"data_list" is used to populate lists (serialized array($value => $text), empty values are NOT supported, if you wish to create an optgroup, $value should be set to "optgroup" followed by a number (ex: "optgroup1" => "categories").
- Dynamically populated lists are NOT supported yet
- ));
- */
-
-/*
-
- - Title
- - Description
- - Form Object Type
- - input
- - text
- - name
- - size
- - INI val
- - password
- - name
- - size
- - hidden
- - name
- - INI val
- - checkbox
- - name
- - INI switch
- - FALSE === unchecked
- - TRUE === checked
- - textarea
- - rows
- - cols
- - INI VAL
- - name
- - link
- - URL
- - text
- - target
- */
-
 class ConfigSettings extends tdb {
-	private $_cache = array();  //cache the vars
-	private $_cache_ext = array();
+    private $_cache = array();  //cache the vars
+    private $_cache_ext = array();
 
-	function __construct()
+    function __construct()
     {
-		$this->tdb(DB_DIR, 'main.tdb');
-		$this->setFp('config', 'config');
-		$this->setFp('ext_config', 'ext_config');
-	}
+        $this->tdb(DB_DIR, 'main.tdb');
+        $this->setFp('config', 'config');
+        $this->setFp('ext_config', 'ext_config');
+    }
 
-	function clearcache()
+    public function clearcache()
     {
-		$this->_cache = array();
-		$this->_cache_ext = array();
-	}
+        $this->_cache = array();
+        $this->_cache_ext = array();
+    }
 
-	function getVars($type, $returnOptionalData=false)
+    public function getVars($type, $returnOptionalData=false)
     {
-		$return = array();
+        $return = array();
 
         if ($returnOptionalData) {
-			if (isset($this->_cache_ext[$type]))
+            if (isset($this->_cache_ext[$type]))
                 return $this->_cache_ext[$type];
 
             $this->_cache_ext[$type] = $this->query('ext_config', 'type=\'' . $type . '\'');
 
             return $this->_cache_ext[$type];
-		}
+        }
 
-		if (isset($this->_cache[$type]))
+        if (isset($this->_cache[$type]))
             return $this->_cache[$type];
 
         $rawVars = $this->query('config', 'type=\'' . $type . '\'');
-		//print_r($rawVars);
 
         foreach ($rawVars as $rawVar) {
-			switch($rawVar['data_type']) {
-				case 'string':
-				case 'text':
-				default:
-					//do nothing
-					break;
-				case 'bool':
-				case 'boolean':
-					$rawVar['value'] = (($rawVar['value'] == '' || $rawVar['value'] == '0' || !$rawVar['value']) ? false : true);
-					break;
-				case 'number':
-					$rawVar['value'] = (int)$rawVar['value'];
-					break;
-			}
-			$return[$rawVar['name']] = $rawVar['value'];
-		}
+            switch ($rawVar['data_type']) {
+                case 'string':
+                case 'text':
+                default:
+                    //do nothing
+                    break;
+                case 'bool':
+                case 'boolean':
+                    $rawVar['value'] = (($rawVar['value'] == '' || $rawVar['value'] == '0' || !$rawVar['value']) ? false : true);
+                    break;
+                case 'number':
+                    $rawVar['value'] = (int)$rawVar['value'];
+                    break;
+            }
+            $return[$rawVar['name']] = $rawVar['value'];
+        }
 
-		$this->_cache[$type] = $return;
+        $this->_cache[$type] = $return;
 
         return $return;
-	}
+    }
 
-	function editVars($type, $varArr, $editOptionalData = false)
+    public function editVars($type, $varArr, $editOptionalData = false)
     {
-		//format for $varArr is array('var_name' => 'var_value', ...)
-		//if($editOptionalData) format is how it is stored in the tdb, array(array("name" => $name, ...)...)
-		if (!is_array($varArr)) {
-			echo '<b>Warning:</b> second argument of editVars() must be an array.  (type: ' . $type . ')';
+        //format for $varArr is array('var_name' => 'var_value', ...)
+        //if($editOptionalData) format is how it is stored in the tdb, array(array('name' => $name, ...)...)
+        if (!is_array($varArr)) {
+            echo '<b>Warning:</b> second argument of editVars() must be an array.  (type: ' . $type . ')';
 
             return false;
-		}
+        }
 
-		$oriVars = $this->getVars($type, true);
+        $oriVars = $this->getVars($type, true);
 
         if ($editOptionalData) {
-			$nameRef = array();
+            $nameRef = array();
 
-			for ($i = 0; $i < count($varArr); $i++) {
-				$nameRef[$varArr[$i]['name']] = $varArr[$i];  //element "value" is already in $varArr[$i]$varArr
-			}
-		}
+            for ($i = 0; $i < count($varArr); $i++) {
+                $nameRef[$varArr[$i]['name']] = $varArr[$i];  //element 'value' is already in $varArr[$i]$varArr
+            }
+        }
 
-		foreach ($oriVars as $oriVar) {
-			if (!$editOptionalData && !isset($varArr[$oriVar['name']]))
+        foreach ($oriVars as $oriVar) {
+            if (!$editOptionalData && !isset($varArr[$oriVar['name']]))
                 continue;
-			elseif ($editOptionalData && !isset($nameRef[$oriVar['name']]))
+            elseif ($editOptionalData && !isset($nameRef[$oriVar['name']]))
                 continue;
 
-			if (isset($nameRef[$oriVar['name']]['value'])) {
-				if (isset($nameRef[$oriVar['name']]['data_type']))
+            if (isset($nameRef[$oriVar['name']]['value'])) {
+                if (isset($nameRef[$oriVar['name']]['data_type']))
                     $data_type =& $nameRef[$oriVar['name']]['data_type'];
-				else
+                else
                     $data_type =& $oriVar['data_type'];
 
                 switch ($data_type) {
-					case 'number':
-						if ($editOptionalData) {
-							$nameRef[$oriVar['name']]['value'] = preg_replace('/[^0-9.-]/i', '', $nameRef[$oriVar['name']]['value']);
-						} else
+                    case 'number':
+                        if ($editOptionalData) {
+                            $nameRef[$oriVar['name']]['value'] = preg_replace('/[^0-9.-]/i', '', $nameRef[$oriVar['name']]['value']);
+                        } else
                             $varArr[$oriVar['name']] = preg_replace('/[^0-9.-]/i', '', $varArr[$oriVar['name']]);
 
                         break;
-					case 'bool':
-					case 'boolean':
-						if ($editOptionalData) {
-							$nameRef[$oriVar['name']]['value'] = (($nameRef[$oriVar['name']]['value'] == ''
+                    case 'bool':
+                    case 'boolean':
+                        if ($editOptionalData) {
+                            $nameRef[$oriVar['name']]['value'] = (($nameRef[$oriVar['name']]['value'] == ''
                                 || $nameRef[$oriVar['name']]['value'] == '0' || $nameRef[$oriVar['name']]['value'] == false) ? '0' : '1');
-						} else
+                        } else
                             $varArr[$oriVar['name']] = (($varArr[$oriVar['name']] == '' || $varArr[$oriVar['name']] == '0' || $varArr[$oriVar['name']] == false) ? '0' : '1');
 
                     break;
-					case 'text':
-					case 'string':
-					default:
-						if ($editOptionalData)
+                    case 'text':
+                    case 'string':
+                    default:
+                        if ($editOptionalData)
                             $nameRef[$oriVar['name']]['value'] = stripslashes($nameRef[$oriVar['name']]['value']);
-						else
+                        else
                             $varArr[$oriVar['name']] = stripslashes($varArr[$oriVar['name']]);
 
                         break;
-				}
-			}
+                }
+            }
 
-			if ($editOptionalData) {
-				if (isset($nameRef[$oriVar['name']]) && is_array($nameRef[$oriVar['name']])) {
-					$this->edit('ext_config', $oriVar['id'], array_diff_assoc($nameRef[$oriVar['name']], $oriVar), false);
-					$this->edit('config',     $oriVar['id'], array_diff_assoc($nameRef[$oriVar['name']], $oriVar), false);
-				}
-			} else {
-				//if($varArr[$oriVar["name"]] != "" && $varArr[$oriVar["name"]] != $oriVar["value"]) {
-				if ($varArr[$oriVar["name"]] != $oriVar["value"]) { // Allow entries to be blank, otherwise how set blank announcement?
-					//echo "Changing Value of ".$oriVar["name"]." from \"<i>".htmlentities($oriVar["value"])."</i>\" to \"<i>".htmlentities($varArr[$oriVar["name"]])."</i>\"<br>";
-					$this->edit("config", $oriVar["id"], array("value" => $varArr[$oriVar["name"]]), false);
-					$this->edit("ext_config", $oriVar["id"], array("value" => $varArr[$oriVar["name"]]), false);
-				}
-			}
-		}
+            if ($editOptionalData) {
+                if (isset($nameRef[$oriVar['name']]) && is_array($nameRef[$oriVar['name']])) {
+                    $this->edit('ext_config', $oriVar['id'], array_diff_assoc($nameRef[$oriVar['name']], $oriVar), false);
+                    $this->edit('config',     $oriVar['id'], array_diff_assoc($nameRef[$oriVar['name']], $oriVar), false);
+                }
+            } else {
+                //if($varArr[$oriVar['name']] != '' && $varArr[$oriVar['name']] != $oriVar['value']) {
+                if ($varArr[$oriVar['name']] != $oriVar['value']) { // Allow entries to be blank, otherwise how set blank announcement?
+                    //echo 'Changing Value of '.$oriVar['name'].' from \'<i>'.htmlentities($oriVar['value']).'</i>\' to \'<i>'.htmlentities($varArr[$oriVar['name']]).'</i>\'<br>';
+                    $this->edit('config', $oriVar['id'], array('value' => $varArr[$oriVar['name']]), false);
+                    $this->edit('ext_config', $oriVar['id'], array('value' => $varArr[$oriVar['name']]), false);
+                }
+            }
+        }
 
-		return true;
-	}
+        return true;
+    }
 
-	function deleteVar($varName)
+    public function deleteVar($varName)
     {
-		$query = $this->query('config', "name='$varName'", 1, 1);
+        $query = $this->query('config', 'name=\'' . $varName . '\'', 1, 1);
 
         if (!empty($query[0])) {
-			parent::delete('config', $query[0]['id']);
+            parent::delete('config', $query[0]['id']);
 
             return parent::delete('ext_config', $query[0]['id']);
-		}
+        }
 
-		return false;
-	}
+        return false;
+    }
 
-	function addVar($varName, $initialValue, $type, $dataOjbect, $formObject,  $category, $sort, $pageTitle, $pageDescription, $dataList = '')
+    public function addVar($varName, $initialValue, $type, $dataOjbect, $formObject,  $category, $sort, $pageTitle, $pageDescription, $dataList = '')
     {
-		$query = $this->query('config', "name='$varName'", 1, 1);
+        $query = $this->query('config', 'name=\'' . $varName . '\'', 1, 1);
 
         if (!empty($query[0]))
             return false;
 
-        $query = $this->query('ext_config', "minicat='$category'&&sort='$sort'");
+        $query = $this->query('ext_config', 'minicat=\'' . $category . '\'&&sort=\'' . $sort . '\'');
 
         if (!empty($query[0])) {
-			//query sort-1 in order to bump on the exact match and higher
-			$query = $this->query('ext_config', "minicat='$category'&&sort>'".($sort-1)."'");
-			if(!empty($query[0])) {
-				foreach($query as $r) {
-					if(empty($r)) continue;
-					$this->edit('ext_config', $r['id'], array('sort' => ($r['sort']+1)));
-				}
-			}
-		}
-		$recArr = array("name" => $varName,
-                "value" => $initialValue,
-                "type" => $type,
-                "title" => $pageTitle,
-                "description" => $pageDescription,
-                "form_object" => $formObject,
-                "data_type" => $dataOjbect,
-                "data_list" => $dataList,
-                "minicat" => $category,
-                "sort" => $sort
-		);
-		parent::add("ext_config", $recArr);
-		return parent::add("config", $recArr); //This is okay because elements in array NOT in the table are IGNORED
-	}
+            //query sort-1 in order to bump on the exact match and higher
+            $query = $this->query('ext_config', 'minicat=\'' . $category . '\'&&sort>\'' . ($sort - 1) . '\'');
 
-	function rename($oldVarName, $newVarName) {
-		$query = $this->query('config', "name='$oldVarName'", 1, 1);
-		if(!empty($query[0])) {
-			$this->edit('config', $query[0]['id'], array('name' => $newVarName));
-			return $this->edit('ext_config', $query[0]['id'], array('name' => $newVarName));
-		}
-		return false;
-	}
+            if (!empty($query[0])) {
+                foreach($query as $r) {
+                    if (empty($r))
+                        continue;
 
-	function addCategory() {
-		//Place Holder
-	}
+                    $this->edit('ext_config', $r['id'], array('sort' => ($r['sort'] + 1)));
+                }
+            }
+        }
 
-	//if $placeBeforeMiniCat == '', place at the end
-	//if $placeBeforeMiniCat == '0', place at the beginning
-	//else use fetchMiniCategories, and use the $sort of the minicat as the third argument
-	function addMiniCategory($title, $type, $placeBeforeMiniCat='', $addingMoreMiniCats=true) {
-		switch ($type) { //TEMPORARY $type validation,
-			case 'config':
-			case 'status':
-			case 'regist':
-				break;
-			default:
-				trigger_error('Invalid configVar type provided to addMiniCategory('.$title.')', E_USER_NOTICE);
-				return false;
-		}
+        $recArr = array('name' => $varName,
+                'value' => $initialValue,
+                'type' => $type,
+                'title' => $pageTitle,
+                'description' => $pageDescription,
+                'form_object' => $formObject,
+                'data_type' => $dataOjbect,
+                'data_list' => $dataList,
+                'minicat' => $category,
+                'sort' => $sort
+        );
+        parent::add('ext_config', $recArr);
 
-		$title = str_replace(array(chr(29), chr(30), chr(31)), array('', '', ''), $title); //Make sure there isn't any record injection
+        return parent::add('config', $recArr); //This is okay because elements in array NOT in the table are IGNORED
+    }
 
-		$file = file_get_contents(DB_DIR.'/config_org.dat');
-		$raws = explode(chr(29), $file);
-		$raws2 = explode(chr(31), rtrim($raws[1], chr(31)));
+    public function rename($oldVarName, $newVarName)
+    {
+        $query = $this->query('config', 'name=\'' . $oldVarName . '\'', 1, 1);
 
-		$minicat_id = 1;
-		foreach($raws2 as $rawRec) {  // Find the next $minicat_id available
-			list($cat_type, $id) = explode(chr(30), $rawRec, 3);
-			if($id >= $minicat_id) $minicat_id = $id + 1;
-			if($placeBeforeMiniCat == $id && $cat_type != $type) {
-				trigger_error("The minicat_id({$placeBeforeMiniCat}) provided as the third argument for addMiniCategory() does not belong to the same configVar type as the one added.({$title})", E_USER_NOTICE);
-				return false;
-			}
-		}
+        if (!empty($query[0])) {
+            $this->edit('config', $query[0]['id'], array('name' => $newVarName));
 
-		//Prepare $whereToWrite
-		if($placeBeforeMiniCat == '') {
-			$whereToWrite = filesize(DB_DIR.'/config_org.dat');
-			$raws2 = array_reverse($raws2);
-		} else {
-			if(FALSE === ($whereToWrite = strpos($file, chr(29)))) return false;
-			$whereToWrite += 1; //for the chr(29)
-		}
+            return $this->edit('ext_config', $query[0]['id'], array('name' => $newVarName));
+        }
+        return false;
+    }
 
-		// Find out where to write it
-		foreach($raws2 as $rawRec) {
-			list($cat_type, $id) = explode(chr(30), $rawRec, 3);
-			if($cat_type == $type && // Check Conditions to BREAK out
-			($placeBeforeMiniCat == '' || // Place at the end
-			$placeBeforeMiniCat == '0' || // Place at the beginning
-			$id == $placeBeforeMiniCat) // Place in the middle
-			) break;
-			else { // Else Add/Subtract the record
-				if($placeBeforeMiniCat == '' // Place at the end
-				) $whereToWrite -= strlen($rawRec) + 1; //1 for the chr(31);
-				else // Place in the middle or beginning
-				$whereToWrite += strlen($rawRec) + 1; //1 for the chr(31);
-			}
-		}
+    public function addCategory()
+    {
+        //Place Holder
+    }
 
-		$rec = $type.chr(30).$minicat_id.chr(30).$title.chr(31);
+    //if $placeBeforeMiniCat == '', place at the end
+    //if $placeBeforeMiniCat == '0', place at the beginning
+    //else use fetchMiniCategories, and use the $sort of the minicat as the third argument
+    public function addMiniCategory($title, $type, $placeBeforeMiniCat = '', $addingMoreMiniCats = true)
+    {
+        switch ($type) { //TEMPORARY $type validation,
+            case 'config':
+            case 'status':
+            case 'regist':
+                break;
+            default:
+                trigger_error('Invalid configVar type provided to addMiniCategory(' . $title . ')', E_USER_NOTICE);
+                return false;
+        }
 
-		if($addingMoreMiniCats) clearstatcache(); //FAILURE TO DO THIS RESULTS IN LOSS OF MINI-CATEGORIES
-		$f = fopen(DB_DIR.'/config_org.dat', 'r+');
-		fseek($f, $whereToWrite);
+        $title = str_replace(array(chr(29), chr(30), chr(31)), array('', '', ''), $title); //Make sure there isn't any record injection
+        $file = file_get_contents(DB_DIR . '/config_org.dat');
+        $raws = explode(chr(29), $file);
+        $raws2 = explode(chr(31), rtrim($raws[1], chr(31)));
+        $minicat_id = 1;
 
-		$restOfFileSize = filesize(DB_DIR.'/config_org.dat') - $whereToWrite;
-		if($restOfFileSize > 0) {
-			$restOfFile = fread($f, $restOfFileSize);
-			fseek($f, $whereToWrite);
-		} else $restOfFile = '';
+        foreach ($raws2 as $rawRec) {  // Find the next $minicat_id available
+            list($cat_type, $id) = explode(chr(30), $rawRec, 3);
+            if ($id >= $minicat_id)
+                $minicat_id = $id + 1;
+            if ($placeBeforeMiniCat == $id && $cat_type != $type) {
+                trigger_error('The minicat_id(' . $placeBeforeMiniCat . ') provided as the third argument for addMiniCategory() does not belong to the same configVar type as the one added.(' . $title . ')', E_USER_NOTICE);
 
-		//Good tool to debug:
-		//print "\n".str_replace(array(chr(29), chr(30), chr(31)), array('&lt;29&gt;'."\n", '&lt;30&gt;', '&lt;31&gt;'."\n"), $tmp.$restOfFile);
-		$success = fwrite($f, $rec.$restOfFile);
-		fclose($f);
-		return (($success === false) ? false : $minicat_id);
-	}
+                return false;
+            }
+        }
 
-	function deleteCategory() {
-		//Place Holder
-	}
+        //Prepare $whereToWrite
+        if ($placeBeforeMiniCat == '') {
+            $whereToWrite = filesize(DB_DIR.'/config_org.dat');
+            $raws2 = array_reverse($raws2);
+        } else {
+            if (($whereToWrite = strpos($file, chr(29))) === false)
+                return false;
 
-	function deleteMiniCategory() {
-		//Place Holder
-	}
+            $whereToWrite += 1; //for the chr(29)
+        }
 
-	function renameCategory ($type, $title) {
-		switch ($type) { //TEMPORARY $type validation,
-			case 'config':
-			case 'status':
-			case 'regist':
-				break;
-			default:
-				trigger_error('Invalid configVar type provided to addMiniCategory('.$title.')', E_USER_NOTICE);
-				return false;
-		}
+        // Find out where to write it
+        foreach ($raws2 as $rawRec) {
+            list($cat_type, $id) = explode(chr(30), $rawRec, 3);
 
-		$title = str_replace(array(chr(29), chr(30), chr(31)), array('', '', ''), $title); //Make sure there isn't any record injection
+            if ($cat_type == $type && // Check Conditions to BREAK out
+                ($placeBeforeMiniCat == '' || // Place at the end
+                $placeBeforeMiniCat == '0' || // Place at the beginning
+                $id == $placeBeforeMiniCat) // Place in the middle
+            )
+                break;
+            else { // Else Add/Subtract the record
+                if ($placeBeforeMiniCat == '' // Place at the end
+                    )
+                    $whereToWrite -= strlen($rawRec) + 1; //1 for the chr(31);
+                else // Place in the middle or beginning
+                    $whereToWrite += strlen($rawRec) + 1; //1 for the chr(31);
+            }
+        }
 
-		clearstatcache();
-		$file = file_get_contents(DB_DIR.'/config_org.dat');
-		$raws = explode(chr(29), $file);
-		$raws2 = explode(chr(31), rtrim($raws[0], chr(31)));
-		for($i=0,$c=count($raws2);$i<$c;$i++) {
-			if(FALSE === strpos($raws2[$i], $type.chr(30))) continue;
-			$raws2[$i] = $type.chr(30).$title;
+        $rec = $type . chr(30) . $minicat_id . chr(30) . $title . chr(31);
 
-			$f = fopen(DB_DIR.'/config_org.dat', 'w');
-			fwrite($f, implode(chr(31), $raws2).chr(29).$raws[1]);
-			fclose($f);
-			return true;
-		}
-		return false;
-	}
+        if ($addingMoreMiniCats)
+            clearstatcache(); //FAILURE TO DO THIS RESULTS IN LOSS OF MINI-CATEGORIES
 
-	function renameMiniCategory() {
-		//Place Holder
-	}
+        $f = fopen(DB_DIR . '/config_org.dat', 'r+');
+        fseek($f, $whereToWrite);
+        $restOfFileSize = filesize(DB_DIR . '/config_org.dat') - $whereToWrite;
 
-	function fetchCategories() {
-		$raws = explode(chr(29), file_get_contents(DB_DIR.'/config_org.dat'));
-		$raws = explode(chr(31), rtrim($raws[0], chr(31)));
-		$cats = array();
-		foreach($raws as $rawRec) {
-			list($key, $title) = explode(chr(30), $rawRec, 2);
-			$cats[$key] = $title;
-		}
-		return $cats;
-	}
+        if ($restOfFileSize > 0) {
+            $restOfFile = fread($f, $restOfFileSize);
+            fseek($f, $whereToWrite);
+        } else
+            $restOfFile = '';
 
-	function fetchMiniCategories($category) {
-		$raws = explode(chr(29), file_get_contents(DB_DIR.'/config_org.dat'));
-		$raws = explode(chr(31), rtrim($raws[1], chr(31)));
-		$minicats = array();
-		foreach($raws as $rawRec) {
-			list($key, $id, $title) = explode(chr(30), $rawRec, 3);
-			if($key != $category) continue;
-			$minicats[$id] = $title;
-		}
-		return $minicats;
-	}
+        //Good tool to debug:
+        //print '\n'.str_replace(array(chr(29), chr(30), chr(31)), array('&lt;29&gt;'.'\n', '&lt;30&gt;', '&lt;31&gt;'.'\n'), $tmp.$restOfFile);
+
+        $success = fwrite($f, $rec.$restOfFile);
+        fclose($f);
+
+        return (($success === false) ? false : $minicat_id);
+    }
+
+    public function deleteCategory()
+    {
+        //Place Holder
+    }
+
+    public function deleteMiniCategory()
+    {
+        //Place Holder
+    }
+
+    public function renameCategory ($type, $title)
+    {
+        switch ($type) { //TEMPORARY $type validation,
+            case 'config':
+            case 'status':
+            case 'regist':
+                break;
+            default:
+                trigger_error('Invalid configVar type provided to addMiniCategory('.$title.')', E_USER_NOTICE);
+
+                return false;
+        }
+
+        $title = str_replace(array(chr(29), chr(30), chr(31)), array('', '', ''), $title); //Make sure there isn't any record injection
+        clearstatcache();
+        $file = file_get_contents(DB_DIR . '/config_org.dat');
+        $raws = explode(chr(29), $file);
+        $raws2 = explode(chr(31), rtrim($raws[0], chr(31)));
+
+        for ($i = 0, $c = count($raws2); $i < $c; $i++) {
+            if(strpos($raws2[$i], $type . chr(30)) === false)
+                continue;
+
+            $raws2[$i] = $type . chr(30) . $title;
+            $f = fopen(DB_DIR . '/config_org.dat', 'w');
+            fwrite($f, implode(chr(31), $raws2) . chr(29) . $raws[1]);
+            fclose($f);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    public function renameMiniCategory()
+    {
+        //Place Holder
+    }
+
+    public function fetchCategories()
+    {
+        $raws = explode(chr(29), file_get_contents(DB_DIR . '/config_org.dat'));
+        $raws = explode(chr(31), rtrim($raws[0], chr(31)));
+        $cats = array();
+
+        foreach ($raws as $rawRec) {
+            list($key, $title) = explode(chr(30), $rawRec, 2);
+            $cats[$key] = $title;
+        }
+
+        return $cats;
+    }
+
+    public function fetchMiniCategories($category)
+    {
+        $raws = explode(chr(29), file_get_contents(DB_DIR . '/config_org.dat'));
+        $raws = explode(chr(31), rtrim($raws[1], chr(31)));
+        $minicats = array();
+
+        foreach ($raws as $rawRec) {
+            list($key, $id, $title) = explode(chr(30), $rawRec, 3);
+
+            if ($key != $category)
+                continue;
+
+            $minicats[$id] = $title;
+        }
+
+        return $minicats;
+    }
 }
-?>
