@@ -1,4 +1,8 @@
 <?php
+
+$loader = require 'vendor/autoload.php';
+$loader->add('', 'classes');
+
 function RemoveXSS($val) {
 	$before_val = $val;
 	
