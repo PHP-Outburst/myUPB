@@ -1,0 +1,55 @@
+/* Notes
+ $tdb->createTable("config", array(
+ array("name", "memo"),
+ array("value", "memo"),
+ array("type", "string", 6),
+ array("id", "id"),
+ array("title", "memo"),
+ array("description", "memo"),
+ array("form_object", "string", 8),
+ //form_name = "name"
+ //for link "name" = text
+ //form_value = "value"
+ //for link "value" = URL
+ //size predetermined (40)
+ //rows predetermined (10)
+ //cols predetermined (30)
+ array("data_type", "string", 7)
+ //Determines what kind of data is acceptable in the object.  Options: "number", "text" aka "string", "_blank", "_parent", bool, or boolean
+ //"data_type" is the target of links.
+ //"data_list" is used to populate lists (serialized array($value => $text), empty values are NOT supported, if you wish to create an optgroup, $value should be set to "optgroup" followed by a number (ex: "optgroup1" => "categories').
+ Dynamically populated lists are NOT supported yet
+ ));
+ */
+
+/*
+
+ - Title
+ - Description
+ - Form Object Type
+ - input
+ - text
+ - name
+ - size
+ - INI val
+ - password
+ - name
+ - size
+ - hidden
+ - name
+ - INI val
+ - checkbox
+ - name
+ - INI switch
+ - FALSE === unchecked
+ - TRUE === checked
+ - textarea
+ - rows
+ - cols
+ - INI VAL
+ - name
+ - link
+ - URL
+ - text
+ - target
+ */
