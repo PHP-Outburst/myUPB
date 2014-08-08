@@ -184,8 +184,7 @@ switch($_POST["add"]{0}) {
 				}
 
 				//Set the errorHandler
-				require_once('./includes/class/error.class.php');
-				$errorHandler = new errorhandler();
+				$errorHandler = new ErrorHandler();
 				set_error_handler(array(&$errorHandler, 'add_error'));
 				error_reporting(E_ALL ^ E_NOTICE);
 
