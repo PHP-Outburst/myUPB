@@ -6,8 +6,7 @@
 // Version: 2.0
 // Using textdb Version: 4.4.1
 require_once("./includes/upb.initialize.php");
-require_once("./includes/class/posts.class.php");
-$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 
 if (!isset($_GET["id"]) || !isset($_GET["t_id"]) || $_GET['id'] == '' || $_GET['t_id'] == '' || !ctype_digit($_GET['id']) || !ctype_digit($_GET['id'])) exitPage(str_replace('__TITLE__', 'Invalid ID:', str_replace('__MSG__', 'Cannot retrieve topic information because not enough information was provided.<br />'.ALERT_GENERIC_MSG, ALERT_MSG)), true);
 if (!$tdb->is_logged_in()) exitPage(str_replace('__TITLE__', 'Warning:', str_replace('__MSG__', 'You must be <a href="login.php">logged in</a> to view this page.', ALERT_MSG)), true);

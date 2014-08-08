@@ -550,8 +550,7 @@ if (isset($_POST["u_edit"])) {
 		<td colspan='6' class='area_2' style='text-align:center;font-weight:bold;padding:20px;'>you have no bookmarked topics</td>
 	</tr>";
 	} else {
-		require_once('./includes/class/posts.class.php');
-		$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+		$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 		while(list(, $tmp) = each($topics)) {
 			list($f_id, $t_id) = explode(',', $tmp);
 			$posts_tdb->setFp("topics", $f_id."_topics");

@@ -31,8 +31,7 @@ if($access == false)
     exitPage(str_replace('__TITLE__', "Permission Denied", str_replace('__MSG__', "You do not have enough Power to view this forum.<br>".ALERT_GENERIC_MSG, ALERT_MSG)), true);
 }
 
-require_once('./includes/class/posts.class.php');
-$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 $posts_tdb->setFp("topics", $_GET["id"]."_topics");
 $posts_tdb->set_forum($fRec);
 if (!($tdb->is_logged_in())) {
