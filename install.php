@@ -6,6 +6,9 @@
 // Version: 2.2.7
 // Using textdb Version: 4.4.1
 
+$loader = require 'vendor/autoload.php';
+$loader->add('', 'classes');
+	
 require_once 'includes/inc/func.inc.php';
 
 ignore_user_abort();
@@ -260,7 +263,7 @@ switch($_POST["add"]{0}) {
 				$tdb->createDatabase(DB_DIR."/", "posts.tdb");
 				$tdb->createDatabase(DB_DIR."/", "privmsg.tdb");
 				$tdb->createDatabase(DB_DIR."/", "bbcode.tdb");
-				$tdb->tdb(DB_DIR."/", "main.tdb");
+				$tdb->__construct(DB_DIR."/", "main.tdb");
 				$tdb->createTable("members", array(
 				array("user_name", "string", 20),
 				array("password", "string", 49),
@@ -340,7 +343,7 @@ switch($_POST["add"]{0}) {
 				), 2048);
 				$tdb->setFp("config", "config");
 				$tdb->setFp("ext_config", "ext_config");
-				$tdb->tdb(DB_DIR."/", "privmsg.tdb");
+				$tdb->__construct(DB_DIR."/", "privmsg.tdb");
 				$tdb->createTable("1", array(
 				array("box", "string", 6),
 				array("from", "number", 7),
@@ -471,7 +474,7 @@ switch($_POST["add"]{0}) {
 				}
 
 
-				$tdb->tdb(DB_DIR.'/', 'bbcode.tdb');
+				$tdb->__construct(DB_DIR.'/', 'bbcode.tdb');
 				$tdb->createTable('smilies',array(array('id','id'),array('bbcode','memo'),array('replace','memo'),array('type','string',4)));
 				$tdb->createTable('icons',array(array('id','id'),array('filename','memo')));
 				$tdb->setFp("smilies","smilies");
