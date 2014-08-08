@@ -356,7 +356,8 @@ switch($_POST["add"]{0}) {
 				touch(DB_DIR."/blockedlist.dat");
 				//$_CONFIG
 				?><?php
-				$config_tdb = new ConfigSettings();
+				require_once('./includes/class/config.class.php');
+				$config_tdb = new configSettings();
 				$config_tdb->addVar('ver', '2.2.5', 'config', 'text', 'hidden', '','','','');
 				$config_tdb->addVar('email_mode', '1', 'config', 'bool', 'hidden','','','','');
 				$config_tdb->addVar('admin_catagory_sorting', '', 'config', 'text', 'hidden', '', '', '', '');
@@ -788,7 +789,8 @@ switch($_POST["add"]{0}) {
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='hidden' name='add' value='3auth'><input type='submit' value='Submit' name='B1'><input type='reset' value='Reset' name='B2'></td>";
 			} else if ($_POST['add'] == "4") {
 				require_once("./includes/class/tdb.class.php");
-				$config_tdb = new ConfigSettings();
+				require_once("./includes/class/config.class.php");
+				$config_tdb = new configSettings();
 				$edit_config = array("title" => $_POST["title"], "fileupload_size" => $_POST["fileupload_size"], "fileupload_types" => $_POST["fileupload_types"], "homepage" => $_POST["homepage"]);
 				$edit_regist = array("register_sbj" => $_POST["register_sbj"], "register_msg" => $_POST["register_msg"], "admin_email" => $_POST["admin_email"]);
 				if ($config_tdb->editVars("config", $edit_config) && $config_tdb->editVars("regist", $edit_regist)) {
