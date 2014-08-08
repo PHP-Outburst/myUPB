@@ -9,7 +9,6 @@
  */
 
 require_once('./includes/upb.initialize.php');
-require_once('./includes/class/upload.class.php');
 
 if(!isset($_GET['action']) || $_GET['action'] == '') $_GET['action'] = 'edit';
 if ($_GET['action'] == "get" || $_GET['action'] == 'view') $where = "Member Profile";
@@ -93,7 +92,7 @@ if (isset($_POST["u_edit"])) {
 				$upload_err = "The dimensions of the uploaded avatar are too big.<br>The maximum dimensions are ".$_REGIST['avatarupload_dim']."px by ".$_REGIST['avatarupload_dim']."px";
 				else
 				{
-					$upload = new upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
+					$upload = new Upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
 					$uploadId = $upload->storeFile($_FILES["avatar2file"]);
 				}
 			}
@@ -121,8 +120,7 @@ if (isset($_POST["u_edit"])) {
 			$id = substr($user[0]['avatar'], 26);
 			if(ctype_digit($id)) {
 				if(!isset($upload)) {
-					require_once('./includes/class/upload.class.php');
-					$upload = new upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
+					$upload = new Upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
 				}
 				$upload->deleteFile($id);
 			}

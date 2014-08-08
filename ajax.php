@@ -1,6 +1,5 @@
 <?php
 require_once('./includes/upb.initialize.php');
-require_once("./includes/class/upload.class.php");
 
 $ajax_type = $_POST['type'];
 
@@ -598,7 +597,7 @@ switch ($ajax_type)
 		$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 		$posts_tdb->setFp("topics", $_POST["forumid"]."_topics");
 		$posts_tdb->setFp("posts", $_POST["forumid"]);
-		$upload = new upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
+		$upload = new Upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
 
 		$upload->deleteFile($_POST['fileid']);
 		$pRec = $posts_tdb->get("posts", $_POST["postid"]);

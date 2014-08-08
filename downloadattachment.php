@@ -1,6 +1,5 @@
 <?php
 require_once("./includes/upb.initialize.php");
-require_once("./includes/class/upload.class.php");
 require_once("./includes/api/usermanagement/authentication.class.php");
 
 $auth = new UPB_Authentication($tdb);
@@ -11,7 +10,7 @@ if($uploadRec !== false)
 {
 	if($auth->access("topic", 'r', $uploadRec[0]["forum_id"], $uploadRec[0]["topic_id"]) == true)
 	{
-		$upload = new upload(DB_DIR, 0,$_CONFIG['fileupload_location']);
+		$upload = new Upload(DB_DIR, 0,$_CONFIG['fileupload_location']);
 		$upload->getFile((int) $_GET["upload_id"]);
 		
 		// Update the download count

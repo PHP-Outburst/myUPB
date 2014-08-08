@@ -9,7 +9,6 @@
  */
 
 require_once("./includes/upb.initialize.php");
-require_once("./includes/class/upload.class.php");
 
 $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin_forums.php'>Manage Forums</a>";
 require_once('./includes/header.php');
