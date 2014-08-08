@@ -105,7 +105,7 @@ if ($_POST['next'] == 0) {
 		), 2048);
 	}
 
-	$post_tdb = new tdb(DB_DIR, 'posts');
+	$post_tdb = new Tdb(DB_DIR, 'posts');
 	$tableList = $post_tdb->getTableList();
 	foreach($tableList as $table) {
 		// Remove the database name from the tablename

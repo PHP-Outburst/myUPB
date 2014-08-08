@@ -9,7 +9,7 @@
 require_once('./includes/inc/geshi.inc.php');
 function message_icons()
 {
-	$tdb = new tdb(DB_DIR.'/', 'bbcode.tdb');
+	$tdb = new Tdb(DB_DIR.'/', 'bbcode.tdb');
 	$tdb->setFP("icons","icons");
 	$icons = $tdb->query("icons","id>'0'");
 	//var_dump($smilies);
@@ -77,7 +77,7 @@ function display_msg($text,$type = '',$removeMeta=false)
 
 function UPBcoding($text) {
 
-	$tdb = new tdb(DB_DIR.'/', 'bbcode.tdb');
+	$tdb = new Tdb(DB_DIR.'/', 'bbcode.tdb');
 
 	$tdb->setFP("smilies","smilies");
 	$msg = $text;
@@ -251,7 +251,7 @@ function bbcodebuttons($txtarea='message',$type='post') {
 
 function getSmilies($field = 'message')
 {
-	$tdb = new tdb(DB_DIR.'/', 'bbcode.tdb');
+	$tdb = new Tdb(DB_DIR.'/', 'bbcode.tdb');
 	$tdb->setFP("smilies","smilies");
 	$smilies = $tdb->query("smilies","id>'0'&&type='main'");
 	//var_dump($smilies);

@@ -9,7 +9,7 @@
 /**
  * Class Upload
  */
-class Upload extends tdb
+class Upload extends Tdb
 {
     private $initialized = false;
     private $file = array();

@@ -9,14 +9,14 @@
 /**
  * Class TdbFunctions
  */
-class TdbFunctions extends tdb
+class TdbFunctions extends Tdb
 {
     private $_cache = array();
 
     function __construct($dir, $db)
     {
         $this->cleanup();
-        $this->tdb($dir, $db);
+        parent::__construct($dir, $db);
     }
 
     public function login_user($user, $pass, $key, &$error)

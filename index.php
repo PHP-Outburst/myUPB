@@ -35,7 +35,7 @@ require_once("./includes/header.php");
 if($_COOKIE['power_env'] == '0' && $_REGIST['disable_reg']) {
 	print str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Public Registration has been disabled.  This may be a private bulletin board.<br /> Please contact an Administrator if you would like to register.', ALERT_MSG));
 }
-$posts = new tdb(DB_DIR, "posts.tdb");
+$posts = new Tdb(DB_DIR, "posts.tdb");
 $cRecs = $tdb->listRec("cats", 1);
 //$cRecs = $tdb->query("cats", "view<'".($_COOKIE["power_env"] + 1)."'");
 if ($cRecs[0]["id"] == "") {

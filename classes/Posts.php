@@ -8,7 +8,7 @@
 /**
  * Class Posts
  */
-class Posts extends tdb
+class Posts extends Tdb
 {
     //declare vars
     private $tRec;
@@ -17,7 +17,7 @@ class Posts extends tdb
 
     function __construct($dir, $db)
     {
-        $this->tdb($dir, $db);
+        parent::__construct($dir, $db);
     }
 
     //Check Functions

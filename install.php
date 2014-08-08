@@ -255,8 +255,7 @@ switch($_POST["add"]{0}) {
 				fclose($f);
 				//end
 				//begin db files
-				require_once('./includes/class/tdb.class.php');
-				$tdb = new tdb('', '');
+				$tdb = new Tdb('', '');
 				$tdb->createDatabase(DB_DIR."/", "main.tdb");
 				$tdb->createDatabase(DB_DIR."/", "posts.tdb");
 				$tdb->createDatabase(DB_DIR."/", "privmsg.tdb");
@@ -671,7 +670,6 @@ switch($_POST["add"]{0}) {
 
 				if($_POST["add"] == "3adduser") {
 					//add admin to the db
-					require_once("./includes/class/tdb.class.php");
 					require_once("./includes/inc/encode.inc.php");
 					require_once("./includes/inc/date.inc.php");
 
@@ -691,7 +689,7 @@ switch($_POST["add"]{0}) {
 						"date_added" => mkdate(),
 						"lastvisit" => mkdate(), 
 						"timezone" => $_POST["timezone"]);
-					$tdb = new tdb(DB_DIR, "main");
+					$tdb = new Tdb(DB_DIR, "main");
 					$tdb->setFp("users", "members");
 					$tdb->add("users", $admin);
 					$f = fopen(DB_DIR."/new_pm.dat", 'w');
@@ -786,7 +784,6 @@ switch($_POST["add"]{0}) {
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='hidden' name='add' value='3auth'><input type='submit' value='Submit' name='B1'><input type='reset' value='Reset' name='B2'></td>";
 			} else if ($_POST['add'] == "4") {
-				require_once("./includes/class/tdb.class.php");
 				$config_tdb = new ConfigSettings();
 				$edit_config = array("title" => $_POST["title"], "fileupload_size" => $_POST["fileupload_size"], "fileupload_types" => $_POST["fileupload_types"], "homepage" => $_POST["homepage"]);
 				$edit_regist = array("register_sbj" => $_POST["register_sbj"], "register_msg" => $_POST["register_msg"], "admin_email" => $_POST["admin_email"]);

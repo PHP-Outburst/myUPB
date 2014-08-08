@@ -266,7 +266,7 @@ if (isset($_POST["u_edit"])) {
 		} else {
 			$fRecs = $tdb->listRec("forums", 1);
 			if(!empty($fRecs[0])) {
-				$posts_tdb = new tdb(DB_DIR, "posts");
+				$posts_tdb = new Tdb(DB_DIR, "posts");
 				foreach($fRecs as $fRec) {
 					if ((int)$_COOKIE["power_env"] < $fRec["view"]) {
 						continue;

@@ -8,14 +8,14 @@
 /**
  * Class ConfigSettings
  */
-class ConfigSettings extends tdb
+class ConfigSettings extends Tdb
 {
     private $_cache = array();  //cache the vars
     private $_cache_ext = array();
 
     function __construct()
     {
-        $this->tdb(DB_DIR, 'main.tdb');
+        parent::__construct(DB_DIR, 'main.tdb');
         $this->setFp('config', 'config');
         $this->setFp('ext_config', 'ext_config');
     }
