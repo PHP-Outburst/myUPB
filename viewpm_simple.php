@@ -9,7 +9,7 @@ if (!$tdb->is_logged_in()) die('You are not properly logged in.');
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) die('Invalid ID');
 require_once('./includes/header_simple.php');
 $where = 'PM:';
-$PrivMsg = new functions(DB_DIR."/", "privmsg.tdb");
+$PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
 $PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 $pmRec = $PrivMsg->get("CuBox", $_GET["id"]);
 echo "

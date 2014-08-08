@@ -6,7 +6,7 @@
 // Using textdb Version: 4.3.2
 require_once('./includes/upb.initialize.php');
 $fRec = $tdb->get("forums", $_GET["id"]);
-$posts_tdb = new functions(DB_DIR."/", "posts.tdb");
+$posts_tdb = new TdbFunctions(DB_DIR."/", "posts.tdb");
 $posts_tdb->setFp("topics", $_GET["id"]."_topics");
 $posts_tdb->setFp("posts", $_GET["id"]);
 $message = "";

@@ -153,7 +153,6 @@ if(file_exists(DB_DIR.'/banneduser.dat')) {
 }
 
 require_once("./includes/class/tdb.class.php");
-require_once("./includes/class/func.class.php");
 
 require_once('./includes/inc/post.inc.php');
 require_once("./includes/inc/func.inc.php");
@@ -171,7 +170,7 @@ if(!file_exists(DB_DIR."/main.tdb"))
 }
 
 if(file_exists(DB_DIR."/main.tdb")) {
-	$tdb = new functions(DB_DIR.'/', 'main.tdb');
+	$tdb = new TdbFunctions(DB_DIR.'/', 'main.tdb');
 	//$tdb->define_error_handler(array(&$errorHandler, 'add_error'));
 	$tdb->setFp('users', 'members');
 	$tdb->setFp('forums', 'forums');

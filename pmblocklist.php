@@ -8,7 +8,7 @@ require_once('./includes/upb.initialize.php');
 if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset($_COOKIE["power_env"]) || !isset($_COOKIE["id_env"])) exitPage('You are not logged in.', true);
 if (!$tdb->is_logged_in()) exitPage('Invalid Login!', true);
 require_once('./includes/inc/privmsg.inc.php');
-$PrivMsg = new functions(DB_DIR."/", "privmsg.tdb");
+$PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
 $PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 if ($_GET["action"] == "add") {
 	$where = "<a href='pmsystem.php'>Private Msg</a> ".$_CONFIG["where_sep"]." Manage Blocked Users";

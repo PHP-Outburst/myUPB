@@ -26,7 +26,6 @@ include_once(dirname( __FILE__ )."/authentication.base.php");
 
 //include_once(dirname( __FILE__ )."/../../../config.php");
 //include_once(dirname( __FILE__ )."/../../class/tdb.class.php");
-//include_once(dirname( __FILE__ )."/../../class/func.class.php");
 
 if(!defined("DB_DIR"))
 {
