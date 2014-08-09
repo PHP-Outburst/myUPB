@@ -171,7 +171,7 @@ if (empty($tRecs[0]['id'])) {
 			echo "
 		<tr>
 			<td class='area_2' onmouseover=\"this.className='area_2_over'\" onmouseout=\"this.className='area_2'\">
-				<span class='link_1'><a href='xml.php?id=".$_GET["id"]."&amp;t_id=".$tRec["id"]."'><img src='images/rss.png' class='rss' alt='RSS Feed' title='RSS Feed'></a> ".$tRec["subject"].$r_ext."</span>
+				<span class='link_1'><a href='xml.php?id=".$_GET["id"]."&amp;t_id=".$tRec["id"]."'><img src='images/rss.png' class='rss' alt='RSS Feed' title='RSS Feed'/></a> ".$tRec["subject"].$r_ext."</span>
 				<div class='description'>Started By:&nbsp;<span style='color:#".$statuscolor."'>".$tRec["topic_starter"]."</span></div>
 				<div class='box_posts'><strong>Views:</strong>&nbsp;".$tRec["views"]."</div>
 				<div class='box_posts'><strong>Replies:</strong>&nbsp;".$tRec["replies"]."</div></td>

@@ -19,6 +19,7 @@ $f = fopen('./config.php', 'w');
 fwrite($f, implode("\n", $lines));
 fclose($f);
 ?>
+<!DOCTYPE html>
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>
 <head>
 <title>UPB v2.2.5 Updater</title>

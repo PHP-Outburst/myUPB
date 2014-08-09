@@ -300,27 +300,27 @@ if($_GET['action'] == 'confirm') {
 				<td class='footer_3' colspan='2'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
 			</tr>
 			<tr>
-				<td class='area_1' style='padding:8px;'><img src='images/msn.gif' border='0' align='absmiddle'>&nbsp;<strong>MSN:</strong></td>
+				<td class='area_1' style='padding:8px;'><img src='images/msn.gif' align='absmiddle'/>&nbsp;<strong>MSN:</strong></td>
 				<td class='area_2'><input type='text' name='msn' size='20' value='".$rec[0]["msn"]."' /></td>
 			</tr>
 			<tr>
-				<td class='area_1' style='padding:8px;'><img src='images/yahoo.gif' border='0' align='absmiddle'>&nbsp;<strong>YIM:</strong></td>
+				<td class='area_1' style='padding:8px;'><img src='images/yahoo.gif' align='absmiddle'/>&nbsp;<strong>YIM:</strong></td>
 				<td class='area_2'><input type='text' name='yahoo' size='20' value='".$rec[0]["yahoo"]."' /></td>
 			</tr>
 			<tr>
-				<td class='area_1' style='padding:8px;'><img src='images/icq.gif' border='0' align='absmiddle'>&nbsp;<strong>ICQ:</strong></td>
+				<td class='area_1' style='padding:8px;'><img src='images/icq.gif' align='absmiddle'/>&nbsp;<strong>ICQ:</strong></td>
 				<td class='area_2'><input type='text' name='icq' size='20' value='".$rec[0]["icq"]."' /></td>
 			</tr>
       <tr>
-				<td class='area_1' style='padding:8px;'><img src='images/aol.gif' border='0' align='absmiddle'>&nbsp;<strong>AOL:</strong></td>
+				<td class='area_1' style='padding:8px;'><img src='images/aol.gif' align='absmiddle'/>&nbsp;<strong>AOL:</strong></td>
 				<td class='area_2'><input type='text' name='icq' size='20' value='".$rec[0]["aim"]."' /></td>
 			</tr>
       <tr>
-				<td class='area_1' style='padding:8px;'><img src='images/twitter.png' border='0' align='absmiddle'>&nbsp;<strong>Twitter:</strong></td>
+				<td class='area_1' style='padding:8px;'><img src='images/twitter.png' align='absmiddle'/>&nbsp;<strong>Twitter:</strong></td>
 				<td class='area_2'><input type='text' name='twitter' size='20' value='".$rec[0]["twitter"]."' /></td>
 			</tr>
       <tr>
-				<td class='area_1' style='padding:8px;'><img src='images/skype.gif' border='0' align='absmiddle'>&nbsp;<strong>Skype:</strong></td>
+				<td class='area_1' style='padding:8px;'><img src='images/skype.gif' align='absmiddle'/>&nbsp;<strong>Skype:</strong></td>
 				<td class='area_2'><input type='text' name='skype' size='20' value='".$rec[0]["skype"]."' /></td>
 			</tr>
       <tr>

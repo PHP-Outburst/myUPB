@@ -250,7 +250,7 @@ switch ($ajax_type)
 			if (@$user[0]["avatar"] != "")
 			{
 				$resize = MiscFunctions::resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
-				$output .= "<br /><center><img src=\"".$user[0]["avatar"]."\" border='0' $resize alt='' title=''></center><br />";
+				$output .= "<br /><center><img src=\"".$user[0]["avatar"]."\" $resize alt='' title=''/></center><br />";
 			}
 			else $output .= "<br /><br />";
 			$output .= "<div class='post_info'><center><span style='color:#".$statuscolor."'><img src='".$statusrank."'><br><strong>".$status."</strong></span></center></div>";
@@ -265,10 +265,10 @@ switch ($ajax_type)
 					</div>
 					<br />
 					<div class='post_info_extra'>";
-			if ($user[0]["aim"] != "") $output .= "&nbsp;<a href='aim:goim?screenname=".$user[0]["aim"]."'><img src='images/aol.gif' border='0' alt='AIM: ".$user[0]["aim"]."'></a>&nbsp;&nbsp;";
-			if ($user[0]["msn"] != "") $output .= "&nbsp;<a href='http://members.msn.com/".$user[0]["msn"]."' target='_blank'><img src='images/msn.gif' border='0' alt='MSN: ".$user[0]["msn"]."'></a>&nbsp;&nbsp;";
-			if ($user[0]["icq"] != "") $output .= "&nbsp;<a href='http://wwp.icq.com/scripts/contact.dll?msgto=".$user[0]["icq"]."&action=message'><img src='images/icq.gif' border='0' alt='ICQ: ".$user[0]["icq"]."'></a>&nbsp;&nbsp;";
-			if ($user[0]["yahoo"] != "") $output .= "&nbsp;<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$user[0]["yahoo"]."&.src=pg'><img border=0 src='http://opi.yahoo.com/online?u=".$user[0]["yahoo"]."&m=g&t=0' alt='Y!: ".$user[0]["yahoo"]."'></a>";
+			if ($user[0]["aim"] != "") $output .= "&nbsp;<a href='aim:goim?screenname=".$user[0]["aim"]."'><img src='images/aol.gif' alt='AIM: ".$user[0]["aim"]."'/></a>&nbsp;&nbsp;";
+			if ($user[0]["msn"] != "") $output .= "&nbsp;<a href='http://members.msn.com/".$user[0]["msn"]."' target='_blank'><img src='images/msn.gif'  alt='MSN: ".$user[0]["msn"]."'/></a>&nbsp;&nbsp;";
+			if ($user[0]["icq"] != "") $output .= "&nbsp;<a href='http://wwp.icq.com/scripts/contact.dll?msgto=".$user[0]["icq"]."&action=message'><img src='images/icq.gif'  alt='ICQ: ".$user[0]["icq"]."'/></a>&nbsp;&nbsp;";
+			if ($user[0]["yahoo"] != "") $output .= "&nbsp;<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$user[0]["yahoo"]."&.src=pg'><img  src='http://opi.yahoo.com/online?u=".$user[0]["yahoo"]."&m=g&t=0' alt='Y!: ".$user[0]["yahoo"]."'/></a>";
 
 			$output .= "</div>";
 			$output .= "</td>

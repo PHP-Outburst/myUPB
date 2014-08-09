@@ -74,7 +74,7 @@ if ($vars['page'] == 1) $first_post = $pRecs[0]['id'];
 else $first_post = 0;
 $x = +1;
 
-echo "<div name='current_posts' id='current_posts'>";
+echo "<div id='current_posts'>";
 
 foreach($pRecs as $pRec) {
 	// display each post in the current topic
@@ -150,18 +150,18 @@ foreach($pRecs as $pRec) {
 	if ($pRec["user_id"] != "0") echo "<a href='profile.php?action=get&amp;id=".$pRec["user_id"]."'>".$pRec["user_name"]."</a>";
 	else echo $pRec["user_name"];
 	echo "</div></th>
-				<th><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pRec["icon"]."' alt=''></div><div style='align:right;'>$delete $edit $quote $reply</div></th>
+				<th><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pRec["icon"]."' alt=''/></div><div style='align:right;'>$delete $edit $quote $reply</div></th>
 			</tr>
 			<tr>
 				<td class='$table_color' style='width:15%; vertical-align:top;'>";
 	if (@$user[0]["avatar"] != "")
 	{
 		$resize = MiscFunctions::resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
-		echo "<br /><style='align:center'><img src=\"".$user[0]["avatar"]."\" border='0' $resize alt='' title=''></style><br />";
+		echo "<br /><style='align:center'><img src=\"".$user[0]["avatar"]."\"  $resize alt='' title=''/></style><br />";
 	}
 	else if ($pRec["user_id"] != "0")
 	echo "<br /><br />";
-	print "<div class='post_info' style='align:center'><span style='color:#".$statuscolor."'><img src='".$statusrank."'><br><strong>".$status."</strong></span></div>";
+	print "<div class='post_info' style='align:center'><span style='color:#".$statuscolor."'><img src='".$statusrank."'/><br><strong>".$status."</strong></span></div>";
 	if ($pRec["user_id"] != "0") echo "
 					<div class='post_info'>
 						<strong>Posts:</strong> ".$user[0]["posts"]."
@@ -172,10 +172,10 @@ foreach($pRecs as $pRec) {
 					</div>
 					<br />
 					<div class='post_info_extra'>";
-	if ($user[0]["aim"] != "") echo "&nbsp;<a href='aim:goim?screenname=".$user[0]["aim"]."'><img src='images/aol.gif' border='0' alt='AIM: ".$user[0]["aim"]."'></a>&nbsp;&nbsp;";
-	if ($user[0]["msn"] != "") echo "&nbsp;<a href='http://members.msn.com/".$user[0]["msn"]."' target='_blank'><img src='images/msn.gif' border='0' alt='MSN: ".$user[0]["msn"]."'></a>&nbsp;&nbsp;";
-	if ($user[0]["icq"] != "") echo "&nbsp;<a href='http://wwp.icq.com/scripts/contact.dll?msgto=".$user[0]["icq"]."&action=message'><img src='images/icq.gif' border='0' alt='ICQ: ".$user[0]["icq"]."'></a>&nbsp;&nbsp;";
-	if ($user[0]["yahoo"] != "") echo "&nbsp;<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$user[0]["yahoo"]."&.src=pg'><img border=0 src='http://opi.yahoo.com/online?u=".$user[0]["yahoo"]."&amp;m=g&t=0' alt='Y!: ".$user[0]["yahoo"]."'></a>";
+	if ($user[0]["aim"] != "") echo "&nbsp;<a href='aim:goim?screenname=".$user[0]["aim"]."'><img src='images/aol.gif' alt='AIM: ".$user[0]["aim"]."'/></a>&nbsp;&nbsp;";
+	if ($user[0]["msn"] != "") echo "&nbsp;<a href='http://members.msn.com/".$user[0]["msn"]."' target='_blank'><img src='images/msn.gif' alt='MSN: ".$user[0]["msn"]."'/></a>&nbsp;&nbsp;";
+	if ($user[0]["icq"] != "") echo "&nbsp;<a href='http://wwp.icq.com/scripts/contact.dll?msgto=".$user[0]["icq"]."&action=message'><img src='images/icq.gif' alt='ICQ: ".$user[0]["icq"]."'/></a>&nbsp;&nbsp;";
+	if ($user[0]["yahoo"] != "") echo "&nbsp;<a href='http://edit.yahoo.com/config/send_webmesg?.target=".$user[0]["yahoo"]."&.src=pg'><img src='http://opi.yahoo.com/online?u=".$user[0]["yahoo"]."&amp;m=g&t=0' alt='Y!: ".$user[0]["yahoo"]."'/></a>";
 
 	echo"</div>";
 	echo "</td>

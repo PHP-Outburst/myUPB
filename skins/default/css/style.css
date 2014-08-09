@@ -60,7 +60,7 @@ a:hover {
 /* This eliminates the border that some browsers place around an image
 	when it is used as a link */
 img {
-	border : 0;
+	border : 0; /* delete all border tags in HTML */
 	display:inline;  /*vertical-align:absmiddle is in html, not in css*/
 }
 

@@ -278,7 +278,7 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
           <a href=\"#\" onclick=\"document.getElementById('captcha').src='./includes/thirdparty/cool-php-captcha-0.3.1/captcha.php?'+Math.random();
 		  document.getElementById('captcha-form').focus();\" 
 		  id=\"change-image\">Load new image?</a></td>
-				<td class='area_2'><div><img src=\"./includes/thirdparty/cool-php-captcha-0.3.1/captcha.php\" id=\"captcha\"></div>
+				<td class='area_2'><div><img src=\"./includes/thirdparty/cool-php-captcha-0.3.1/captcha.php\" id=\"captcha\"/></div>
 				<input type=\"text\" name=\"captcha\" id=\"captcha-form\" autocomplete=\"off\" size=\"40\"/></td>
 			</tr>";
 	}
