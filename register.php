@@ -85,8 +85,6 @@ if (empty($_POST["show_email"])) $_POST["show_email"] = "";
 if (empty($_POST["email_list"])) $_POST["email_list"] = "";
 if (!isset($_POST["submit"])) $_POST["submit"] = "";
 
-require_once('./includes/inc/encode.inc.php');
-
 if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 	if (!$tdb->is_logged_in() && (empty($_SESSION['captcha']) || strtolower(trim($_REQUEST['captcha'])) != $_SESSION['captcha'])) //checks cool php captcha, repaired registering as admin/mod
 	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You failed the CAPTCHA check.  Please enter the code <b>exactly</b> as it appears.', ALERT_MSG)), true);//captcha failed
@@ -142,7 +140,7 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 
 	$id = $tdb->add("users",
 	array("user_name" => $_POST["u_login"],
-		    "password" => generateHash($u_pass),
+		    "password" => Encode::generateHash($u_pass),
 		    "level" => 1,
 		    "email" => $_POST["u_email"],
 		    "view_email" => $_POST["show_email"],
@@ -239,7 +237,7 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 		$string = md5(rand(0, microtime() * 1000000));
 		$verify_string = substr($string, 3, 7);
 		$key = md5(rand(0, 999));
-		$encid = urlencode(md5_encrypt($verify_string, $key));
+		$encid = urlencode(Encode::md5_encrypt($verify_string, $key));
 		// rather than the hidden field we have
 		$_SESSION['u_keycheck'] = $verify_string;
 	}

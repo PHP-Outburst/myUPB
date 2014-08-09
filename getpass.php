@@ -22,7 +22,7 @@ if (isset($_POST["u_name"])) {
 		}
 		if ($results[0]['id'] == '') {
 			$passcode = rand();
-			$request_ID = $tdb->add("getpass", array("passcode_HASH" => generateHash($passcode), time => mkdate(), "user_id" => $user[0]['id']));
+			$request_ID = $tdb->add("getpass", array("passcode_HASH" => Encode::generateHash($passcode), time => mkdate(), "user_id" => $user[0]['id']));
 			if (FALSE !== ($question_mark_where = strpos($_SERVER['REQUEST_URI'], '?'))) {
 				$url = substr($_SERVER['REQUEST_URI'], 0, $question_mark_where);
 			}
@@ -37,14 +37,14 @@ if (isset($_POST["u_name"])) {
 }
 if (isset($_POST['passcode']) && isset($_POST['request_ID'])) {
 	$results = $tdb->get('getpass', $_POST['request_ID']);
-	$passcode_HASH = generateHash($_POST['passcode'], $results[0]['passcode_HASH']);
+	$passcode_HASH = Encode::generateHash($_POST['passcode'], $results[0]['passcode_HASH']);
 	if ($passcode_HASH == $results[0]['passcode_HASH']) {
 		if ($_POST['pass1'] != $_POST['pass2']) {
 			$_GET['passcode'] = $_POST['passcode'];
 			$_GET['request_ID'] = $_POST['request_ID'];
 			$error = "Passwords do not match";
 		} else {
-			$tdb->edit('users', $results[0]['user_id'], array("password" => generateHash($_POST['pass1'])));
+			$tdb->edit('users', $results[0]['user_id'], array("password" => Encode::generateHash($_POST['pass1'])));
 			$tdb->delete('getpass', $_POST['request_ID']);
 			$where = "Lost Password ".$_CONFIG["where_sep"]." Set New";
 			require_once('includes/header.php');
@@ -63,7 +63,7 @@ if (isset($_GET['passcode']) && isset($_GET['request_ID'])) {
 	$results = $tdb->get('getpass', $_GET['request_ID']);
 	$expire = alterDate($results[0]['time'], 2, 'days');
 	if (mkdate() < $expire) {
-		$passcode_HASH = generateHash($_GET['passcode'], $results[0]['passcode_HASH']);
+		$passcode_HASH = Encode::generateHash($_GET['passcode'], $results[0]['passcode_HASH']);
 		if ($passcode_HASH == $results[0]['passcode_HASH']) {
 			$where = "Lost Password ".$_CONFIG["where_sep"]." Create New";
 			require_once('./includes/header.php');

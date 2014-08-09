@@ -33,7 +33,7 @@ class TdbFunctions extends Tdb
         }
 
         if ($rec[0]['password']{0} != chr(21)) {
-            if ($rec[0]['password'] == generateHash($pass, $rec[0]['password'])) {
+            if ($rec[0]['password'] == Encode::generateHash($pass, $rec[0]['password'])) {
                 if ($rec[0]['reg_code'] != '') {
                     $error = 'Your account has not been validated yet.';
 
@@ -50,8 +50,8 @@ class TdbFunctions extends Tdb
 
                 return $rec[0];
             }
-        } elseif (substr($rec[0]['password'], 1) == stripslashes(t_encrypt(substr($pass, 0, (HASH_LENGTH - 1)), $key))) {
-            $rec[0]['password'] = generateHash($pass);
+        } elseif (substr($rec[0]['password'], 1) == stripslashes(t_encrypt(substr($pass, 0, (Encode::HASH_LENGTH - 1)), $key))) {
+            $rec[0]['password'] = Encode::generateHash($pass);
             $this->edit('users', $rec[0]['id'], array('password' => $rec[0]['password']));
             $this->edit('users', $rec[0]['id'], array('lastvisit' => mkdate()));
 
@@ -82,7 +82,7 @@ class TdbFunctions extends Tdb
             $this->setFp('users', 'members');
 
         $rec = $this->get('users', $_COOKIE['id_env']);
-        /*        if(strlen($_COOKIE['password_env']) != HASH_LENGTH && basename($_SERVER['PHP_SELF']) != 'login.php') {
+        /*        if(strlen($_COOKIE['password_env']) != Encode::HASH_LENGTH && basename($_SERVER['PHP_SELF']) != 'login.php') {
          redirect('logoff.php?ref=login.php', 0);
          exit;
          } */

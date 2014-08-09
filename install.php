@@ -673,12 +673,11 @@ switch($_POST["add"]{0}) {
 
 				if($_POST["add"] == "3adduser") {
 					//add admin to the db
-					require_once("./includes/inc/encode.inc.php");
 					require_once("./includes/inc/date.inc.php");
 
 					$admin = array(
 						"user_name" => $_POST["username"], 
-						"password" => generateHash($_POST["pass1"]), 
+						"password" => Encode::generateHash($_POST["pass1"]),
 						"level" => 9, 
 						"email" => $_POST["email"], 
 						"view_email" => $_POST["view_email"], 

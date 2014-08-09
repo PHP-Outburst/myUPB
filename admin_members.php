@@ -370,7 +370,7 @@ if($_GET['action'] == 'confirm') {
 	if (isset($_POST["a"])) {
 		if ($_POST["pass"] != $_POST["pass2"]) exitPage("The passwords don't match!");
 		if (strlen($_POST["pass"]) < 4) exitPage("The password has to be longer then 4 characters");
-		$tdb->edit("users", $_GET["id"], array("password" => generateHash($_POST["pass"])));
+		$tdb->edit("users", $_GET["id"], array("password" => Encode::generateHash($_POST["pass"])));
 		$msg = "You Password was changed by ".$_COOKIE["user_env"]." on the website ".$_CONFIG["homepage"]." to \"".$_POST["pass"]."\"";
 		if (isset($_POST["reason"])) $msg .= "\n\n".$_COOKIE["user_env"]."'s reason was this:\n".$_POST["reason"];
  

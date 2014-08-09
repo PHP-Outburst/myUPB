@@ -26,10 +26,10 @@ if (isset($_POST["u_edit"])) {
 		if (strlen($_POST["u_sig"]) > 500) exitPage("You cannot have more than 500 characters in your signature.", true);
 		$user = $tdb->get("users", $_COOKIE["id_env"]);
 		if (strlen($_POST["u_newpass"]) > 0) {
-			if ($user[0]['password'] != generateHash($_POST['u_oldpass'], $user[0]['password'])) exitPage('You old password does not match the one on file!', true);
+			if ($user[0]['password'] != Encode::generateHash($_POST['u_oldpass'], $user[0]['password'])) exitPage('You old password does not match the one on file!', true);
 			if ($_POST["u_newpass"] != $_POST["u_newpass2"]) exitPage("your pass and pass confirm are not matching!", true);
 			if (strlen($_POST["u_newpass"]) < 6) exitPage("your password has to be longer then 6 characters", true);
-			$rec["password"] = generateHash($_POST["u_newpass"]);
+			$rec["password"] = Encode::generateHash($_POST["u_newpass"]);
 			setcookie("user_env", "");
 			setcookie("uniquekey_env", "");
 			setcookie("power_env", "");

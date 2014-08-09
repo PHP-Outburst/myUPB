@@ -4,8 +4,7 @@
 // Original PM Version (before _MANUAL_ upgrades): 2.0
 // File Created by fraser
 // Using textdb Version: 4.2.3
-require_once('./inc/encode.inc.php');
-$decid = urldecode(md5_decrypt($_REQUEST['id'], $_REQUEST['key']));
+$decid = urldecode(Encode::md5_decrypt($_REQUEST['id'], $_REQUEST['key']));
 header("Content-type: image/jpg");
 $img = imagecreatetruecolor(80, 20);
 for($i = 0; $i < 3; $i++) {
