@@ -196,8 +196,7 @@ if (isset($_POST["u_edit"])) {
             <br />
 						<div class='link_pm'>";
 		if($_COOKIE['power_env'] >= 3 && $rec[0]['level'] <= $_COOKIE['power_env']) print "<a href='admin_members.php?action=edit&id={$_GET['id']}'>Edit Member</a><br/>";
-		require_once('./includes/inc/privmsg.inc.php');
-		$blockedList = getUsersPMBlockedList($_GET["id"]);
+		$blockedList = PrivateMessaging::getUsersPMBlockedList($_GET["id"]);
 		if ($_GET["id"] == $_COOKIE["id_env"]) {
 			echo "";
 		} elseif($_COOKIE["id_env"] == "" || $_COOKIE["id_env"] == "0") {

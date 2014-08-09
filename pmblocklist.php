@@ -7,7 +7,6 @@
 require_once('./includes/upb.initialize.php');
 if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset($_COOKIE["power_env"]) || !isset($_COOKIE["id_env"])) exitPage('You are not logged in.', true);
 if (!$tdb->is_logged_in()) exitPage('Invalid Login!', true);
-require_once('./includes/inc/privmsg.inc.php');
 $PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
 $PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 if ($_GET["action"] == "add") {
@@ -24,7 +23,7 @@ if ($_GET["action"] == "add") {
 		$void .= '1';
 		$echo .= "You cannot Block ".$user[0]["user_name"].", He/She is an Administrator/Moderator<br />";
 	}
-	$blockedIds = getUsersPMBlockedList($_COOKIE["id_env"]);
+	$blockedIds = PrivateMessaging::getUsersPMBlockedList($_COOKIE["id_env"]);
 	if (!empty($blockedIds)) {
 		//print_r($blockedIds);
 		if (true === (in_array($user[0]["id"], $blockedIds))) {
@@ -34,14 +33,14 @@ if ($_GET["action"] == "add") {
 	} else {
 		if ($void == "") {
 			$blockedIds = array();
-			addUsersPMBlockedList($_COOKIE["id_env"]);
+			PrivateMessaging::addUsersPMBlockedList($_COOKIE["id_env"]);
 		}
 	}
 	if ($void == "") {
 		if ($blockedIds[0] == "") $new = $user[0]["id"];
 		else $new = implode (",", $blockedIds).",".$user[0]["id"];
 		//print_r("<br />".$new);
-		if (!editUsersPMBlockedList($_COOKIE["id_env"], $new)) {
+		if (!PrivateMessaging::editUsersPMBlockedList($_COOKIE["id_env"], $new)) {
 			exitPage("<strong>Error</strong>:  An unexpected error occured when editing PMBlockedList file, <strong>USER NOT FOUND</strong><br />", true);
 		}
 		$echo = "Successfully Blocked <strong>".$user[0]["user_name"]."</strong>!<br />";
@@ -66,7 +65,7 @@ if ($_GET["action"] == "add") {
 	}
 	unset($rec, $user, $ck, $k, $void, $new, $f, $i);
 } elseif($_GET["action"] == "unblock") {
-	$blockedIds = getUsersPMBlockedList($_COOKIE["id_env"]);
+	$blockedIds = PrivateMessaging::getUsersPMBlockedList($_COOKIE["id_env"]);
 	deleteWhiteIndex($blockedIds);
 	$keep = array();
 	$count = count($blockedIds);
@@ -82,7 +81,7 @@ if ($_GET["action"] == "add") {
 	elseif($keep[1] == "") $new = $keep[0];
 	else $new = implode(",", $keep);
 	$blockedIds = $keep;
-	editUsersPMBlockedList($_COOKIE["id_env"], $new);
+	PrivateMessaging::editUsersPMBlockedList($_COOKIE["id_env"], $new);
 	if ($num != 0) {
 		$echo = "Successfully unblocked <strong>$num</strong> user";
 		if ($num > 1) $echo .= "s";
@@ -110,7 +109,7 @@ if ($_GET["action"] == "add") {
 				<tr>
 					<td colspan='2' bgcolor='white'>";
 	echo $error;
-	$blockedIds = explode(",", getUsersPMBlockedList($_COOKIE["id_env"]));
+	$blockedIds = explode(",", PrivateMessaging::getUsersPMBlockedList($_COOKIE["id_env"]));
 	$select = $tdb->createUserSelectFormObject("user_id", true, true, true, "", $blockedIds);
 
 	echo "
@@ -149,7 +148,7 @@ if ($_GET["action"] == "") {
 			<	form action='$PHP_SELF' method='POST' onSubmit='submitonce(this)' enctype='multipart/form-data'><input type='hidden' name='action' value='unban'>";
 	$none = 0;
 	$count = 0;
-	if (FALSE !== ($blockedIds = getUsersPMBlockedList($_COOKIE["id_env"]))) {
+	if (FALSE !== ($blockedIds = PrivateMessaging::getUsersPMBlockedList($_COOKIE["id_env"]))) {
 		$count = count($blockedIds);
 		for($i = 0; $i < $count; $i++) {
 			if ($blockedIds[$i] != "") {

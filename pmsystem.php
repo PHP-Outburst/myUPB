@@ -14,7 +14,6 @@ if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset(
 if (!$tdb->is_logged_in()) exitPage("
 		<div class='alert'><div class='alert_text'>
 		<strong>Access Denied!</strong></div><div style='padding:4px;'>Invalid Login!</div></div>");
-require_once('./includes/inc/privmsg.inc.php');
 $PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
 $PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 if ($_GET["section"] != "outbox") $pmRecs = $PrivMsg->query("CuBox", "box='inbox'&&to='".$_COOKIE["id_env"]."'");
@@ -83,7 +82,7 @@ if ($_GET["section"] == "inbox") {
 	}
 	$none = TRUE;
 	$echo = "";
-	$blockedids = getUsersPMBlockedList($_COOKIE["id_env"]);
+	$blockedids = PrivateMessaging::getUsersPMBlockedList($_COOKIE["id_env"]);
 	foreach($pmRecs as $pmRec) {
 		if ($pmRec["id"] != "") {
 			if ($none) $none = FALSE;

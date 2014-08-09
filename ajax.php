@@ -215,7 +215,7 @@ switch ($ajax_type)
 				$statusrank = $status_config['rank'];
 				if ($user[0]["status"] != "") $status = $user[0]["status"];
 				if (isset($_COOKIE["id_env"]) && $pRec["user_id"] != $_COOKIE["id_env"]) {
-					$user_blList = getUsersPMBlockedList($pRec["user_id"]);
+					$user_blList = PrivateMessaging::getUsersPMBlockedList($pRec["user_id"]);
 					if (TRUE !== (in_array($_COOKIE["id_env"], $user_blList))) $pm = "<div class='button_pro2'><a href='newpm.php?to=".$pRec["user_id"]."'>Send ".$pRec["user_name"]." a PM</a></div>";
 				}
 			}

@@ -73,7 +73,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 	if (!isset($pmRec) || $pmRec == "" || !is_array($pmRec)) $pmRec = $PrivMsg->get("CuBox", $_GET["id"]);
 	$user = $tdb->get("users", $pmRec[0][$users_id]);
 	if ($_GET["section"] == "inbox") {
-		if(in_array($_COOKIE['id_env'], getUsersPMBlockedList($pmRec[0][$users_id]))) $reply_disabled = " DISABLED";
+		if(in_array($_COOKIE['id_env'], PrivateMessaging::getUsersPMBlockedList($pmRec[0][$users_id]))) $reply_disabled = " DISABLED";
 		else $reply_disabled = '';
 		if($user[0]['level'] > 1) $block_disabled = " DISABLED";
 		else $block_disabled = "";
