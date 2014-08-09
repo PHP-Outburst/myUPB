@@ -20,7 +20,7 @@ if ($tdb->is_logged_in()) {
 
 	$num_pages = ceil(($c + 1) / $_CONFIG["topics_per_page"]);
 	$p = MiscFunctions::createPageNumbers($_GET["page"], $num_pages, $_SERVER['QUERY_STRING']);
-	echo pagination($p,$_GET['page'],$num_pages);
+	echo MiscFunctions::pagination($p,$_GET['page'],$num_pages);
 
 	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
@@ -71,7 +71,7 @@ if ($tdb->is_logged_in()) {
 		}
 	}
     MiscFunctions::echoTableFooter(SKIN_DIR);
-	echo pagination($p,$_GET['page'],$num_pages);
+	echo MiscFunctions::pagination($p,$_GET['page'],$num_pages);
 } else {
 	echo "<div class='alert'><div class='alert_text'>
 <strong>Access Denied!</strong></div><div style='padding:4px;'>you are not authorized to be here.</div></div>";

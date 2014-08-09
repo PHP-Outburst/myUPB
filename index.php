@@ -192,7 +192,8 @@ echo "
 echo "
 			</ul>
 		</div>
-		<div style='clear:bMiscFunctions::echoTableHeading(hoTableHeading("Community Information", $_CONFIG);
+		<div style='clear:both;'></div>";
+MiscFunctions::echoTableHeading("Community Information", $_CONFIG);
 echo "
 			<tr>
 				<th>Users online in the last 15 minutes: $whos_t</th>

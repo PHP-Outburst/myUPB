@@ -561,7 +561,7 @@ elseif($_GET["action"] == "delete") {
 		$num_pages = ceil(($c + 1) / $_CONFIG["topics_per_page"]);
  
 		$p = MiscFunctions::createPageNumbers($_GET["page"], $num_pages, $_SERVER['QUERY_STRING']);
-		echo pagination($p,$_GET['page'],$num_pages);
+		echo MiscFunctions::pagination($p,$_GET['page'],$num_pages);
  
 		echo "<div id='tabstyle_2'>
             <ul>
@@ -650,7 +650,7 @@ elseif($_GET["action"] == "delete") {
 				<td class='area_1' style='text-align:center;font-weight:bold;padding:12px;line-height:20px;' colspan='10'>An <i>italized</i> e-mail states that this member has chosen to have his/her email address non-viewable to all but admins.</td>
 			</tr>";
 		MiscFunctions::echoTableFooter(SKIN_DIR);
-		echo pagination($p,$_GET['page'],$num_pages);
+		echo MiscFunctions::pagination($p,$_GET['page'],$num_pages);
 }
 require_once("./includes/footer.php");
 ?>

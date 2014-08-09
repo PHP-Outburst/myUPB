@@ -8,7 +8,7 @@ require_once('./includes/upb.initialize.php');
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) MiscFunctions::exitPage(str_replace('__TITLE__', "Invalid Forum", str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 
 $fRec = $tdb->get("forums", $_GET["id"]);
-if(emMiscFunctions::exitPage([0])) exitPage(str_replace('__TITLE__', "Forum Does Not Exist", str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
+if(empty($fRec[0])) MiscFunctions::exitPage(str_replace('__TITLE__', "Forum Does Not Exist", str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 
 $access = false;
 if($tdb->is_logged_in() == false)
@@ -24,9 +24,11 @@ else
     {
         $access = true;
     }
-MiscFunctions::exitPage(cess == false)
+}
+
+if($access == false)
 {
-    exitPage(str_replace('__TITLE__', "Permission Denied", str_replace('__MSG__', "You do not have enough Power to view this forum.<br>".ALERT_GENERIC_MSG, ALERT_MSG)), true);
+    MiscFunctions::exitPage(str_replace('__TITLE__', "Permission Denied", str_replace('__MSG__', "You do not have enough Power to view this forum.<br>".ALERT_GENERIC_MSG, ALERT_MSG)), true);
 }
 
 $posts_tdb = new Posts(DB_DIR."/", "posts.tdb");

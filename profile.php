@@ -177,7 +177,7 @@ if (isset($_POST["u_edit"])) {
 			$customs[] = array($custom[0]['value'],$rec[0]["custom_profile$i"]);
 		}
 
-		echoTableHeading("Viewing profile for ".$rec[0]["user_name"]."", $_CONFIG);
+		MiscFunctions::echoTableHeading("Viewing profile for ".$rec[0]["user_name"]."", $_CONFIG);
 		echo "
 			<tr>
 				<td colspan='2' id='topcontent'>
@@ -392,7 +392,7 @@ if (isset($_POST["u_edit"])) {
         MiscFunctions::echoTableFooter(SKIN_DIR);
 
 		$custom_avatar = (($rec[0]['posts'] >= $_REGIST['newuseravatars'] || $_COOKIE['power_env'] > 1) && $_REGIST['custom_avatars']);
-		echoTableHeading("Avatar Options", $_CONFIG);
+		MiscFunctions::echoTableHeading("Avatar Options", $_CONFIG);
 		echo "
 			<tr>
 				<th style='text-align:center;'>Current avatar</th>

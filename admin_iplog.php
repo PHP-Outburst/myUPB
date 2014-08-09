@@ -55,7 +55,7 @@ $num_pages = ceil((count($log) + 1) / $_CONFIG["posts_per_page"]);
 
 $p = MiscFunctions::createPageNumbers($_GET['page'], $num_pages, $_SERVER['QUERY_STRING']);
 
-echo pagination($p,$_GET['page'],$num_pages);
+echo MiscFunctions::pagination($p,$_GET['page'],$num_pages);
 
 
 echo "<div style='clear:both;'></div>
@@ -116,7 +116,7 @@ foreach($sublog as $entry) {
 	</tr>";
 }
 MiscFunctions::echoTableFooter(SKIN_DIR);
-echo pagination($p,$_GET['page'],$num_pages);
+echo MiscFunctions::pagination($p,$_GET['page'],$num_pages);
 
 require_once("./includes/footer.php");
 ?>
