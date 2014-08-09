@@ -49,7 +49,7 @@ switch ($ajax_type)
 		$msg .= "<div id='{$_POST["forumid"]}-{$_POST['threadid']}-{$_POST['postid']}-attach'>".$tdb->getUploads($_POST["forumid"],$_POST['threadid'],$pRec[0]['id'],$pRec[0]['upload_id'],$_CONFIG['fileupload_location'],$pRec[0]['user_id'])."</div>";
 		$dbmsg = encode_text(stripslashes($attach_msg.$_POST["newedit"]),ENT_NOQUOTES);
 
-		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => mkdate()));
+		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => DateCustom::mkdate()));
 		//clearstatcache();
 		$posts_tdb->cleanup();
 		$posts_tdb->setFp("posts", $_POST["forumid"]);
@@ -59,7 +59,7 @@ switch ($ajax_type)
 
 
 		if(!empty($pRec2[0]['edited_by']) && !empty($pRec2[0]['edited_by_id']) && !empty($pRec2[0]['edited_date']))
-		$edited = "Last edited by: <a href='profile.php?action=get&id=".$pRec2[0]['edited_by_id']."' target='_new'>".$pRec2[0]['edited_by']."</a> on ".gmdate("M d, Y g:i:s a", user_date($pRec2[0]['edited_date']));
+		$edited = "Last edited by: <a href='profile.php?action=get&id=".$pRec2[0]['edited_by_id']."' target='_new'>".$pRec2[0]['edited_by']."</a> on ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec2[0]['edited_date']));
 		echo "$msg<!--divider-->$edited";
 
 		break 1;
@@ -96,7 +96,7 @@ switch ($ajax_type)
 		$p_id = $posts_tdb->add("posts", array(
         "icon" => $_POST["icon"],
         "user_name" => $_COOKIE["user_env"],
-        "date" => mkdate(),
+        "date" => DateCustom::mkdate(),
         "message" => $msg,
         "user_id" => $_COOKIE["id_env"],
         "t_id" => $_POST["t_id"],
@@ -125,7 +125,7 @@ switch ($ajax_type)
 		}
 
 		$rec = $posts_tdb->get("topics", $_POST["t_id"]);
-		$posts_tdb->edit("topics", $_POST["t_id"], array("replies" => ((int)$rec[0]["replies"] + 1), "last_post" => mkdate(), "user_name" => $_COOKIE["user_env"], "user_id" => $_COOKIE["id_env"], "p_ids" => $rec[0]["p_ids"].",".$p_id));
+		$posts_tdb->edit("topics", $_POST["t_id"], array("replies" => ((int)$rec[0]["replies"] + 1), "last_post" => DateCustom::mkdate(), "user_name" => $_COOKIE["user_env"], "user_id" => $_COOKIE["id_env"], "p_ids" => $rec[0]["p_ids"].",".$p_id));
 		clearstatcache();
 		$posts_tdb->sort("topics", "last_post", "DESC");
 		clearstatcache();
@@ -181,7 +181,7 @@ switch ($ajax_type)
 			$output .= "<a name='{$pRec['id']}'>
       <div name='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>
       <div class='main_cat_wrapper'>
-			<div class='cat_area_1' style='text-align:center;'>Posted: ".gmdate("M d, Y g:i:s a", user_date($pRec["date"]))."</div>
+			<div class='cat_area_1' style='text-align:center;'>Posted: ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec["date"]))."</div>
 			<table class='main_table'>";
 			if ($x == 0)
 			{
@@ -261,7 +261,7 @@ switch ($ajax_type)
 						<br />
 						<strong>Registered:</strong>
 						<br />
-						".gmdate("Y-m-d", user_date($user[0]["date_added"]))."
+						".gmdate("Y-m-d", DateCustom::user_date($user[0]["date_added"]))."
 					</div>
 					<br />
 					<div class='post_info_extra'>";
@@ -283,7 +283,7 @@ switch ($ajax_type)
 
 			//echo "<div name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' style='float: right;'>";
 			if (!empty($pRec['edited_by']) && !empty($pRec['edited_by_id']) && !empty($pRec['edited_date']))
-			$output .= "<div class='post_edited' name='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}' id='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}'>Last edited by: <a href='profile.php?action=get&id=".$pRec['edited_by_id']." target='_new'><strong>".$pRec['edited_by']."</strong></a> on ".gmdate("M d, Y g:i:s a", user_date($pRec['edited_date']))."</div>";
+			$output .= "<div class='post_edited' name='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}' id='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}'>Last edited by: <a href='profile.php?action=get&id=".$pRec['edited_by_id']." target='_new'><strong>".$pRec['edited_by']."</strong></a> on ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec['edited_date']))."</div>";
 			else
 			$output .= "<div name='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}' id='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}' class='post_edited'></div>";
 			if ($pRec['user_id'] != 0)
@@ -606,10 +606,10 @@ switch ($ajax_type)
 		$key = array_search($_POST['fileid'],$split);
 		unset($split[$key]);
 		$new = implode(',',$split);
-		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => mkdate(),'upload_id'=>$new));
+		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => DateCustom::mkdate(),'upload_id'=>$new));
 		$pRec2 = $posts_tdb->get("posts", $_POST["postid"]);
 		$output .= $tdb->getUploads($_POST['forumid'],$_POST['threadid'],$_POST["postid"],$pRec2[0]['upload_id'],$_CONFIG['fileupload_location'],$_POST['userid']);
-		$edited = "Last edited by: <a href='profile.php?action=get&id=".$pRec2[0]['edited_by_id']."' target='_new'>".$pRec2[0]['edited_by']."</a> on ".gmdate("M d, Y g:i:s a", user_date($pRec2[0]['edited_date']));
+		$edited = "Last edited by: <a href='profile.php?action=get&id=".$pRec2[0]['edited_by_id']."' target='_new'>".$pRec2[0]['edited_by']."</a> on ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec2[0]['edited_date']));
 		echo $output."<!--divider-->".$edited;
 		break;
 

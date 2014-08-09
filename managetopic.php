@@ -81,7 +81,7 @@ if($_GET['action'] == 'favorite') {
 			exit;
 		}
 		if ($_POST["newId"] != "") {
-			if ($_POST["update_date"] == "1") $tRec[0]["last_post"] = mkdate();
+			if ($_POST["update_date"] == "1") $tRec[0]["last_post"] = DateCustom::mkdate();
 			$tRec[0]["subject"] = str_replace($_CONFIG['sticky_note'], "", $tRec[0]["subject"]);
 			if ($_POST["sticky_status"] == "1") $tRec[0]["sticky"] = 1;
 			else $tRec[0]["sticky"] = 0;
@@ -109,7 +109,7 @@ if($_GET['action'] == 'favorite') {
 						$posts_tdb->edit("posts", $p_ids[0], array(
 							"icon" => "icon1.gif",
 								"user_name" => $_COOKIE["user_env"],
-								"date" => mkdate(),
+								"date" => DateCustom::mkdate(),
 								"message" => "Topic was moved to forum : ".$fNRec[0]["forum"]."<br /> You should be redirected in 2 seconds.  If not, <a href='viewtopic.php?id=".$_POST["newId"]."&t_id=".$newT_id."'>click here</a>.<meta http-equiv='refresh' content='1;URL=viewtopic.php?id=".$_POST["newId"]."&t_id=".$newT_id."'>",
 								"user_id" => $_COOKIE["id_env"]));
 					}
@@ -320,7 +320,7 @@ if($_GET['action'] == 'favorite') {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Created on:</strong></td>
-				<td class='area_2'>".gmdate("M d, Y g:i:s a", user_date($pRec[0]["date"]))."</td>
+				<td class='area_2'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec[0]["date"]))."</td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Created by:</strong></td>
@@ -332,7 +332,7 @@ if($_GET['action'] == 'favorite') {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Last post on:</strong></td>
-				<td class='area_2'>".gmdate("M d, Y g:i:s a", user_date($tRec[0]["last_post"]))."</td>
+				<td class='area_2'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($tRec[0]["last_post"]))."</td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Open/Close Status:</strong></td>

@@ -167,12 +167,12 @@ if($_GET['action'] == 'confirm') {
 				<td class='area_1'><i>".$user["email"]."</i></td>";
 			echo "
 				<td class='area_2' style='text-align:center;'>";
-			if (gmdate('Y-m-d', user_date($user['date_added'])) == gmdate('Y-m-d'))
+			if (gmdate('Y-m-d', DateCustom::user_date($user['date_added'])) == gmdate('Y-m-d'))
 			echo '<i>today</i>';
-			else if (gmdate('Y-m-d', user_date($user['date_added'])) == gmdate('Y-m-d', mktime(0, 0, 0, gmdate('m'), ((int)gmdate('d') - 1), gmdate('Y'))))
+			else if (gmdate('Y-m-d', DateCustom::user_date($user['date_added'])) == gmdate('Y-m-d', mktime(0, 0, 0, gmdate('m'), ((int)gmdate('d') - 1), gmdate('Y'))))
 			echo "<i>yesterday</i>";
 			else
-			echo gmdate("Y-m-d", user_date($user['date_added']))."</td>";
+			echo gmdate("Y-m-d", DateCustom::user_date($user['date_added']))."</td>";
 			$sig = str_replace('<br><br>', '',format_text(filterLanguage($user["sig"])));
 			print "<td class='area_1'><a href='{$user['homepage']}' target='_blank'>{$user['homepage']}</a></td>
                 <td class='area_2'><i>".substr($sig, 0, (50 - strlen(strip_tags($sig)))).(((50 - strlen(strip_tags($sig))) > 0) ? '': "...")."</i></td>
@@ -346,11 +346,11 @@ if($_GET['action'] == 'confirm') {
 		else if (gmdate('Y-m-d', $lastvisit) == gmdate('Y-m-d', mktime(0, 0, 0, gmdate('m'), ((int)gmdate('d') - 1), gmdate('Y'))))
 		echo '<i>yesterday</i>';
 		else
-		echo gmdate("Y-m-d", user_date($lastvisit));
+		echo gmdate("Y-m-d", DateCustom::user_date($lastvisit));
 		echo "</td></tr>
 			<tr>
 				<td class='area_1' style='padding:8px;'><strong>Registered Date:</strong></td>
-				<td class='area_2'>".gmdate("Y-m-d", user_date($rec[0]["date_added"]))."</td>
+				<td class='area_2'>".gmdate("Y-m-d", DateCustom::user_date($rec[0]["date_added"]))."</td>
 			</tr>
 			<tr>
 				<td class='area_1' style='padding:8px;'><strong>Time zone:</strong></td>
@@ -599,7 +599,7 @@ elseif($_GET["action"] == "delete") {
 				$status = $status_config['status'];
 			 $statuscolor = $status_config['statuscolor'];
 				//if(gmdate('Y-m-d', $lastvisit) == gmdate('Y-m-d')) $lastvisit =
-				//(gmdate('Y-m-d', $lastvisit) == gmdate('Y-m-d') ? '<i>today</i>' : (gmdate('Y-m-d', $lastvisit) == gmdate('Y-m-d', mktime(0, 0, 0, gmdate('m'), ((int)gmdate('d') - 1), gmdate('Y'))) ? '<i>yesterday</i>' : gmdate("Y-m-d", user_date($lastvisit))))
+				//(gmdate('Y-m-d', $lastvisit) == gmdate('Y-m-d') ? '<i>today</i>' : (gmdate('Y-m-d', $lastvisit) == gmdate('Y-m-d', mktime(0, 0, 0, gmdate('m'), ((int)gmdate('d') - 1), gmdate('Y'))) ? '<i>yesterday</i>' : gmdate("Y-m-d", DateCustom::user_date($lastvisit))))
 				//show each user
 				echo "
 			<tr>
@@ -620,8 +620,8 @@ elseif($_GET["action"] == "delete") {
 				else if (gmdate('Y-m-d', $lastvisit) == gmdate('Y-m-d', mktime(0, 0, 0, gmdate('m'), ((int)gmdate('d') - 1), gmdate('Y'))))
 				echo "<i>yesterday</i>";
 				else
-				echo gmdate("Y-m-d", user_date($lastvisit))."</td>";
-				echo "<td class='area_2' style='text-align:center;'>".gmdate("Y-m-d", user_date($user['date_added']))."</td>";
+				echo gmdate("Y-m-d", DateCustom::user_date($lastvisit))."</td>";
+				echo "<td class='area_2' style='text-align:center;'>".gmdate("Y-m-d", DateCustom::user_date($user['date_added']))."</td>";
 				echo "<td class='area_2' style='text-align:center;'>";
 				if ($user['level'] != 9)
 				{

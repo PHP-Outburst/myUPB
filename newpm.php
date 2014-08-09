@@ -64,8 +64,8 @@ if ($_GET["action"] == "ClearOutBox") {
 		if ($_POST["icon"] == "") $_POST["icon"] = "icon1.gif";
 		if (trim($_POST["subject"]) == "") $_POST["subject"] = "No Subject";
 		if (isset($_POST["del"]) && isset($_POST["r"])) $PrivMsg->delete("CuBox", $_POST["r"]);
-		$PrivMsg->add("ToBox", array("box" => "inbox", "from" => $_COOKIE["id_env"], "to" => $_POST["to"], "icon" => $_POST["icon"], "subject" => $_POST["subject"], "date" => mkdate(), "message" => chop($_POST["message"])));
-		$PrivMsg->add("CuBox", array("box" => "outbox", "from" => $_COOKIE["id_env"], "to" => $_POST["to"], "icon" => $_POST["icon"], "subject" => $_POST["subject"], "date" => mkdate(), "message" => chop($_POST["message"])));
+		$PrivMsg->add("ToBox", array("box" => "inbox", "from" => $_COOKIE["id_env"], "to" => $_POST["to"], "icon" => $_POST["icon"], "subject" => $_POST["subject"], "date" => DateCustom::mkdate(), "message" => chop($_POST["message"])));
+		$PrivMsg->add("CuBox", array("box" => "outbox", "from" => $_COOKIE["id_env"], "to" => $_POST["to"], "icon" => $_POST["icon"], "subject" => $_POST["subject"], "date" => DateCustom::mkdate(), "message" => chop($_POST["message"])));
 		$f = fopen(DB_DIR."/new_pm.dat", 'r+');
 		fseek($f, (((int)$_POST["to"] * 2) - 2));
 		$new_pm = trim(fread($f, 2));

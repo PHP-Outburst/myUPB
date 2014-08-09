@@ -177,7 +177,7 @@ if (empty($tRecs[0]['id'])) {
 				<div class='box_posts'><strong>Replies:</strong>&nbsp;".$tRec["replies"]."</div></td>
 			<td class='area_1' style='text-align:center;'>
 				<img src='".SKIN_DIR."/icons/post_icons/".$tRec["icon"]."' class='post_image' alt=''/>
-				<span class='latest_topic'><span class='date'>".gmdate("M d, Y g:i:s a", user_date($tRec["last_post"]))."</span>
+				<span class='latest_topic'><span class='date'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($tRec["last_post"]))."</span>
 				<br />
 				<strong>By:</strong> ";
 			if ($tRec["user_id"] != "0") echo "<span class='link_2'><a href='profile.php?action=get&amp;id=".$tRec["user_id"]."' style='color : #".$status_config['statuscolor'].";'>".$tRec["user_name"]."</a></span></span></td>

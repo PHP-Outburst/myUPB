@@ -14,15 +14,15 @@ if (isset($_POST["u_name"])) {
 	if ($user[0]['id'] != '') {
 		$results = $tdb->basicQuery("getpass", "user_id", $user[0]['id'], 1, 1);
 		if ($results[0]['id'] != '') {
-			$expire = alterDate($results[0]['time'], 2, 'days');
-			if (mkdate() > $expire) {
+			$expire = DateCustom::alterDate($results[0]['time'], 2, 'days');
+			if (DateCustom::mkdate() > $expire) {
 				$tdb->delete('getpass', $results[0]['id']);
 				unset($results);
 			}
 		}
 		if ($results[0]['id'] == '') {
 			$passcode = rand();
-			$request_ID = $tdb->add("getpass", array("passcode_HASH" => Encode::generateHash($passcode), time => mkdate(), "user_id" => $user[0]['id']));
+			$request_ID = $tdb->add("getpass", array("passcode_HASH" => Encode::generateHash($passcode), time => DateCustom::mkdate(), "user_id" => $user[0]['id']));
 			if (FALSE !== ($question_mark_where = strpos($_SERVER['REQUEST_URI'], '?'))) {
 				$url = substr($_SERVER['REQUEST_URI'], 0, $question_mark_where);
 			}
@@ -61,8 +61,8 @@ if (isset($_POST['passcode']) && isset($_POST['request_ID'])) {
 if (isset($_GET['passcode']) && isset($_GET['request_ID'])) {
 	$_GET['passcode'] = trim($_GET['passcode']);
 	$results = $tdb->get('getpass', $_GET['request_ID']);
-	$expire = alterDate($results[0]['time'], 2, 'days');
-	if (mkdate() < $expire) {
+	$expire = DateCustom::alterDate($results[0]['time'], 2, 'days');
+	if (DateCustom::mkdate() < $expire) {
 		$passcode_HASH = Encode::generateHash($_GET['passcode'], $results[0]['passcode_HASH']);
 		if ($passcode_HASH == $results[0]['passcode_HASH']) {
 			$where = "Lost Password ".$_CONFIG["where_sep"]." Create New";

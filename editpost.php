@@ -21,7 +21,7 @@ if (!($tdb->is_logged_in())) exitPage("<div class='alert'><div class='alert_text
 if ($pRec[0]["user_id"] != $_COOKIE["id_env"] && $_COOKIE["power_env"] < 2) exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>You do not have the rights to perform this action.</div></div>");
 if (isset($_POST["message"])) {
-	$posts_tdb->edit("posts", $_GET["p_id"], array("message" => encode_text(stripslashes($_POST["message"])), "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => mkdate()));
+	$posts_tdb->edit("posts", $_GET["p_id"], array("message" => encode_text(stripslashes($_POST["message"])), "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => DateCustom::mkdate()));
 	echo "
 						<div class='alert_confirm'>
 						<div class='alert_confirm_text'>

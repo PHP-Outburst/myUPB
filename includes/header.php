@@ -32,8 +32,8 @@ if ($tdb->is_logged_in()) {
 		//NEW VERSION
 		$ses_info = $r['lastvisit'];
 		if ($ses_info == 0)
-		$ses_info = mkdate();
-		$tdb->edit("users",$_COOKIE["id_env"],array('lastvisit'=>mkdate()));
+		$ses_info = DateCustom::mkdate();
+		$tdb->edit("users",$_COOKIE["id_env"],array('lastvisit'=>DateCustom::mkdate()));
 
 		if (!headers_sent()) {
 			$uniquekey = generateUniqueKey();
@@ -59,7 +59,7 @@ if ($tdb->is_logged_in()) {
 	}
 } else {
 	$default_timezone = '0';
-	$now = mkdate();
+	$now = DateCustom::mkdate();
 	if (!isset($_COOKIE["timezone"]) && !headers_sent()) setcookie("timezone", $default_timezone, (time() + (60 * 60 * 24 * 7)));
 	if (!isset($_COOKIE["lastvisit"]) && !headers_sent()) setcookie("lastvisit", $now, (time() + (60 * 60 * 24 * 7)));
 	$_COOKIE['lastvisit'] = $now;

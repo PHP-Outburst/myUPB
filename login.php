@@ -18,7 +18,7 @@ if (isset($_POST["u_name"]) && isset($_POST["u_pass"])) {
 				<strong>Access Denied!</strong></div><div style='padding:4px;'>{$error}</div>
 		</div><br />";
 	} else {
-		if (empty($r['lastvisit']))$r['lastvisit'] = mkdate();
+		if (empty($r['lastvisit']))$r['lastvisit'] = DateCustom::mkdate();
 
 		if (headers_sent()) $error_msg = 'Could not login: headers sent.';
 		else {

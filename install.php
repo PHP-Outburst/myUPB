@@ -673,7 +673,6 @@ switch($_POST["add"]{0}) {
 
 				if($_POST["add"] == "3adduser") {
 					//add admin to the db
-					require_once("./includes/inc/date.inc.php");
 
 					$admin = array(
 						"user_name" => $_POST["username"], 
@@ -688,8 +687,8 @@ switch($_POST["add"]{0}) {
 						"msn" => $_POST["msn"], 
 						"sig" => $_POST["sig"], 
 						"posts" => 0, 
-						"date_added" => mkdate(),
-						"lastvisit" => mkdate(), 
+						"date_added" => DateCustom::mkdate(),
+						"lastvisit" => DateCustom::mkdate(),
 						"timezone" => $_POST["timezone"]);
 					$tdb = new Tdb(DB_DIR, "main");
 					$tdb->setFp("users", "members");

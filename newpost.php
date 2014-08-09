@@ -151,7 +151,7 @@ if ($_POST["a"] == "1") {
 				"replies" => "0",
 				"views" => "0",
 				"locked" => $_POST["locked"],
-				"last_post" => mkdate(),
+				"last_post" => DateCustom::mkdate(),
 				"user_name" => $_COOKIE["user_env"],
 				"user_id" => $_COOKIE["id_env"] ));
 		echo "
@@ -196,7 +196,7 @@ if ($_POST["a"] == "1") {
 			$e_hed .= "Bcc: ".$monitors."\r\n"; //More efficient to send one e-mail with everyone on a BLANK CARBON COPY (see php.net's mail())
 			@mail("", $e_sbj, $e_msg, $e_hed);
 		}
-		$posts_tdb->edit("topics", $_GET["t_id"], array("replies" => ((int)$rec[0]["replies"] + 1), "last_post" => mkdate(), "user_name" => $_COOKIE["user_env"], "sticky" => $rec[0]["sticky"], "user_id" => $_COOKIE["id_env"]));
+		$posts_tdb->edit("topics", $_GET["t_id"], array("replies" => ((int)$rec[0]["replies"] + 1), "last_post" => DateCustom::mkdate(), "user_name" => $_COOKIE["user_env"], "sticky" => $rec[0]["sticky"], "user_id" => $_COOKIE["id_env"]));
 		if ($_GET["page"] == "") $vars['page'] = 1;
 		$redirect = "viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$vars['page'];
 		$pre = $rec[0]["p_ids"].",";
@@ -207,7 +207,7 @@ if ($_POST["a"] == "1") {
 	$p_id = $posts_tdb->add("posts", array(
 			"icon" => $_POST["icon"],
 			"user_name" => $_COOKIE["user_env"],
-			"date" => mkdate(),
+			"date" => DateCustom::mkdate(),
 			"message" => $uploadText.$_POST["message"],
 			"user_id" => $_COOKIE["id_env"],
 			"t_id" => $_GET["t_id"],

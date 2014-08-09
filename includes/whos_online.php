@@ -17,7 +17,7 @@ if ($tdb->is_logged_in()) {
 	$wRaw = 'guest'.str_repeat(' ', 15). getenv("REMOTE_ADDR").str_repeat(' ', 16 - strlen(getenv("REMOTE_ADDR"))). '0';
 	$wSearch = getenv("REMOTE_ADDR");
 }
-$now = mkdate();
+$now = DateCustom::mkdate();
 if (strlen($now) > 14) $now = substr($now, 0, 14);
 else $now = $now.str_repeat(' ', 14 - strlen($now));
 $wRaw .= $now."\n";
@@ -35,7 +35,7 @@ $whos_online_array = explode("\n", substr($whos_online_log, 0, -1));
 $whos_online_array = array_reverse($whos_online_array);
 $whos_online_count = count($whos_online_array);
 for($wi = 0; $wi < $whos_online_count; $wi++) {
-	if ((int)substr($whos_online_array[$wi], 37 , 14) < (mkdate()-(60 * 15))) unset($whos_online_array[$wi]);
+	if ((int)substr($whos_online_array[$wi], 37 , 14) < (DateCustom::mkdate()-(60 * 15))) unset($whos_online_array[$wi]);
 }
 $whos_online_log = implode("\n", array_reverse($whos_online_array))."\n";
 $f = fopen(DB_DIR.'/whos_online.dat', 'w');

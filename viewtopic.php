@@ -82,7 +82,7 @@ foreach($pRecs as $pRec) {
 	echo "	
       <div name='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>
       <div class='main_cat_wrapper'>
-			<div class='cat_area_1' style='text-align:center;'>Posted: ".gmdate("M d, Y g:i:s a", user_date($pRec["date"]))."</div>
+			<div class='cat_area_1' style='text-align:center;'>Posted: ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec["date"]))."</div>
 			<table class='main_table'>";
 	if ($x == 0) {
 		$table_color = 'area_1';
@@ -168,7 +168,7 @@ foreach($pRecs as $pRec) {
 						<br />
 						<strong>Registered:</strong>
 						<br />
-						".gmdate("Y-m-d", user_date($user[0]["date_added"]))."
+						".gmdate("Y-m-d", DateCustom::user_date($user[0]["date_added"]))."
 					</div>
 					<br />
 					<div class='post_info_extra'>";
@@ -190,7 +190,7 @@ foreach($pRecs as $pRec) {
 
 	//echo "<div name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' style='float: right;'>";
 	if (!empty($pRec['edited_by']) && !empty($pRec['edited_by_id']) && !empty($pRec['edited_date'])) echo "
-					<div class='post_edited' name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>Last edited by: <a href='profile.php?action=get&amp;id=".$pRec['edited_by_id']." target='_blank'><strong>".$pRec['edited_by']."</strong></a> on ".gmdate("M d, Y g:i:s a", user_date($pRec['edited_date']))."</div>";
+					<div class='post_edited' name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>Last edited by: <a href='profile.php?action=get&amp;id=".$pRec['edited_by_id']." target='_blank'><strong>".$pRec['edited_by']."</strong></a> on ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec['edited_date']))."</div>";
 	else
 	echo "<div name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' class='post_edited'></div>";
 	if ($pRec['user_id'] != 0)

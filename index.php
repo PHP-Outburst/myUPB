@@ -10,7 +10,7 @@ require_once("./includes/upb.initialize.php");
 
 if(!isset($_GET['action'])) $_GET['action'] = '';      //PHP sends Notices if you don't do this first
 if($_GET['action'] == 'markallread') {
-	$now = mkdate();
+	$now = DateCustom::mkdate();
 	if($tdb->is_logged_in()) {
 		$tdb->edit('users', $_COOKIE['id_env'], array('lastvisit' => $now));   //Update lastvisit field for next time
 		if (!headers_sent()) setcookie("lastvisit", $now);
@@ -31,7 +31,7 @@ if($_GET['action'] == 'markallread') {
 
 if ($_COOKIE["power_env"] == "" || empty($_COOKIE["power_env"]) || trim($_COOKIE["power_env"]) == "") $_COOKIE["power_env"] = "0";
 require_once("./includes/header.php");
-//print '<pre>'; print_r($_SESSION['newTopics']); print "\n".mkdate(); print '</pre>';
+//print '<pre>'; print_r($_SESSION['newTopics']); print "\n".DateCustom::mkdate(); print '</pre>';
 if($_COOKIE['power_env'] == '0' && $_REGIST['disable_reg']) {
 	print str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Public Registration has been disabled.  This may be a private bulletin board.<br /> Please contact an Administrator if you would like to register.', ALERT_MSG));
 }
@@ -125,7 +125,7 @@ if ($cRecs[0]["id"] == "") {
 							} else {
 								$user_data = $tdb->basicQuery('users','user_name',$tRec[0]["user_name"], 1, 1,array('level','posts'));
 								$status_config = status($user_data);
-								$when = "<span class='date'>".gmdate("M d, Y g:i:s a", user_date($tRec[0]["last_post"]))."</span><br /><strong>In:</strong>&nbsp;<strong><a href='viewtopic.php?id=".$fRec["id"]."&amp;t_id=".$tRec[0]["id"]."'>".$tRec[0]["subject"]."</a></strong><br /><strong>By:</strong> ";
+								$when = "<span class='date'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($tRec[0]["last_post"]))."</span><br /><strong>In:</strong>&nbsp;<strong><a href='viewtopic.php?id=".$fRec["id"]."&amp;t_id=".$tRec[0]["id"]."'>".$tRec[0]["subject"]."</a></strong><br /><strong>By:</strong> ";
 								if ($tRec[0]["user_id"] != "0") $when .= "<span class='link_2'><a href='profile.php?action=get&amp;id=".$tRec[0]["user_id"]."'  style='color : #".$status_config['statuscolor'].";'>".$tRec[0]["user_name"]."</a></span>";
 								else $when .= "a ".$tRec[0]["user_name"]."";
 								/*print "{$_SESSION['newTopics']['f'.$fRec['id']]['t'.$tRec[0]['id']]} == 1

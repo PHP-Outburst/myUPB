@@ -154,8 +154,8 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 		    "msn" => $_POST["u_msn"],
 		    "sig" => chop($_POST["u_sig"]),
 		    "posts" => 0,
-		    "date_added" => mkdate(),
-		    "lastvisit" => mkdate(),
+		    "date_added" => DateCustom::mkdate(),
+		    "lastvisit" => DateCustom::mkdate(),
 		    "timezone" => $_POST["u_timezone"],
 		    'newTopicsData' => serialize(array('lastVisitForums' => array()))
 	));

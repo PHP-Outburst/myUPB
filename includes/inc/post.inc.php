@@ -184,7 +184,7 @@ function parse_quote($matches)
 		$msg = "<blockquote><font size='1' face='tahoma'>Quote: <a href='viewtopic.php?id=".$_GET['id']."&t_id=".$_GET['t_id'];
 		if (array_key_exists('page',$_GET))
 		$msg .= "&page=".$_GET['page'];
-		$msg .= "#".$explode[1]."'>$author at ".gmdate("M d, Y g:i:s a", user_date($explode[2]))."</a></font><hr>".$matches[2]."<br /><hr></blockquote>";
+		$msg .= "#".$explode[1]."'>$author at ".gmdate("M d, Y g:i:s a", DateCustom::user_date($explode[2]))."</a></font><hr>".$matches[2]."<br /><hr></blockquote>";
 	}
 	return $msg;
 }

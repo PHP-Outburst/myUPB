@@ -64,7 +64,7 @@ if (!isset($_GET['t_id'])) {
 		$newurl = str_replace('xml.php',$replace,$url);
 		$newurl .= '&page='.$pRec['page']."#".$pRec['id'];
 		$xml .= "<item>
-	  <title>Post by ".xml_clean($pRec['user_name'])." on ".xml_clean(gmdate("M d, Y @ g:i:s a", user_date($pRec["date"])))."</title>
+	  <title>Post by ".xml_clean($pRec['user_name'])." on ".xml_clean(gmdate("M d, Y @ g:i:s a", DateCustom::user_date($pRec["date"])))."</title>
 	  <link>".xml_clean($newurl)."</link>
 	  <description>".xml_clean(format_text(filterLanguage($pRec['message'])))."</description>
 	  <guid isPermaLink=\"false\">".xml_clean($url)."</guid>

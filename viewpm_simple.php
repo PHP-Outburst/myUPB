@@ -27,7 +27,7 @@ echo "
 		<table id='simple_table' style='background-color:#ffffff;' cellspacing='12'>
 			<tr>
 				<td valign='top'>
-					<div class='simple_date' style='float:left;'>Message Sent: ".gmdate("M d, Y g:i:s a", user_date($pmRec[0]["date"]))."</div>
+					<div class='simple_date' style='float:left;'>Message Sent: ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pmRec[0]["date"]))."</div>
 					
 					<div class='simple_content'><div style='margin-bottom:20px;'>$message</div></div></td>
 			</tr>

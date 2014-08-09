@@ -45,15 +45,15 @@ class TdbFunctions extends Tdb
                     return false;
                 }
 
-                $this->edit('users', $rec[0]['id'], array('lastvisit' => mkdate()));
-                $rec[0]['lastvisit'] = mkdate();
+                $this->edit('users', $rec[0]['id'], array('lastvisit' => DateCustom::mkdate()));
+                $rec[0]['lastvisit'] = DateCustom::mkdate();
 
                 return $rec[0];
             }
         } elseif (substr($rec[0]['password'], 1) == stripslashes(t_encrypt(substr($pass, 0, (Encode::HASH_LENGTH - 1)), $key))) {
             $rec[0]['password'] = Encode::generateHash($pass);
             $this->edit('users', $rec[0]['id'], array('password' => $rec[0]['password']));
-            $this->edit('users', $rec[0]['id'], array('lastvisit' => mkdate()));
+            $this->edit('users', $rec[0]['id'], array('lastvisit' => DateCustom::mkdate()));
 
             return $rec[0];
         }

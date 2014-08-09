@@ -211,7 +211,7 @@ if (isset($_POST["u_edit"])) {
 		echo "<tr><td id='leftcontent' valign='top'>
 					<div class='pro_sig_name'>General</div>
 					<div class='pro_container'>
-						<div class='pro_area_1'><div class='pro_area_2'><strong>Joined: </strong></div>".gmdate("Y-m-d", user_date($rec[0]["date_added"]))."</div>
+						<div class='pro_area_1'><div class='pro_area_2'><strong>Joined: </strong></div>".gmdate("Y-m-d", DateCustom::user_date($rec[0]["date_added"]))."</div>
 						<div class='pro_area_1'><div class='pro_area_2'><strong>Posts made: </strong></div>".$rec[0]["posts"]."</div>";
 
 
@@ -578,7 +578,7 @@ if (isset($_POST["u_edit"])) {
 			<div class='box_posts'><strong>Replies:</strong>&nbsp;".$tRec[0]["replies"]."</div></td>
 		<td class='area_1' style='text-align:center;'>
 			<img src='icon/".$tRec[0]["icon"]."' class='post_image'>
-			<span class='latest_topic'><span class='date'>".gmdate("M d, Y g:i:s a", user_date($tRec[0]["last_post"]))."</span>
+			<span class='latest_topic'><span class='date'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($tRec[0]["last_post"]))."</span>
 			<br />
 			<strong>By:</strong> ";
 			if ($tRec[0]["user_id"] != "0") echo "<span class='link_2'><a href='profile.php?action=get&id=".$tRec[0]["user_id"]."'>".$tRec[0]["user_name"]."</a></span></td>
