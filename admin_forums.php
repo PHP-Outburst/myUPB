@@ -533,14 +533,14 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			<tr>
 			    <td class='area_1' style='padding:8px;text-align:center;'>";
 				if ($i>0) {
-					echo "<span id='enabled_msg'><a href=\"javascript:forumSort('cat',  'up','".$cRecs[$i]['id']."');\"><img src='./images/up.gif'></a></span>";
-					echo "<span id='disabled_msg'><a href='admin_forums.php?action=shift&what=cat&where=up&id=".$cRecs[$i]['id']."'><img src='./images/up.gif'></a></span>";
+					echo "<span id='enabled_msg'><a href=\"javascript:forumSort('cat',  'up','".$cRecs[$i]['id']."');\"><img src='./images/up.gif'/></a></span>";
+					echo "<span id='disabled_msg'><a href='admin_forums.php?action=shift&what=cat&where=up&id=".$cRecs[$i]['id']."'><img src='./images/up.gif'/></a></span>";
 				}
 				else
 				echo "&nbsp;&nbsp;&nbsp;";
 				if ($i<($c1-1)) {
-					echo "<span id='enabled_msg'><a href=\"javascript:forumSort('cat','down','".$cRecs[$i]['id']."');\"><img src='./images/down.gif'></a></span>";
-					echo "<span id='disabled_msg'><a href='admin_forums.php?action=shift&what=cat&where=down&id=".$cRecs[$i]['id']."'><img src='./images/down.gif'></a></span>";
+					echo "<span id='enabled_msg'><a href=\"javascript:forumSort('cat','down','".$cRecs[$i]['id']."');\"><img src='./images/down.gif'/></a></span>";
+					echo "<span id='disabled_msg'><a href='admin_forums.php?action=shift&what=cat&where=down&id=".$cRecs[$i]['id']."'><img src='./images/down.gif'/></a></span>";
 				}
 				else
 				echo "";
@@ -571,14 +571,14 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			    <td class='area_2' style='padding:8px;text-align:center;'>";
 
 						if ($j>0) {
-							echo "<span id='enabled_msg'><a href=\"javascript:forumSort('forum','up','".$fRec[0]['id']."');\"><img src='./images/up.gif'></a></span>";
-							echo "<span id='disabled_msg'><a href='admin_forums.php?action=shift&what=forum&where=up&id=".$fRec[0]['id']."'><img src='./images/up.gif'></a></span>";
+							echo "<span id='enabled_msg'><a href=\"javascript:forumSort('forum','up','".$fRec[0]['id']."');\"><img src='./images/up.gif'/></a></span>";
+							echo "<span id='disabled_msg'><a href='admin_forums.php?action=shift&what=forum&where=up&id=".$fRec[0]['id']."'/><img src='./images/up.gif'></a></span>";
 						}
 						else echo "&nbsp;&nbsp;&nbsp;";
 
 						if ($j<($c2-1)) {
-							echo "<span id='enabled_msg'><a href=\"javascript:forumSort('forum','down','".$fRec[0]['id']."');\"><img src='./images/down.gif'></a></span>";
-							echo "<span id='disabled_msg'><a href='admin_forums.php?action=shift&what=forum&where=down&id=".$fRec[0]['id']."'><img src='./images/down.gif'></a></span>";
+							echo "<span id='enabled_msg'><a href=\"javascript:forumSort('forum','down','".$fRec[0]['id']."');\"><img src='./images/down.gif'/></a></span>";
+							echo "<span id='disabled_msg'><a href='admin_forums.php?action=shift&what=forum&where=down&id=".$fRec[0]['id']."'><img src='./images/down.gif'/></a></span>";
 
 						}
 						else echo "&nbsp;&nbsp;&nbsp;";

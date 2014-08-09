@@ -253,7 +253,7 @@ else {
 	foreach ($icons as $key => $icon)
 	{
 		$id = $icon['id'];
-		echo "<td class='area_2' style='padding:8px;text-align:center;'><img src='".SKIN_DIR."/icons/post_icons/".$icon['filename']."' border='0'><br>".$icon['filename']."</td>\n";
+		echo "<td class='area_2' style='padding:8px;text-align:center;'><img src='".SKIN_DIR."/icons/post_icons/".$icon['filename']."' /><br>".$icon['filename']."</td>\n";
 		echo "<td class='area_1' style='padding:8px;text-align:center;'>";
 		if (count($icons) > 1)
 		echo "<input type='checkbox' name='{$id}_delete' value='$id'>";

@@ -86,7 +86,7 @@ if($_GET["action"] == "addnew") {
 						if (strlen($_POST['bbcode'][$key]) > 10)
 						$alt = basename($_FILES['icon_file']['name'][$key]);
 
-						$replace = "<img src='./smilies/".basename($_FILES['icon_file']['name'][$key])."' border='0' alt='$alt'>";
+						$replace = "<img src='./smilies/".basename($_FILES['icon_file']['name'][$key])."' alt='$alt'/>";
 						$array = array('bbcode'=>$_POST['bbcode'][$key],'replace'=>$replace,'type'=>$_POST['type'][$key]);
 						$bdb->add('smilies',$array);
 						$success[$key]['name'] = $_FILES['icon_file']['name'][$key];
