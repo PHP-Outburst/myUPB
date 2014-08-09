@@ -6,16 +6,16 @@
 // Using textdb Version: 4.3.2
 require_once("./includes/upb.initialize.php");
 $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin_restore.php'>Backup and Restore Data</a>";
-if (!(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["id_env"]))) exitPage('
+if (!(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["id_env"]))) MiscFunctions::exitPage('
 		<div class="alert"><div class="alert_text">
 		<strong>Access Denied!</strong></div><div style="padding:4px;">you are not logged in</div></div>
 		<meta http-equiv="refresh" content="2;URL=login.php?ref=admin.php">', true);
-if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) exitPage('
+if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) MiscFunctions::exitPage('
 		<div class="alert"><div class="alert_text">
 		<strong>Access Denied!</strong></div><div style="padding:4px;">you are not authorized to be here.</div></div>', true);
 if (!($_GET['action'] == 'download' && isset($_GET['file'])) && $_POST['verify'] != 'Cancel') {
 	require_once('./includes/header.php');
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -26,8 +26,8 @@ if (!($_GET['action'] == 'download' && isset($_GET['file'])) && $_POST['verify']
 	require_once("admin_navigation.php");
 	echo "</td>
 			</tr>";
-	echoTableFooter(SKIN_DIR);
-	echoTableHeading("Backup and Restore Data", $_CONFIG);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableHeading("Backup and Restore Data", $_CONFIG);
 	echo "
 			<tr>
 				<th>Select an option below</th>
@@ -80,10 +80,10 @@ if ($_GET['action'] == 'backup') {
 		}
 		else echo 'Unable to retrieve backup list: Could not open the directory.';
 	} elseif($_GET['file'] != '') {
-		if (!isset($_POST['verify'])) ok_cancel('admin_restore.php?action=restore&file='.$_GET['file'], 'Backup the current database before proceeding.  CHMOD upb\'s root directory to 0777 before proceeding.  Are you sure you wish to abandon the current database for an earlier version?');
-		elseif($_POST['verify'] == 'Cancel') redirect('admin_restore.php', 0);
+		if (!isset($_POST['verify'])) MiscFunctions::ok_cancel('admin_restore.php?action=restore&file='.$_GET['file'], 'Backup the current database before proceeding.  CHMOD upb\'s root directory to 0777 before proceeding.  Are you sure you wish to abandon the current database for an earlier version?');
+		elseif($_POST['verify'] == 'Cancel') MiscFunctions::redirect('admin_restore.php', 0);
 		elseif($_POST['verify'] == 'Ok') {
-			if (!is_writable('./')) exitPage('Cannot restore database: upb\'s root directory is not writable. (CHMOD to 0777 before preceeding)');
+			if (!is_writable('./')) MiscFunctions::exitPage('Cannot restore database: upb\'s root directory is not writable. (CHMOD to 0777 before preceeding)');
 			$new_db_dir = './'.uniqid('data_', true);
 			mkdir($new_db_dir, 0770);
 			mkdir($new_db_dir."/backup", 0770);
@@ -151,7 +151,7 @@ if ($_GET['action'] == 'backup') {
 			echo '</p>';
 		}
 		else echo 'Unable to retrieve backup list: Could not open the directory.';
-	} elseif($_GET['file'] != '' and file_exists(DB_DIR.'/backup/'.$_GET['file']) && check_file(DB_DIR.'/backup/'.$_GET['file'])) {
+	} elseif($_GET['file'] != '' and file_exists(DB_DIR.'/backup/'.$_GET['file']) && MiscFunctions::check_file(DB_DIR.'/backup/'.$_GET['file'])) {
 		header("Pragma: public");
 		header("Expires: 0");
 		header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
@@ -183,8 +183,8 @@ if ($_GET['action'] == 'backup') {
 		else echo 'Unable to retrieve backup list: Could not open the directory.';
 		echo '<p><i>Note: to import a backedup database, put the file in the backup folder in the upb root directory.  The "backup" folder must be readable and writable (CHMOD to 0777).</p>';
 	} elseif($_GET['file'] != '') {
-		if (!isset($_POST['verify']) && check_file('./backup/'.$_GET['file'])) ok_cancel('admin_restore.php?action=import&file='.$_GET['file'], 'Are you sure you wish to import <strong>'.$_GET['file'].'</strong>?');
-		elseif($_POST['verify'] == 'Cancel') redirect('admin_restore.php', 0);
+		if (!isset($_POST['verify']) && MiscFunctions::check_file('./backup/'.$_GET['file'])) MiscFunctions::ok_cancel('admin_restore.php?action=import&file='.$_GET['file'], 'Are you sure you wish to import <strong>'.$_GET['file'].'</strong>?');
+		elseif($_POST['verify'] == 'Cancel') MiscFunctions::redirect('admin_restore.php', 0);
 		elseif($_POST['verify'] == 'Ok') {
 			if(!preg_match("/../", $_GET['file']))
 			{
@@ -202,8 +202,8 @@ if ($_GET['action'] == 'backup') {
 	}
 	else echo 'Unable to process request: Invalid GET file';
 } elseif($_GET['action'] == 'delete') {
-	if (!isset($_POST['verify'])) ok_cancel('admin_restore.php?action=delete', 'Are you sure you want to delete all backups?');
-	elseif($_POST['verify'] == 'Cancel') redirect('admin_restore.php', 0);
+	if (!isset($_POST['verify'])) MiscFunctions::ok_cancel('admin_restore.php?action=delete', 'Are you sure you want to delete all backups?');
+	elseif($_POST['verify'] == 'Cancel') MiscFunctions::redirect('admin_restore.php', 0);
 	elseif($_POST['verify'] == 'Ok') {
 		if (FALSE !== ($handle = opendir(DB_DIR.'/backup'))) {
 			while (FALSE !== ($filename = readdir($handle))) {
@@ -219,6 +219,6 @@ if ($_GET['action'] == 'backup') {
 // else echo 'Cannot process request: Invalid action.';
 echo "</td>
 			</tr>";
-echoTableFooter(SKIN_DIR);
+MiscFunctions::echoTableFooter(SKIN_DIR);
 require_once('./includes/footer.php');
 ?>

@@ -5,7 +5,6 @@
 // Addon Created by J. Moore aka Rebles
 // Using textdb Version: 4.2.3
 require_once('./includes/upb.initialize.php');
-require_once('./includes/inc/post.inc.php');
 $where = "<a href='pmsystem.php'>Messenger</a>";
 if ($_POST["action"] == "close") die('<html><body Onload="window.close()"> </body></html>');
 if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_GET["section"] == "inbox" || $_GET["section"] == "outbox")) {
@@ -53,18 +52,18 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 					</div>
 					</div>";
 			require_once('./includes/footer.php');
-			redirect("pmsystem.php?section=".$_GET["section"], 2);
+			MiscFunctions::redirect("pmsystem.php?section=".$_GET["section"], 2);
 		} elseif($_POST["action"] == "<< Last Message") {
-			redirect($PHP_SELF."?section=".$_GET["section"]."&id=".$back_id.$extra, "0");
+			MiscFunctions::redirect($PHP_SELF."?section=".$_GET["section"]."&id=".$back_id.$extra, "0");
 			$_GET["id"] = $pmRec[0]["id"];
 		} elseif($_POST["action"] == "Next Message >>") {
-			redirect($PHP_SELF."?section=".$_GET["section"]."&id=".$next_id.$extra, "0");
+			MiscFunctions::redirect($PHP_SELF."?section=".$_GET["section"]."&id=".$next_id.$extra, "0");
 			$_GET["id"] = $pmRec[0]["id"];
 		} elseif($_POST["action"] == "Block User") {
-			redirect("pmblocklist.php?action=add&section=".$_GET["section"]."&ref=viewpm.php&id=".$_GET["id"], "0");
+			MiscFunctions::redirect("pmblocklist.php?action=add&section=".$_GET["section"]."&ref=viewpm.php&id=".$_GET["id"], "0");
 		} else {
 			$where = "<a href='pmsystem.php'>Messenger</a>";
-			exitPage("
+			MiscFunctions::exitPage("
 					<div class='alert'><div class='alert_text'>
 					<strong>Access Denied!</strong></div><div style='padding:4px;'>You should not be here (Invalid Action).</div></div>", true);
 		}
@@ -93,16 +92,16 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 		</form>
 		<br />";
 	echo $pm_navegate;
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	$table_color = $table1;
 
 	if ($user[0]["sig"] != "") $user[0]["sig"] = "
-			<div class='signature'>".UPBcoding(filterLanguage($user[0]["sig"], $_CONFIG))."</div>";
-	$status_config = status($user);
+			<div class='signature'>".PostingFunctions::UPBcoding(PostingFunctions::filterLanguage($user[0]["sig"], $_CONFIG))."</div>";
+	$status_config = PostingFunctions::status($user);
 	$status = $status_config['status'];
 	$statuscolor = $status_config['statuscolor'];
 
-	$message = display_msg(encode_text($pmRec[0]["message"]));
+	$message = PostingFunctions::display_msg(PostingFunctions::encode_text($pmRec[0]["message"]));
 	echo "
 			<tr>
 				<th style='width:15%;'><div class='post_name'><a href='profile.php?action=get&id=".$user[0]["id"]."'>".$user[0]["user_name"]."</a></div></th>
@@ -139,7 +138,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 	echo "
 						<div class='button_pro2'><a href='email.php?id=".$pmRec["user_id"]."'>email ".$pmRec["user_name"]."</a></div>";
 	echo "</td></tr>";
-	echoTableFooter(SKIN_DIR);
+    MiscFunctions::echoTableFooter(SKIN_DIR);
 	echo $pm_navegate;
 } else {
 	require_once('./includes/header.php');

@@ -7,9 +7,9 @@
 require_once("./includes/upb.initialize.php");
 $rec = $tdb->get("users", $_GET["id"]);
 require_once('./includes/header.php');
-if (!(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["id_env"]))) exitPage("<div class='alert'><div class='alert_text'>
+if (!(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["id_env"]))) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>You are not logged in.</div></div><meta http-equiv='refresh' content='2;URL=login.php?ref=email.php?id=$id'>");
-if (!$tdb->is_logged_in()) exitPage("<div class='alert'><div class='alert_text'>
+if (!$tdb->is_logged_in()) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Access Denied!</strong></div><div style='padding:4px;'>You are not authorized to be here.</div></div>");
 if (isset($_POST["subject"]) && isset($_POST["message"])) {
 	$where = "<a href='showmembers.php'>Members List</a> ".$_CONFIG["where_sep"]." Send email";
@@ -29,7 +29,7 @@ if (isset($_POST["subject"]) && isset($_POST["message"])) {
 						</div>
 						</div>";
 		require_once("./includes/footer.php");
-		redirect("index.php", 2);
+		MiscFunctions::redirect("index.php", 2);
 		exit;
 	}
 	else echo "<div class='alert'><div class='alert_text'>
@@ -38,7 +38,7 @@ if (isset($_POST["subject"]) && isset($_POST["message"])) {
 	$where = "<a href='showmembers.php'>Members List</a> ".$_CONFIG["where_sep"]." Send email";
 	require_once('./includes/header.php');
 	echo "<form name='form1' method='post' action='$PHP_SELF' ><input type='hidden' name='id' value='".$_GET["id"]."'>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th colspan='2'>Composing an email</th>
@@ -59,7 +59,7 @@ if (isset($_POST["subject"]) && isset($_POST["message"])) {
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='submit' value='Send'><input type='reset' value='Reset' name='Reset'></td>
 			</tr>
 	</form>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 require_once("./includes/footer.php");
 ?>

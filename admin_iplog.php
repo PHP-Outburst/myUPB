@@ -7,14 +7,14 @@
 require_once("./includes/upb.initialize.php");
 $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin_iplog.php'>Ip Address Logs</a>";
 require_once("./includes/header.php");
-if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset($_COOKIE["power_env"]) || !isset($_COOKIE["id_env"])) exitPage("
+if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset($_COOKIE["power_env"]) || !isset($_COOKIE["id_env"])) MiscFunctions::exitPage("
 	<div class='alert'><div class='alert_text'>
 	<strong>Access Denied!</strong></div><div style='padding:4px;'>You are not logged in.</div></div>
 	<meta http-equiv='refresh' content='2;URL=login.php?ref=admin_iplog.php'>");
-if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) exitPage("
+if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) MiscFunctions::exitPage("
 	<div class='alert'><div class='alert_text'>
 	<strong>Access Denied!</strong></div><div style='padding:4px;'>you are not authorized to be here.</div></div>");
-echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 echo "
 	<tr>
 		<th>Admin Panel Navigation</th>
@@ -25,7 +25,7 @@ echo "
 require_once("admin_navigation.php");
 echo "</td>
 	</tr>";
-echoTableFooter(SKIN_DIR);
+MiscFunctions::echoTableFooter(SKIN_DIR);
 print '<a name="skip_nav">&nbsp;</a>';
 
 //create page numbers and retrieve the raw IP log data
@@ -34,7 +34,7 @@ if(!file_exists(DB_DIR.'/ip.log') || filesize(DB_DIR.'/ip.log') == 0) {
 	$pageStr = '';
 	$log = "cut\toff\tdata\n---\t---\t---\t---\t---\nsome\tmore\tcut\toff\tdata";
 } else {
-	$pageStr = createPageNumbers($_GET['page'], (filesize(DB_DIR.'/ip.log')/(1024*20)));
+	$pageStr = MiscFunctions::createPageNumbers($_GET['page'], (filesize(DB_DIR.'/ip.log')/(1024*20)));
 
 	$pageStr =  "<table class='pagenum_container' cellspacing='1'>
 			<tr>
@@ -53,9 +53,9 @@ $log = array_reverse(explode("\n", substr($log, $pos1+1, $pos2 - $pos1)));
 $sublog = array_slice($log,($_GET['page']*$_CONFIG["posts_per_page"])-$_CONFIG["posts_per_page"],$_CONFIG["posts_per_page"]);
 $num_pages = ceil((count($log) + 1) / $_CONFIG["posts_per_page"]);
 
-$p = createPageNumbers($_GET['page'], $num_pages, $_SERVER['QUERY_STRING']);
+$p = MiscFunctions::createPageNumbers($_GET['page'], $num_pages, $_SERVER['QUERY_STRING']);
 
-echo pagination($p,$_GET['page'],$num_pages);
+echo MiscFunctions::pagination($p,$_GET['page'],$num_pages);
 
 
 echo "<div style='clear:both;'></div>
@@ -68,7 +68,7 @@ echo "<div style='clear:both;'></div>
     </div>
 ";
 
-echoTableHeading("Visitor's Log", $_CONFIG);
+MiscFunctions::echoTableHeading("Visitor's Log", $_CONFIG);
 echo "
 	<tr>
     <th style='width:10%;'>REMOTE_HOST</th>
@@ -115,8 +115,8 @@ foreach($sublog as $entry) {
 		<td class='area_1'>{$entry[4]}</td>
 	</tr>";
 }
-echoTableFooter(SKIN_DIR);
-echo pagination($p,$_GET['page'],$num_pages);
+MiscFunctions::echoTableFooter(SKIN_DIR);
+echo MiscFunctions::pagination($p,$_GET['page'],$num_pages);
 
 require_once("./includes/footer.php");
 ?>

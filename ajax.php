@@ -19,14 +19,14 @@ switch ($ajax_type)
 			$output .= "<input type='hidden' id='userid' name='userid' value='".$_POST["userid"]."'>";
 			$output .= "<input type='hidden' id='threadid' name='threadid' value='".$_POST["threadid"]."'>";
 			$output .= "<input type='hidden' id='postid' name='postid' value='".$_POST["postid"]."'>";
-			$output .= "<textarea name='newedit' id='newedit' cols='60' rows='18'>".format_text(encode_text($pRec[0]['message']),'edit')."</textarea><br>";
+			$output .= "<textarea name='newedit' id='newedit' cols='60' rows='18'>".PostingFunctions::format_text(PostingFunctions::encode_text($pRec[0]['message']),'edit')."</textarea><br>";
 			$output .= "\n<input type='button' onclick='javascript:getEdit(document.getElementById(\"quickedit\"),\"".$_POST['divname']."\");'\' name='qedit' value='Save'>";
 			$output .= "\n<input type='button' name='cancel_edit' onClick=\"javascript:getPost('".$_POST["userid"]."','".$_POST["forumid"]."-".$_POST["threadid"]."-".$_POST["postid"]."','cancel');\" value='Cancel'>";
 			$output .= "\n<input type='submit' name='submit' value='Advanced'>";
 			$output .= "</form>";
 		}
 		else
-		$output = display_msg($pRec[0]['message']);
+		$output = PostingFunctions::display_msg($pRec[0]['message']);
 
 		echo $output;
 
@@ -38,18 +38,18 @@ switch ($ajax_type)
 		$posts_tdb->setFp("posts", $_POST["forumid"]);
 		$pRec = $posts_tdb->get("posts", $_POST["postid"]);
 		//STORES THE EDITED VERSION OF THE POST IN THE DATABASE AND RETURNS THE EDITED PAGE TO THE USER
-		if(!(isset($_POST["userid"]) && isset($_POST["forumid"]) && isset($_POST["threadid"]) && isset($_POST["postid"]))) exitPage("Not enough information to perform this function.");
-		if(!($tdb->is_logged_in())) exitPage("You are not logged in, therefore unable to perform this action.");
+		if(!(isset($_POST["userid"]) && isset($_POST["forumid"]) && isset($_POST["threadid"]) && isset($_POST["postid"]))) MiscFunctions::exitPage("Not enough information to perform this function.");
+		if(!($tdb->is_logged_in())) MiscFunctions::exitPage("You are not logged in, therefore unable to perform this action.");
 
-		if($pRec[0]["user_id"] != $_COOKIE["id_env"] && $_COOKIE["power_env"] < 2) exitPage("You are not authorized to edit this post.");
+		if($pRec[0]["user_id"] != $_COOKIE["id_env"] && $_COOKIE["power_env"] < 2) MiscFunctions::exitPage("You are not authorized to edit this post.");
 		$msg = "";
 
-		$msg = display_msg(encode_text($_POST['newedit']));
-		$msg = display_msg($_POST['newedit']);
+		$msg = PostingFunctions::display_msg(PostingFunctions::encode_text($_POST['newedit']));
+		$msg = PostingFunctions::display_msg($_POST['newedit']);
 		$msg .= "<div id='{$_POST["forumid"]}-{$_POST['threadid']}-{$_POST['postid']}-attach'>".$tdb->getUploads($_POST["forumid"],$_POST['threadid'],$pRec[0]['id'],$pRec[0]['upload_id'],$_CONFIG['fileupload_location'],$pRec[0]['user_id'])."</div>";
-		$dbmsg = encode_text(stripslashes($attach_msg.$_POST["newedit"]),ENT_NOQUOTES);
+		$dbmsg = PostingFunctions::encode_text(stripslashes($attach_msg.$_POST["newedit"]),ENT_NOQUOTES);
 
-		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => mkdate()));
+		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => DateCustom::mkdate()));
 		//clearstatcache();
 		$posts_tdb->cleanup();
 		$posts_tdb->setFp("posts", $_POST["forumid"]);
@@ -59,7 +59,7 @@ switch ($ajax_type)
 
 
 		if(!empty($pRec2[0]['edited_by']) && !empty($pRec2[0]['edited_by_id']) && !empty($pRec2[0]['edited_date']))
-		$edited = "Last edited by: <a href='profile.php?action=get&id=".$pRec2[0]['edited_by_id']."' target='_new'>".$pRec2[0]['edited_by']."</a> on ".gmdate("M d, Y g:i:s a", user_date($pRec2[0]['edited_date']));
+		$edited = "Last edited by: <a href='profile.php?action=get&id=".$pRec2[0]['edited_by_id']."' target='_new'>".$pRec2[0]['edited_by']."</a> on ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec2[0]['edited_date']));
 		echo "$msg<!--divider-->$edited";
 
 		break 1;
@@ -90,13 +90,13 @@ switch ($ajax_type)
 			$email_mode = false;
 			$isWatching = false;
 		}
-		$msg = encode_text(stripslashes($_POST["newentry"]));
+		$msg = PostingFunctions::encode_text(stripslashes($_POST["newentry"]));
 		$tdb->edit("forums", $_POST["id"], array("posts" => ((int)$fRec[0]["posts"] + 1)));
 
 		$p_id = $posts_tdb->add("posts", array(
         "icon" => $_POST["icon"],
         "user_name" => $_COOKIE["user_env"],
-        "date" => mkdate(),
+        "date" => DateCustom::mkdate(),
         "message" => $msg,
         "user_id" => $_COOKIE["id_env"],
         "t_id" => $_POST["t_id"],
@@ -125,7 +125,7 @@ switch ($ajax_type)
 		}
 
 		$rec = $posts_tdb->get("topics", $_POST["t_id"]);
-		$posts_tdb->edit("topics", $_POST["t_id"], array("replies" => ((int)$rec[0]["replies"] + 1), "last_post" => mkdate(), "user_name" => $_COOKIE["user_env"], "user_id" => $_COOKIE["id_env"], "p_ids" => $rec[0]["p_ids"].",".$p_id));
+		$posts_tdb->edit("topics", $_POST["t_id"], array("replies" => ((int)$rec[0]["replies"] + 1), "last_post" => DateCustom::mkdate(), "user_name" => $_COOKIE["user_env"], "user_id" => $_COOKIE["id_env"], "p_ids" => $rec[0]["p_ids"].",".$p_id));
 		clearstatcache();
 		$posts_tdb->sort("topics", "last_post", "DESC");
 		clearstatcache();
@@ -166,7 +166,7 @@ switch ($ajax_type)
 
 		$query = "id={$_POST['id']}&t_id={$_POST['t_id']}";
 
-		$p = createPageNumbers($page, $num_pages, $query,true);
+		$p = MiscFunctions::createPageNumbers($page, $num_pages, $query,true);
 		$p = str_replace('ajax.php', 'viewtopic.php', $p);
 		$pagelinks1 = $posts_tdb->d_posting($email_mode, $isWatching,$p,$page,$num_pages);
 		$pagelinks2 = $posts_tdb->d_posting($email_mode, $isWatching,$p,$page,$num_pages,"bottom") . "</div>";
@@ -181,7 +181,7 @@ switch ($ajax_type)
 			$output .= "<a name='{$pRec['id']}'>
       <div name='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='post{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}'>
       <div class='main_cat_wrapper'>
-			<div class='cat_area_1' style='text-align:center;'>Posted: ".gmdate("M d, Y g:i:s a", user_date($pRec["date"]))."</div>
+			<div class='cat_area_1' style='text-align:center;'>Posted: ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec["date"]))."</div>
 			<table class='main_table'>";
 			if ($x == 0)
 			{
@@ -206,16 +206,16 @@ switch ($ajax_type)
 					$pRec['user_id'] = '0';
 				}
 				if ($user[0]["sig"] != "") {
-					$sig = format_text(filterLanguage(UPBcoding($user[0]["sig"]), $_CONFIG));
+					$sig = PostingFunctions::format_text(PostingFunctions::filterLanguage(PostingFunctions::UPBcoding($user[0]["sig"]), $_CONFIG));
 					$sig = "<div class='signature'>$sig</div>";
 				}
-				$status_config = status($user);
+				$status_config = PostingFunctions::status($user);
 				$status = $status_config['status'];
 				$statuscolor = $status_config['statuscolor'];
 				$statusrank = $status_config['rank'];
 				if ($user[0]["status"] != "") $status = $user[0]["status"];
 				if (isset($_COOKIE["id_env"]) && $pRec["user_id"] != $_COOKIE["id_env"]) {
-					$user_blList = getUsersPMBlockedList($pRec["user_id"]);
+					$user_blList = PrivateMessaging::getUsersPMBlockedList($pRec["user_id"]);
 					if (TRUE !== (in_array($_COOKIE["id_env"], $user_blList))) $pm = "<div class='button_pro2'><a href='newpm.php?to=".$pRec["user_id"]."'>Send ".$pRec["user_name"]." a PM</a></div>";
 				}
 			}
@@ -234,7 +234,7 @@ switch ($ajax_type)
 			if ((int)$_COOKIE["power_env"] >= (int)$fRec[0]["reply"] and $tRec[0]['locked'] != 1) $reply = "<div class='button_pro1'><a href='newpost.php?id=".$_POST["id"]."&t=0&t_id=".$_POST["t_id"]."&page=$page'>Add Reply</a></div>";
 			else $reply = "";
 
-			$msg = display_msg($pRec["message"]);
+			$msg = PostingFunctions::display_msg($pRec["message"]);
 			$msg .= "<div id='{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}-attach'>".$tdb->getUploads($_GET['id'],$_GET['t_id'],$pRec['id'],$pRec['upload_id'],$_CONFIG['fileupload_location'],$pRec['user_id'])."</div>";
 
 			$output .= "
@@ -249,7 +249,7 @@ switch ($ajax_type)
 				<td class='$table_color' valign='top' style='width:15%;'>";
 			if (@$user[0]["avatar"] != "")
 			{
-				$resize = resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
+				$resize = MiscFunctions::resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
 				$output .= "<br /><center><img src=\"".$user[0]["avatar"]."\" $resize alt='' title=''/></center><br />";
 			}
 			else $output .= "<br /><br />";
@@ -261,7 +261,7 @@ switch ($ajax_type)
 						<br />
 						<strong>Registered:</strong>
 						<br />
-						".gmdate("Y-m-d", user_date($user[0]["date_added"]))."
+						".gmdate("Y-m-d", DateCustom::user_date($user[0]["date_added"]))."
 					</div>
 					<br />
 					<div class='post_info_extra'>";
@@ -283,14 +283,14 @@ switch ($ajax_type)
 
 			//echo "<div name='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' id='edit{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}' style='float: right;'>";
 			if (!empty($pRec['edited_by']) && !empty($pRec['edited_by_id']) && !empty($pRec['edited_date']))
-			$output .= "<div class='post_edited' name='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}' id='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}'>Last edited by: <a href='profile.php?action=get&id=".$pRec['edited_by_id']." target='_new'><strong>".$pRec['edited_by']."</strong></a> on ".gmdate("M d, Y g:i:s a", user_date($pRec['edited_date']))."</div>";
+			$output .= "<div class='post_edited' name='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}' id='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}'>Last edited by: <a href='profile.php?action=get&id=".$pRec['edited_by_id']." target='_new'><strong>".$pRec['edited_by']."</strong></a> on ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec['edited_date']))."</div>";
 			else
 			$output .= "<div name='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}' id='edit{$_POST['id']}-{$_POST['t_id']}-{$pRec['id']}' class='post_edited'></div>";
 			if ($pRec['user_id'] != 0)
 			{
 				$output .= "
 					<div class='button_pro2'><a href='profile.php?action=get&id=".$pRec["user_id"]."'>Profile</a></div>";
-				if (isValidUrl($user[0]['url']))
+				if (MiscFunctions::isValidURL($user[0]['url']))
 				$output .= "<div class='button_pro2'><a href='".$user[0]["url"]."' target = '_blank'>Homepage</a></div>";
 				if ($_CONFIG['email_mode'])
 				$output .= "<div class='button_pro2'><a href='email.php?id=".$pRec["user_id"]."'>email ".$pRec["user_name"]."</a></div>";
@@ -430,7 +430,7 @@ switch ($ajax_type)
 		} else {
 			for($i=0,$c1=count($cRecs);$i<$c1;$i++) {
 				//show each category
-				$view = createUserPowerMisc($cRecs[$i]["view"], 2);
+				$view = MiscFunctions::createUserPowerMisc($cRecs[$i]["view"], 2);
 				$output .= "
 			<tr>
 			    <td class='area_1' style='padding:8px;text-align:center;'>".(($i>0) ? "<a href=\"javascript:forumSort('cat','up','".$cRecs[$i]['id']."');\"><img src='./images/up.gif'></a>" : "&nbsp;&nbsp;&nbsp;").(($i<($c1-1)) ? "<a href=\"javascript:forumSort('cat','down','".$cRecs[$i]['id']."');\"><img src='./images/down.gif'></a>" : "")."</td>
@@ -451,9 +451,9 @@ switch ($ajax_type)
 						$fRec = $tdb->get('forums', $ids[$j]);
 						//$post_tdb->setFp("topics", $fRec[0]["id"]."_topics");
 						//$post_tdb->setFp("posts", $fRec[0]["id"]);
-						$whoView = createUserPowerMisc($fRec[0]["view"], 3);
-						$whoPost = createUserPowerMisc($fRec[0]["post"], 3);
-						$whoReply = createUserPowerMisc($fRec[0]["reply"], 3);
+						$whoView = MiscFunctions::createUserPowerMisc($fRec[0]["view"], 3);
+						$whoPost = MiscFunctions::createUserPowerMisc($fRec[0]["post"], 3);
+						$whoReply = MiscFunctions::createUserPowerMisc($fRec[0]["reply"], 3);
 						//show each forum
 						$output .= "
 			<tr>
@@ -503,7 +503,7 @@ switch ($ajax_type)
 		}
 		else
 		{
-			$_POST['username'] = format_text(encode_text(trim($_POST['username'])));
+			$_POST['username'] = PostingFunctions::format_text(PostingFunctions::encode_text(trim($_POST['username'])));
 			if ($_POST['area'] == 'changeuser')
 			$newline = '&nbsp';
 			else
@@ -532,7 +532,7 @@ switch ($ajax_type)
 		break 1;
 
 	case "emailvalid" :
-		$_POST['email'] = format_text(encode_text(trim($_POST['email'])));
+		$_POST['email'] = PostingFunctions::format_text(PostingFunctions::encode_text(trim($_POST['email'])));
 		if (trim($_POST['email']) == "")
 		{
 			$reply .= "<br><img src='images/cross.gif' alt='' title='' style='vertical-align: middle;'>Email Address Required";
@@ -561,8 +561,8 @@ switch ($ajax_type)
 		break 1;
 
 	case "emailcheck" :
-		$_POST['email1'] = format_text(encode_text(trim($_POST['email1'])));
-		$_POST['email2'] = format_text(encode_text(trim($_POST['email2'])));
+		$_POST['email1'] = PostingFunctions::format_text(PostingFunctions::encode_text(trim($_POST['email1'])));
+		$_POST['email2'] = PostingFunctions::format_text(PostingFunctions::encode_text(trim($_POST['email2'])));
 		 
 		if (trim($_POST['email1']) != trim($_POST['email2']))
 		{
@@ -580,13 +580,13 @@ switch ($ajax_type)
 	case "sig":
 		if ($_POST['status'] == "set")
 		{
-			$sig = display_msg(encode_text($_POST["sig"]));
+			$sig = PostingFunctions::display_msg(PostingFunctions::encode_text($_POST["sig"]));
 			$sig_title = "<strong>Signature Preview:</strong><br>To save this signature press Submit below";
 		}
 		else
 		{
 			$rec = $tdb->get("users", $_POST["id"]);
-			$sig = display_msg($rec[0]['sig']);
+			$sig = PostingFunctions::display_msg($rec[0]['sig']);
 			$sig_title = "<strong>Current Signature:</strong>";
 		}
 		echo $sig."<!--divider-->".$sig_title;
@@ -606,10 +606,10 @@ switch ($ajax_type)
 		$key = array_search($_POST['fileid'],$split);
 		unset($split[$key]);
 		$new = implode(',',$split);
-		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => mkdate(),'upload_id'=>$new));
+		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => DateCustom::mkdate(),'upload_id'=>$new));
 		$pRec2 = $posts_tdb->get("posts", $_POST["postid"]);
 		$output .= $tdb->getUploads($_POST['forumid'],$_POST['threadid'],$_POST["postid"],$pRec2[0]['upload_id'],$_CONFIG['fileupload_location'],$_POST['userid']);
-		$edited = "Last edited by: <a href='profile.php?action=get&id=".$pRec2[0]['edited_by_id']."' target='_new'>".$pRec2[0]['edited_by']."</a> on ".gmdate("M d, Y g:i:s a", user_date($pRec2[0]['edited_date']));
+		$edited = "Last edited by: <a href='profile.php?action=get&id=".$pRec2[0]['edited_by_id']."' target='_new'>".$pRec2[0]['edited_by']."</a> on ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec2[0]['edited_date']));
 		echo $output."<!--divider-->".$edited;
 		break;
 
@@ -618,10 +618,10 @@ switch ($ajax_type)
 		echo "";
 		else
 		{
-			echoTableHeading("Post Preview", $_CONFIG);
-			$msg = display_msg(encode_text($_POST["message"]));
+			MiscFunctions::echoTableHeading("Post Preview", $_CONFIG);
+			$msg = PostingFunctions::display_msg(PostingFunctions::encode_text($_POST["message"]));
 			echo "<tr><td class='area_2'><div class='msg_block'>".$msg."</div></td></tr>";
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 		}
 		break 1;
 

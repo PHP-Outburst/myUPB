@@ -10,7 +10,7 @@ require_once("./includes/upb.initialize.php");
 
 if(!isset($_GET['action'])) $_GET['action'] = '';      //PHP sends Notices if you don't do this first
 if($_GET['action'] == 'markallread') {
-	$now = mkdate();
+	$now = DateCustom::mkdate();
 	if($tdb->is_logged_in()) {
 		$tdb->edit('users', $_COOKIE['id_env'], array('lastvisit' => $now));   //Update lastvisit field for next time
 		if (!headers_sent()) setcookie("lastvisit", $now);
@@ -26,12 +26,12 @@ if($_GET['action'] == 'markallread') {
 		$_SESSION['newTopics']['lastVisitForums'][$key] = $now;
 	}
 	$ref = ((isset($_GET['ref'])) ? urldecode($_GET['ref']) : 'index.php');
-	redirect($ref, 0);
+	MiscFunctions::redirect($ref, 0);
 }
 
 if ($_COOKIE["power_env"] == "" || empty($_COOKIE["power_env"]) || trim($_COOKIE["power_env"]) == "") $_COOKIE["power_env"] = "0";
 require_once("./includes/header.php");
-//print '<pre>'; print_r($_SESSION['newTopics']); print "\n".mkdate(); print '</pre>';
+//print '<pre>'; print_r($_SESSION['newTopics']); print "\n".DateCustom::mkdate(); print '</pre>';
 if($_COOKIE['power_env'] == '0' && $_REGIST['disable_reg']) {
 	print str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Public Registration has been disabled.  This may be a private bulletin board.<br /> Please contact an Administrator if you would like to register.', ALERT_MSG));
 }
@@ -88,7 +88,7 @@ if ($cRecs[0]["id"] == "") {
 		$t_p = 0;
 		foreach($cRecs as $cRec) {
 			if ($_COOKIE["power_env"] >= $cRec["view"]) {
-				echoTableHeading($cRec["name"], $_CONFIG);
+				MiscFunctions::echoTableHeading($cRec["name"], $_CONFIG);
 				echo "
     			<tr>
     				<th style='width: 75%;'>Forum</th>
@@ -124,8 +124,8 @@ if ($cRecs[0]["id"] == "") {
 								$v_icon = "off.png";
 							} else {
 								$user_data = $tdb->basicQuery('users','user_name',$tRec[0]["user_name"], 1, 1,array('level','posts'));
-								$status_config = status($user_data);
-								$when = "<span class='date'>".gmdate("M d, Y g:i:s a", user_date($tRec[0]["last_post"]))."</span><br /><strong>In:</strong>&nbsp;<strong><a href='viewtopic.php?id=".$fRec["id"]."&amp;t_id=".$tRec[0]["id"]."'>".$tRec[0]["subject"]."</a></strong><br /><strong>By:</strong> ";
+								$status_config = PostingFunctions::status($user_data);
+								$when = "<span class='date'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($tRec[0]["last_post"]))."</span><br /><strong>In:</strong>&nbsp;<strong><a href='viewtopic.php?id=".$fRec["id"]."&amp;t_id=".$tRec[0]["id"]."'>".$tRec[0]["subject"]."</a></strong><br /><strong>By:</strong> ";
 								if ($tRec[0]["user_id"] != "0") $when .= "<span class='link_2'><a href='profile.php?action=get&amp;id=".$tRec[0]["user_id"]."'  style='color : #".$status_config['statuscolor'].";'>".$tRec[0]["user_name"]."</a></span>";
 								else $when .= "a ".$tRec[0]["user_name"]."";
 								/*print "{$_SESSION['newTopics']['f'.$fRec['id']]['t'.$tRec[0]['id']]} == 1
@@ -167,7 +167,7 @@ if ($cRecs[0]["id"] == "") {
 						unset($when);
 					}
 				}
-				echoTableFooter(SKIN_DIR);
+				MiscFunctions::echoTableFooter(SKIN_DIR);
 			}
 			unset($cRec);
 		}
@@ -193,7 +193,7 @@ echo "
 			</ul>
 		</div>
 		<div style='clear:both;'></div>";
-echoTableHeading("Community Information", $_CONFIG);
+MiscFunctions::echoTableHeading("Community Information", $_CONFIG);
 echo "
 			<tr>
 				<th>Users online in the last 15 minutes: $whos_t</th>
@@ -224,7 +224,7 @@ echo "
 					<strong>Busiest Day:</strong> $hits_record Page Views on $hits_date<br />
           <strong>Page Rendering Time:</strong> ".round($script_end_time - $script_start_time, 5)." seconds</span></td>
 			</tr>";
-echoTableFooter(SKIN_DIR);
+MiscFunctions::echoTableFooter(SKIN_DIR);
 //End Statistic Table
 require_once("./includes/footer.php");
 

@@ -18,7 +18,7 @@ if (isset($_POST["u_name"]) && isset($_POST["u_pass"])) {
 				<strong>Access Denied!</strong></div><div style='padding:4px;'>{$error}</div>
 		</div><br />";
 	} else {
-		if (empty($r['lastvisit']))$r['lastvisit'] = mkdate();
+		if (empty($r['lastvisit']))$r['lastvisit'] = DateCustom::mkdate();
 
 		if (headers_sent()) $error_msg = 'Could not login: headers sent.';
 		else {
@@ -35,7 +35,7 @@ if (isset($_POST["u_name"]) && isset($_POST["u_pass"])) {
 			}
 			//end lastvisit info
 			$_SESSION['newTopics'] = unserialize($r['newTopicsData']);
-			$r['uniquekey'] = generateUniqueKey();
+			$r['uniquekey'] = MiscFunctions::generateUniqueKey();
 			$tdb->edit('users', $r['id'], array('uniquekey' => $r['uniquekey']));
 			if ($_POST["remember"] == "YES") {
 				setcookie("remember", '1', (time() + (60 * 60 * 24 * 7)));
@@ -69,13 +69,13 @@ require_once('./includes/header.php');
 if (!$tdb->is_logged_in() != "") {
 	if (isset($error)) {
 		echo "$error";
-		if ($e == 1) exitPage("");
+		if ($e == 1) MiscFunctions::exitPage("");
 	}
 	if ($_COOKIE["remember"] != "") $remember = "checked";
 	else $remember = "";
 	echo "
 	<form action='login.php?ref=".urlencode($_GET["ref"])."' method='post'>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<td class='area_1' style='width:40%;text-align:right;'><strong>User Name:</strong></td>
@@ -95,7 +95,7 @@ if (!$tdb->is_logged_in() != "") {
 	else print " <a href='register.php'>(Need to Register?)</a>";
 	print "</td>
 			</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 	echo "</form>";
 } else {
 	echo "

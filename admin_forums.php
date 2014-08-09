@@ -27,11 +27,11 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 						Category successfully edited.
 						</div>
 						</div>";
-				redirect($_SERVER['PHP_SELF'], 2);
+				MiscFunctions::redirect($_SERVER['PHP_SELF'], 2);
 			} else {
 				$cRec = $tdb->get("cats", $_GET["id"]);
 				echo "<form action='admin_forums.php?action=edit_cat&id=".$_GET["id"]."' method='POST' name='form'>";
-				echoTableHeading("Editing a category", $_CONFIG);
+				MiscFunctions::echoTableHeading("Editing a category", $_CONFIG);
 				echo "<input type=\"hidden\" name=\"neworder\" value=\"\">
 			<tr>
 				<th colspan='2'>&nbsp;</th>
@@ -43,14 +43,14 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			<tr>
 				<td class='area_1'><strong>Who can see this category?</strong></td>
 				<td class='area_2'><select size='1' name='u_view'>";
-				echo createUserPowerMisc($cRec[0]["view"], 1);
+				echo MiscFunctions::createUserPowerMisc($cRec[0]["view"], 1);
 				echo "</select></td>
 			</tr>";
 				echo "</td></tr><tr>
 				<td class='footer_3' colspan='2'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
 			</tr><tr><td class='footer_3a' style='text-align:center;' colspan='2'><input type='submit' value='Submit'></td></tr>";
 
-				echoTableFooter(SKIN_DIR);
+				MiscFunctions::echoTableFooter(SKIN_DIR);
 				echo "</form>";
 			}
 		} else {
@@ -65,7 +65,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 				$config_tdb->editVars("config", array("admin_catagory_sorting" => implode(",", $sort)));
 					
 				$forums = $tdb->query('forums', "cat='{$_GET['id']}'");
-				//dump($forums);
+				//MiscFunctions::dump($forums);
 				if ($forums !== false) {
 					foreach($forums as $forum) {
 						$fRec = $tdb->get("forums", $forum["id"]);
@@ -77,17 +77,17 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 						$posts_tdb->set_forum($fRec);
 
 						$topic_list = $posts_tdb->listRec('topics',1);
-						//dump($topic_list);
+						//MiscFunctions::dump($topic_list);
 						$topics = explode(',',$fRec);
-						//dump($topics);
+						//MiscFunctions::dump($topics);
 						if (count($topics) > 0)
 						{
 							foreach ($topic_list as $topic)
 							{
-								//dump($topics);
+								//MiscFunctions::dump($topics);
 								$topic_array[0] = $topic;
-								//dump($topic);
-								delete_topics($topic_array,$forum["id"]);
+								//MiscFunctions::dump($topic);
+								MiscFunctions::delete_topics($topic_array,$forum["id"]);
 							}
 						}
 						$tdb->delete("forums", $forum["id"]);
@@ -105,11 +105,11 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 						</div>
 						</div>
 						";
-				redirect($_SERVER['PHP_SELF'], 2);
+				MiscFunctions::redirect($_SERVER['PHP_SELF'], 2);
 			} elseif($_POST["verify"] == "Cancel") {
-				redirect('admin_forums.php', 0);
+				MiscFunctions::redirect('admin_forums.php', 0);
 			} else {
-				ok_cancel("admin_forums.php?action=delete_cat&id=".$_GET["id"], "Are you sure you want to delete this category and all forums in this category?");
+				MiscFunctions::ok_cancel("admin_forums.php?action=delete_cat&id=".$_GET["id"], "Are you sure you want to delete this category and all forums in this category?");
 			}
 		} else {
 			echo "No id selected.";
@@ -134,12 +134,12 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 					".$_POST["u_cat"]."
 					</div>
 					</div>";
-			if ($_POST['command'] == 'Add and Add another Category') redirect($_SERVER['PHP_SELF'].'?action=add_cat', 2);
-			elseif ($_POST['command'] == 'Add and Add forums to this category') redirect('admin_forums.php?action=add_forum&cat_id='.$cat_id, 2);
-			else redirect($_SERVER['PHP_SELF'], 2);
+			if ($_POST['command'] == 'Add and Add another Category') MiscFunctions::redirect($_SERVER['PHP_SELF'].'?action=add_cat', 2);
+			elseif ($_POST['command'] == 'Add and Add forums to this category') MiscFunctions::redirect('admin_forums.php?action=add_forum&cat_id='.$cat_id, 2);
+			else MiscFunctions::redirect($_SERVER['PHP_SELF'], 2);
 		} else {
 			echo "<form action='admin_forums.php?action=add_cat' method=POST>";
-			echoTableHeading("Creating a new category", $_CONFIG);
+			MiscFunctions::echoTableHeading("Creating a new category", $_CONFIG);
 			echo "
 			<tr>
 				<th colspan='2'>&nbsp;</th>
@@ -151,7 +151,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			<tr>
 				<td class='area_1'><strong>Who can see the category?</strong></td>
 				<td class='area_2'><select size='1' name='u_view'>
-					".createUserPowerMisc(0, 1)."</select></td>
+					".MiscFunctions::createUserPowerMisc(0, 1)."</select></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='2'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
@@ -159,7 +159,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type=submit name='command' value='Add'> <input type=submit name='command' value='Add and Add another Category'> <input type=submit name='command' value='Add and Add forums to this category'></td>
 			</tr>";
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 			echo "</form>";
 		}
 	} elseif ($_GET["action"] == "edit_forum") {
@@ -192,7 +192,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 						Forum successfully edited.
 						</div>
 						</div>";
-				redirect($_SERVER['PHP_SELF'], 2);
+				MiscFunctions::redirect($_SERVER['PHP_SELF'], 2);
 			} else {
 				$cRecs = $tdb->listRec("cats", 1);
 				$select = "<Select name=cat>\n";
@@ -201,11 +201,11 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 					else $select .= "<option value='".$cRec["id"]."'>".$cRec["name"]."</option>";
 				}
 				$select .= "</select>";
-				$whoView = "<select size='1' name='u_view'>".createUserPowerMisc($fRec[0]["view"], 1)."</select>";
-				$whoPost = "<select size='1' name='u_post'>".createUserPowerMisc($fRec[0]["post"], 1)."</select>";
-				$whoReply = "<select size='1' name='u_reply'>".createUserPowerMisc($fRec[0]["reply"], 1)."</select>";
+				$whoView = "<select size='1' name='u_view'>".MiscFunctions::createUserPowerMisc($fRec[0]["view"], 1)."</select>";
+				$whoPost = "<select size='1' name='u_post'>".MiscFunctions::createUserPowerMisc($fRec[0]["post"], 1)."</select>";
+				$whoReply = "<select size='1' name='u_reply'>".MiscFunctions::createUserPowerMisc($fRec[0]["reply"], 1)."</select>";
 				echo "<form action='".$_SERVER['PHP_SELF']."?action=edit_forum&id=".$_GET["id"]."' method=POST>";
-		  echoTableHeading("Editing a forum", $_CONFIG);
+		  MiscFunctions::echoTableHeading("Editing a forum", $_CONFIG);
 		  echo "
 			<tr>
 				<th colspan='2'>&nbsp;</th>
@@ -248,7 +248,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type=submit value='Submit'></td>
 			</tr>
 		";
-		  echoTableFooter(SKIN_DIR);
+		  MiscFunctions::echoTableFooter(SKIN_DIR);
 		  echo "
 	   </form>";
 			}
@@ -281,7 +281,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 				foreach ($topics as $topic)
 				{
 					$topic_array[0] = $topic;
-					delete_topics($topic_array,$_GET['id']);
+					MiscFunctions::delete_topics($topic_array,$_GET['id']);
 				}
 				 
 				$tdb->edit("cats", $cRec[0]["id"], array("sort" => $sort));
@@ -296,11 +296,11 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 						Successfully deleted forum.
 						</div>
 						</div>";
-				redirect($_SERVER['PHP_SELF'], 2);
+				MiscFunctions::redirect($_SERVER['PHP_SELF'], 2);
 			} elseif($_POST['verify'] == "Cancel") {
-				redirect('admin_forums.php', 0);
+				MiscFunctions::redirect('admin_forums.php', 0);
 			} else {
-				ok_cancel("admin_forums.php?action=delete_forum&id=".$_GET["id"], "Are you sure you want to delete this forum?");
+				MiscFunctions::ok_cancel("admin_forums.php?action=delete_forum&id=".$_GET["id"], "Are you sure you want to delete this forum?");
 			}
 		} else {
 			echo "No id selected.";
@@ -364,9 +364,9 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 					</div>
 					</div>
 					";
-			if ($_POST['command'] == 'Add and Add another forum to the selected Category') redirect($_SERVER['PHP_SELF'].'?action=add_forum&cat_id='.$_POST['cat'], 2);
-			elseif($_POST['command'] == 'Add and Add another forum') redirect($_SERVER['PHP_SELF'].'?action=add_forum', 2);
-			else redirect($_SERVER['PHP_SELF'], 2);
+			if ($_POST['command'] == 'Add and Add another forum to the selected Category') MiscFunctions::redirect($_SERVER['PHP_SELF'].'?action=add_forum&cat_id='.$_POST['cat'], 2);
+			elseif($_POST['command'] == 'Add and Add another forum') MiscFunctions::redirect($_SERVER['PHP_SELF'].'?action=add_forum', 2);
+			else MiscFunctions::redirect($_SERVER['PHP_SELF'], 2);
 		} else {
 			$cRecs = $tdb->listRec("cats", 1);
 			$select = "<Select name=cat>\n";
@@ -375,11 +375,11 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 				else $select .= "<option value='".$cat["id"]."'>".$cat["name"]."</option>";
 			}
 			$select .= "</select>";
-			$whoView = "<select size='1' name='u_view'>".createUserPowerMisc(0, 1)."</select>";
-			$whoPost = "<select size='1' name='u_post'>".createUserPowerMisc(1, 1)."</select>";
-			$whoReply = "<select size='1' name='u_reply'>".createUserPowerMisc(1, 1)."</select>";
+			$whoView = "<select size='1' name='u_view'>".MiscFunctions::createUserPowerMisc(0, 1)."</select>";
+			$whoPost = "<select size='1' name='u_post'>".MiscFunctions::createUserPowerMisc(1, 1)."</select>";
+			$whoReply = "<select size='1' name='u_reply'>".MiscFunctions::createUserPowerMisc(1, 1)."</select>";
 			echo "<form action='admin_forums.php?action=add_forum' method=POST>";
-			echoTableHeading("Creating a new forum", $_CONFIG);
+			MiscFunctions::echoTableHeading("Creating a new forum", $_CONFIG);
 			echo "
 			<tr>
 				<th colspan='2'>&nbsp;</th>
@@ -422,7 +422,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type=submit value='Add'> <input type=submit name='command' value='Add and Add another forum' size='10'> <input type=submit name='command' value='Add and Add another forum to the selected Category' size='15'></td>
 			</tr>
 		";
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 			echo "</form>";
 		}
 	}
@@ -451,7 +451,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			} elseif($_GET['what'] == 'forum') {
 				$tdb->edit('cats', $cRec[0]['id'], array('sort' => $sort));
 			}
-			redirect('admin_forums.php#skip_nav', 0);
+			MiscFunctions::redirect('admin_forums.php#skip_nav', 0);
 		}
 
 	}
@@ -461,7 +461,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 		//
 		$cRecs = $tdb->listRec("cats", 1);
 
-		if (empty($cRecs)) redirect('admin_forums.php?action=add_cat', 0);
+		if (empty($cRecs)) MiscFunctions::redirect('admin_forums.php?action=add_cat', 0);
 
 		// Sort categories in the order that they appear
 		$cSorting = explode(",", $_CONFIG["admin_catagory_sorting"]);
@@ -485,9 +485,9 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 		reset($cRecs);
 
 		#$fRecs = $tdb->listRec("forums", 1);
-		#if (empty($fRecs)) redirect('admin_forums.php?action=add_forum', 0);
+		#if (empty($fRecs)) MiscFunctions::redirect('admin_forums.php?action=add_forum', 0);
 
-		echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+		MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 		echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -498,7 +498,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 		require_once("admin_navigation.php");
 		echo "</td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "<a name='skip_nav'>&nbsp;</a>
 			<div id='tabstyle_2'>
 			    <ul>
@@ -508,7 +508,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			</div>
 			<div style='clear:both;'></div><div id='sorting'>";
 
-		echoTableHeading("Forum Control", $_CONFIG);
+		MiscFunctions::echoTableHeading("Forum Control", $_CONFIG);
 
 		echo "
 			<tr>
@@ -528,7 +528,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 		} else {
 			for($i=0,$c1=count($cRecs);$i<$c1;$i++) {
 				//show each category
-				$view = createUserPowerMisc($cRecs[$i]["view"], 2);
+				$view = MiscFunctions::createUserPowerMisc($cRecs[$i]["view"], 2);
 				echo "
 			<tr>
 			    <td class='area_1' style='padding:8px;text-align:center;'>";
@@ -562,9 +562,9 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 						$fRec = $tdb->get('forums', $ids[$j]);
 						$post_tdb->setFp("topics", $fRec[0]["id"]."_topics");
 						$post_tdb->setFp("posts", $fRec[0]["id"]);
-						$whoView = createUserPowerMisc($fRec[0]["view"], 3);
-						$whoPost = createUserPowerMisc($fRec[0]["post"], 3);
-						$whoReply = createUserPowerMisc($fRec[0]["reply"], 3);
+						$whoView = MiscFunctions::createUserPowerMisc($fRec[0]["view"], 3);
+						$whoPost = MiscFunctions::createUserPowerMisc($fRec[0]["post"], 3);
+						$whoReply = MiscFunctions::createUserPowerMisc($fRec[0]["reply"], 3);
 						//show each forum
 						echo "
 			<tr>
@@ -595,7 +595,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 				}
 			}
 		}
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "</div>";
 	}
 	require_once("./includes/footer.php");

@@ -8,8 +8,8 @@
 require_once("./includes/upb.initialize.php");
 $posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 
-if (!isset($_GET["id"]) || !isset($_GET["t_id"]) || $_GET['id'] == '' || $_GET['t_id'] == '' || !ctype_digit($_GET['id']) || !ctype_digit($_GET['id'])) exitPage(str_replace('__TITLE__', 'Invalid ID:', str_replace('__MSG__', 'Cannot retrieve topic information because not enough information was provided.<br />'.ALERT_GENERIC_MSG, ALERT_MSG)), true);
-if (!$tdb->is_logged_in()) exitPage(str_replace('__TITLE__', 'Warning:', str_replace('__MSG__', 'You must be <a href="login.php">logged in</a> to view this page.', ALERT_MSG)), true);
+if (!isset($_GET["id"]) || !isset($_GET["t_id"]) || $_GET['id'] == '' || $_GET['t_id'] == '' || !ctype_digit($_GET['id']) || !ctype_digit($_GET['id'])) MiscFunctions::exitPage(str_replace('__TITLE__', 'Invalid ID:', str_replace('__MSG__', 'Cannot retrieve topic information because not enough information was provided.<br />'.ALERT_GENERIC_MSG, ALERT_MSG)), true);
+if (!$tdb->is_logged_in()) MiscFunctions::exitPage(str_replace('__TITLE__', 'Warning:', str_replace('__MSG__', 'You must be <a href="login.php">logged in</a> to view this page.', ALERT_MSG)), true);
 if($_GET['action'] == 'favorite') {
 	require_once('./includes/header.php');
 	$fav = &$_SESSION['newTopics']['f'.$_GET['id']]['t'.$_GET['t_id']];
@@ -21,7 +21,7 @@ if($_GET['action'] == 'favorite') {
 		print str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'This topic has been bookmarked.', CONFIRM_MSG));
 	}
 	$tdb->updateVisitedTopics();
-	redirect('viewtopic.php?id='.$_GET['id'].'&t_id='.$_GET['t_id'].'&page='.$_GET['page'], 2);
+	MiscFunctions::redirect('viewtopic.php?id='.$_GET['id'].'&t_id='.$_GET['t_id'].'&page='.$_GET['page'], 2);
 	exit;
 } elseif ($_GET["action"] == "watch") {
 	$posts_tdb->setFp("topics", $_GET["id"]."_topics");
@@ -39,8 +39,8 @@ if($_GET['action'] == 'favorite') {
 				//echo "You are no longer monitoring this topic.";
 				print str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', "You are no longer monitoring this topic.", CONFIRM_MSG));
 			} elseif($_POST["verify"] != "Cancel") {
-				ok_cancel($_SERVER['PHP_SELF']."?action=watch&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"], "Are you sure you no longer wish to monitor this topic?");
-				exitPage('', false, true);
+				MiscFunctions::ok_cancel($_SERVER['PHP_SELF']."?action=watch&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"], "Are you sure you no longer wish to monitor this topic?");
+				MiscFunctions::exitPage('', false, true);
 			}
 		} else {
 			$posts_tdb->edit("topics", $_GET["t_id"], array("monitor" => $tRec[0]["monitor"].",".$user[0]["id"]));
@@ -56,8 +56,8 @@ if($_GET['action'] == 'favorite') {
 				$posts_tdb->edit("topics", $_GET["t_id"], array("monitor" => $monitor_list));
 				print str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You are no longer monitoring this topic.', CONFIRM_MSG));
 			} elseif($_POST["verify"] != "Cancel") {
-				ok_cancel($_SERVER['PHP_SELF']."?action=watch&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"], "Are you sure you no longer wish to monitor this topic?");
-				exitPage('', false, true);
+				MiscFunctions::ok_cancel($_SERVER['PHP_SELF']."?action=watch&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"], "Are you sure you no longer wish to monitor this topic?");
+				MiscFunctions::exitPage('', false, true);
 			}
 		} else {
 			$posts_tdb->edit("topics", $_GET["t_id"], array("monitor" => $tRec[0]["monitor"].",".$user[0]["id"]));
@@ -65,7 +65,7 @@ if($_GET['action'] == 'favorite') {
 		}
 	}
 	require_once("./includes/footer.php");
-	redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"], 2);
+	MiscFunctions::redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"], 2);
 	exit;
 } elseif($_COOKIE["power_env"] > 1) {
 	$posts_tdb->setFp("topics", $_GET["id"]."_topics");
@@ -77,11 +77,11 @@ if($_GET['action'] == 'favorite') {
 		if ($_COOKIE["power_env"] < 3) {
 			print str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Unable to move or copy this topic, you do not have enough power.', ALERT_MSG));
 			require_once("./includes/footer.php");
-			redirect($_SERVER['PHP_SELF']."?id=".$_GET["id"]."&t_id=".$_GET["t_id"], 2);
+			MiscFunctions::redirect($_SERVER['PHP_SELF']."?id=".$_GET["id"]."&t_id=".$_GET["t_id"], 2);
 			exit;
 		}
 		if ($_POST["newId"] != "") {
-			if ($_POST["update_date"] == "1") $tRec[0]["last_post"] = mkdate();
+			if ($_POST["update_date"] == "1") $tRec[0]["last_post"] = DateCustom::mkdate();
 			$tRec[0]["subject"] = str_replace($_CONFIG['sticky_note'], "", $tRec[0]["subject"]);
 			if ($_POST["sticky_status"] == "1") $tRec[0]["sticky"] = 1;
 			else $tRec[0]["sticky"] = 0;
@@ -109,7 +109,7 @@ if($_GET['action'] == 'favorite') {
 						$posts_tdb->edit("posts", $p_ids[0], array(
 							"icon" => "icon1.gif",
 								"user_name" => $_COOKIE["user_env"],
-								"date" => mkdate(),
+								"date" => DateCustom::mkdate(),
 								"message" => "Topic was moved to forum : ".$fNRec[0]["forum"]."<br /> You should be redirected in 2 seconds.  If not, <a href='viewtopic.php?id=".$_POST["newId"]."&t_id=".$newT_id."'>click here</a>.<meta http-equiv='refresh' content='1;URL=viewtopic.php?id=".$_POST["newId"]."&t_id=".$newT_id."'>",
 								"user_id" => $_COOKIE["id_env"]));
 					}
@@ -135,8 +135,8 @@ if($_GET['action'] == 'favorite') {
 			$posts_tdb->sort("newTopics", "last_post", "DESC");
 			$tdb->edit("forums", $_POST["newId"], array("topics" => $fNRec[0]["topics"], "posts" => ($fNRec[0]["posts"] + count($p_ids))));
 			require_once("./includes/footer.php");
-			if ($_GET["redirect"] != "") redirect($_GET["redirect"], 2);
-			else redirect($_SERVER['PHP_SELF']."?id=".$_POST["newId"]."&t_id=$newT_id", 2);
+			if ($_GET["redirect"] != "") MiscFunctions::redirect($_GET["redirect"], 2);
+			else MiscFunctions::redirect($_SERVER['PHP_SELF']."?id=".$_POST["newId"]."&t_id=$newT_id", 2);
 			exit;
 		} else {
 			$_GET['action'] = '';
@@ -161,7 +161,7 @@ if($_GET['action'] == 'favorite') {
 		$posts_tdb->edit("topics", $_GET["t_id"], $tNewRec);
 		print str_replace('__TITLE__', 'Redirecting:', str_replace('__MSG__', 'Successfully edited topic properties', CONFIRM_MSG));
 		require_once("./includes/footer.php");
-		redirect($_SERVER['PHP_SELF']."?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&s=".$s, "2");
+		MiscFunctions::redirect($_SERVER['PHP_SELF']."?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&s=".$s, "2");
 		exit;
 	} elseif($_POST['action'] == 'Delete Selected') {
 		if(!isset($_POST['ids']) || empty($_POST['ids'])) {
@@ -200,27 +200,27 @@ if($_GET['action'] == 'favorite') {
 				require_once('./includes/header.php');
 				print str_replace('__TITLE__', 'Redirecting:', str_replace('__MSG__', 'Successfully deleted '.count($ids).' post(s).', CONFIRM_MSG));
 				include_once './includes/footer.php';
-				redirect("{$_SERVER['PHP_SELF']}?id={$_GET['id']}&t_id={$_GET['t_id']}", 2);
+				MiscFunctions::redirect("{$_SERVER['PHP_SELF']}?id={$_GET['id']}&t_id={$_GET['t_id']}", 2);
 			} elseif($_POST['verify'] == 'Cancel') {
 				include_once './includes/footer.php';
-				redirect("{$_SERVER['PHP_SELF']}?id={$_GET['id']}&t_id={$_GET['t_id']}", 0);
+				MiscFunctions::redirect("{$_SERVER['PHP_SELF']}?id={$_GET['id']}&t_id={$_GET['t_id']}", 0);
 			} else {
 				require_once('./includes/header.php');
-				ok_cancel("{$_SERVER['PHP_SELF']}?id={$_GET['id']}&t_id={$_GET['t_id']}", '<input type="hidden" name="action" value="'.$_POST['action'].'"><input type="hidden" name="ids" value=\''.serialize($_POST['ids']).'\'>Are you sure that you want to delete these '.count($_POST['ids']).' post(s)?');
+				MiscFunctions::ok_cancel("{$_SERVER['PHP_SELF']}?id={$_GET['id']}&t_id={$_GET['t_id']}", '<input type="hidden" name="action" value="'.$_POST['action'].'"><input type="hidden" name="ids" value=\''.serialize($_POST['ids']).'\'>Are you sure that you want to delete these '.count($_POST['ids']).' post(s)?');
 			}
 		}
 	} elseif($_GET["action"] == "CloseTopic" || $_POST["action"] == "CloseTopic") {
 		if ($tRec[0]["locked"] == 1) echo "This Topic is already locked!";
 		else {
 			$posts_tdb->edit("topics", $_GET["t_id"], array("locked" => "1"));
-			redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"], 0);
+			MiscFunctions::redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"], 0);
 		}
 	} elseif($_GET["action"] == "OpenTopic" || $_POST["action"] == "OpenTopic") {
 		if ($tRec[0]["locked"] == 0) echo "This Topic is already unlocked!";
 		else
 		{
 			$posts_tdb->edit("topics", $_GET["t_id"], array("locked" => "0"));
-			redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"], 0);
+			MiscFunctions::redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"], 0);
 		}
 	} elseif($_POST["action"] == "Delete") {
 		require_once('./includes/header.php');
@@ -243,7 +243,7 @@ if($_GET['action'] == 'favorite') {
 			$posts_tdb->edit("topics", $_GET["t_id"], array("p_ids" => $p_ids));
 			echo "Successfully deleted ".$num." Post(s)";
 			require_once("./includes/footer.php");
-			//redirect($_SERVER['PHP_SELF']."?id=".$_GET["id"]."&t_id=".$_GET["t_id"], "2");
+			//MiscFunctions::redirect($_SERVER['PHP_SELF']."?id=".$_GET["id"]."&t_id=".$_GET["t_id"], "2");
 			exit;
 		} elseif($_POST["verify"] == "Cancel") {
 			unset($_POST["action"]);
@@ -263,7 +263,7 @@ if($_GET['action'] == 'favorite') {
 			$ids = implode(",", $ids);
 			echo "<b>Are you sure you want to delete the following posts from this topic?</b>";
 			echo "";
-			echoTableHeading("Manage Topic:", $_CONFIG);
+			MiscFunctions::echoTableHeading("Manage Topic:", $_CONFIG);
 			echo "
 			<tr>
 				<td width='22%' bgcolor='$header'><font size='$font_m' face='$font_face' color='$font_color_header'>Name</font></td>
@@ -271,7 +271,7 @@ if($_GET['action'] == 'favorite') {
 			</tr>";
 			$x = 1;
 			foreach($pRecs as $pRec) {
-				$msg = format_text(UPBcoding(filterLanguage($pRec["message"], $_CONFIG)));
+				$msg = PostingFunctions::format_text(PostingFunctions::UPBcoding(PostingFunctions::filterLanguage($pRec["message"], $_CONFIG)));
 				if ($x == 0) {
 					$table_color = $table1;
 
@@ -287,8 +287,8 @@ if($_GET['action'] == 'favorite') {
 				<td width='78%' bgcolor='$table_color'><font size='$font_m' face='$font_face' color='$table_font'>$msg</font></td>
 			</tr>";
 			}
-			echoTableFooter(SKIN_DIR);
-			ok_cancel($_SERVER['PHP_SELF']."id=".$_GET["id"]."&t_id=".$_GET["t_id"], "<input type='hidden' name='action' value='Delete'><input type='hidden' name='ids' value ='".$ids."'>");
+			MiscFunctions::echoTableFooter(SKIN_DIR);
+			MiscFunctions::ok_cancel($_SERVER['PHP_SELF']."id=".$_GET["id"]."&t_id=".$_GET["t_id"], "<input type='hidden' name='action' value='Delete'><input type='hidden' name='ids' value ='".$ids."'>");
 		}
 	}
 	if ($_GET["action"] == "" && $_POST["action"] == "") {
@@ -305,7 +305,7 @@ if($_GET['action'] == 'favorite') {
 		$p_ids = explode(",", $tRec[0]["p_ids"]);
 		$pRec = $posts_tdb->get("posts", $p_ids[0]);
 		echo "<form method='POST' action='".$_SERVER['PHP_SELF']."?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."'>";
-		echoTableHeading("Topic Properties", $_CONFIG);
+		MiscFunctions::echoTableHeading("Topic Properties", $_CONFIG);
 		echo "
 			<tr>
 				<td class='area_1' style='width:22%;'><strong>Topic Name: </strong></td>
@@ -320,7 +320,7 @@ if($_GET['action'] == 'favorite') {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Created on:</strong></td>
-				<td class='area_2'>".gmdate("M d, Y g:i:s a", user_date($pRec[0]["date"]))."</td>
+				<td class='area_2'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($pRec[0]["date"]))."</td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Created by:</strong></td>
@@ -332,7 +332,7 @@ if($_GET['action'] == 'favorite') {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Last post on:</strong></td>
-				<td class='area_2'>".gmdate("M d, Y g:i:s a", user_date($tRec[0]["last_post"]))."</td>
+				<td class='area_2'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($tRec[0]["last_post"]))."</td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Open/Close Status:</strong></td>
@@ -343,8 +343,8 @@ if($_GET['action'] == 'favorite') {
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='submit' value='Modify' name='action'><input type='reset' value='Reset' name='B2'></td>
 			</tr>
 	</form>";
-		echoTableFooter(SKIN_DIR);
-		echoTableHeading("Topic Options", $_CONFIG);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableHeading("Topic Options", $_CONFIG);
 		if ($_COOKIE["power_env"] >= 3) {
 			echo "
 			<tr>
@@ -420,18 +420,18 @@ if($_GET['action'] == 'favorite') {
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='submit' value='Submit' name='submit2'><input type='reset' value='Reset' name='Reset'></td>
 			</tr>
 		</form>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		$posts_tdb->set_topic($tRec);
 		$pRecs = $posts_tdb->getPosts("posts");
 		if (count($pRecs) > 1) {
 			echo "
 		<form method='POST' action='".$_SERVER['PHP_SELF']."?id=".$_GET["id"]."&t_id=".$_GET["t_id"]."'>";
-			echoTableHeading("Delete Multiple Posts", $_CONFIG);
+			MiscFunctions::echoTableHeading("Delete Multiple Posts", $_CONFIG);
 
 			$x = 1;
 			unset($pRecs[0]);
 			foreach($pRecs as $pRec) {
-				$msg = format_text(UPBcoding(filterLanguage($pRec["message"], $_CONFIG)));
+				$msg = PostingFunctions::format_text(PostingFunctions::UPBcoding(PostingFunctions::filterLanguage($pRec["message"], $_CONFIG)));
 				echo "
 			<tr>
 				<td class='footer_3' colspan='3'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
@@ -447,7 +447,7 @@ if($_GET['action'] == 'favorite') {
 				<td class='footer_3a' colspan='3' style='text-align:center;'><input type='submit' value='Delete Selected' name='action'\"/></td>
 			</tr>
 	</form>";
-			echoTableFooter(SKIN_DIR); }
+			MiscFunctions::echoTableFooter(SKIN_DIR); }
 	}
 } else {
 	require_once('./includes/header.php');

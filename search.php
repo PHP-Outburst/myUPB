@@ -28,7 +28,7 @@ foreach($form_cats as $form_c) {
 }
 //form
 echo "<form action='search.php' method='get'>";
-echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 echo "
 		<tr>
 			<td class='area_1' style='width:40%;text-align:right;'><strong>Search Text:</strong></td>
@@ -59,7 +59,7 @@ echo "
 		<tr>
 			<td class='footer_3a' style='text-align:center;' colspan='2'><input type='submit' value='Search' /></td>
 		</tr>";
-				echoTableFooter(SKIN_DIR);
+MiscFunctions::echoTableFooter(SKIN_DIR);
 				echo "</form>";
 				//end form
 				if (isset($_GET['q']) && trim($_GET['q']) != "" || trim($_GET["q"]) == "" && trim($_GET["user"]) != "") {
@@ -178,7 +178,7 @@ echo "
 				//results here
 				if (!empty($resultTopics)) {
 					echo "<br /><br />";
-					echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], "First 10 Results..."), $_CONFIG);
+					MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], "First 10 Results..."), $_CONFIG);
 					echo "";
 					//while(list($fId, $result) = each($results)) {
 					foreach($resultTopics as $fID => $result) {
@@ -195,7 +195,7 @@ echo "
 			</tr>";
 						}
 					}
-					echoTableFooter(SKIN_DIR);
+					MiscFunctions::echoTableFooter(SKIN_DIR);
 					flush();
 				}
 				if (!empty($resultPosts)) {
@@ -204,10 +204,10 @@ echo "
 
 					foreach($resultPosts as $fID => $result) {
 						foreach($result["records"] as $post) {
-							$msg = format_text(filterLanguage(UPBcoding($post["message"]), $_CONFIG));
-							$msg = removeRedirect($msg);
+							$msg = PostingFunctions::format_text(PostingFunctions::filterLanguage(PostingFunctions::UPBcoding($post["message"]), $_CONFIG));
+							$msg = MiscFunctions::removeRedirect($msg);
 							echo "";
-							echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], "Result from: <a href='viewforum.php?id=".$fID."'>".$result["forumName"]."</a> ".$_CONFIG["where_sep"]." <a href='viewtopic.php?id=".$fID."&t_id=".$post["t_id"]."'>".$post["topicName"]."</a>"), $_CONFIG);
+							MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], "Result from: <a href='viewforum.php?id=".$fID."'>".$result["forumName"]."</a> ".$_CONFIG["where_sep"]." <a href='viewtopic.php?id=".$fID."&t_id=".$post["t_id"]."'>".$post["topicName"]."</a>"), $_CONFIG);
 							echo "
 					<tr>
 						<th>Created by: ".$post["user_name"]."</th>
@@ -216,7 +216,7 @@ echo "
 					<tr>
 						<td class='area_2'><div style='padding:12px;margin-bottom:20px;'>$msg</div></td>
 					</tr>";
-							echoTableFooter(SKIN_DIR);
+                            MiscFunctions::echoTableFooter(SKIN_DIR);
 						}
 					}
 				}

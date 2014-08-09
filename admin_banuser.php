@@ -27,10 +27,10 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 
 						echo "Done!</div>
 	</div>";
-						redirect("admin_banuser.php", 1);
+						MiscFunctions::redirect("admin_banuser.php", 1);
 					} else {
 
-						echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+						MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 
 						echo "
 			<tr>
@@ -43,11 +43,11 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 						require_once("admin_navigation.php");
 						echo "</td>
 			</tr>";
-						echoTableFooter(SKIN_DIR);
+						MiscFunctions::echoTableFooter(SKIN_DIR);
 
 						echo "<form action='admin_banuser.php?action=edit&word=".((isset($_POST["word"])) ? $_POST['word'] : $_GET['word'])."' method=POST>";
 
-						echoTableHeading("Changing banned username", $_CONFIG);
+						MiscFunctions::echoTableHeading("Changing banned username", $_CONFIG);
 
 						echo "
 			<tr>
@@ -63,7 +63,7 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type=submit value='Edit'></td>
 			</tr>";
-						echoTableFooter(SKIN_DIR);
+						MiscFunctions::echoTableFooter(SKIN_DIR);
 						echo "</form>";
 					}
 				} else {
@@ -84,13 +84,13 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 					fclose($f);
 					echo "Done!</div>
 	</div>";
-					if($_POST["ref"] != "") redirect($_POST["ref"], 1);
-					else redirect("admin_banuser.php", 1);
+					if($_POST["ref"] != "") MiscFunctions::redirect($_POST["ref"], 1);
+					else MiscFunctions::redirect("admin_banuser.php", 1);
 				} elseif($verify == "Cancel") {
-					if($_POST["ref"] != "") redirect($_POST["ref"], 1);
-					else redirect("admin_banuser.php", 1);
+					if($_POST["ref"] != "") MiscFunctions::redirect($_POST["ref"], 1);
+					else MiscFunctions::redirect("admin_banuser.php", 1);
 				} else {
-					ok_cancel("admin_banuser.php?action=delete&word=".$_GET["word"], "Are you sure you want to delete <b>".$_GET["word"]."</b> from the banned users list?<input type='hidden' name='ref' value='".$_GET["ref"]."'>");
+					MiscFunctions::ok_cancel("admin_banuser.php?action=delete&word=".$_GET["word"], "Are you sure you want to delete <b>".$_GET["word"]."</b> from the banned users list?<input type='hidden' name='ref' value='".$_GET["ref"]."'>");
 				}
 			} elseif($_GET["action"] == "addnew") {
 				//add new user
@@ -113,11 +113,11 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 					fclose($f);
 					echo "Done!</div>
 	</div>";
-					if($_POST["ref"] != "") redirect($_POST["ref"], 1);
-					else redirect("admin_banuser.php", 1);
+					if($_POST["ref"] != "") MiscFunctions::redirect($_POST["ref"], 1);
+					else MiscFunctions::redirect("admin_banuser.php", 1);
 				} else {
 
-					echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+					MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 
 					echo "
 			<tr>
@@ -130,11 +130,11 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 					require_once("admin_navigation.php");
 					echo "</td>
 			</tr>";
-					echoTableFooter(SKIN_DIR);
+					MiscFunctions::echoTableFooter(SKIN_DIR);
 
 					echo "<form action='admin_banuser.php?action=addnew' method=POST><input type='hidden' name='ref' value='".$_GET["ref"]."'>";
 
-					echoTableHeading("Banning a member", $_CONFIG);
+					MiscFunctions::echoTableHeading("Banning a member", $_CONFIG);
 
 					echo "
 			<tr>
@@ -150,14 +150,14 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type=submit value='Add to ban list'></td>
 			</tr>";
-					echoTableFooter(SKIN_DIR);
+					MiscFunctions::echoTableFooter(SKIN_DIR);
 					echo "</form>";
 				}
 			}
 		} else {
 			$list = explode("\n", file_get_contents(DB_DIR."/banneduser.dat"));
 
-			echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+			MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 
 			echo "
 			<tr>
@@ -170,7 +170,7 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 			require_once("admin_navigation.php");
 			echo "</td>
 			</tr>";
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 
 			echo "
 	<div id='tabstyle_2'>
@@ -180,7 +180,7 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 	</div>
 	<div style='clear:both;'></div>";
 
-			echoTableHeading("Manage banned users", $_CONFIG);
+			MiscFunctions::echoTableHeading("Manage banned users", $_CONFIG);
 
 			echo "
 			<tr>
@@ -200,7 +200,7 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 			</tr>";
 				}
 			}
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 		}
 	} else {
 		echo "
@@ -211,7 +211,7 @@ if(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_CO
 	echo "
 <div class='alert'><div class='alert_text'>
 <strong>Caution!</strong></div><div style='padding:4px;'>You are not logged in!.</div></div>";
-	redirect("login.php?ref=admin_basuser.php", 2);
+	MiscFunctions::redirect("login.php?ref=admin_basuser.php", 2);
 }
 
 require_once("./includes/footer.php");

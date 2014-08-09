@@ -10,10 +10,10 @@ require_once("./includes/upb.initialize.php");
 $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin_smilies.php'>Manage Smilies</a>";
 $bdb = new Tdb(DB_DIR.'/','bbcode.tdb');
 $bdb->setFP('smilies','smilies');
-if(!(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["id_env"]))) redirect("login.php?ref=admin_smilies.php", 2);
+if(!(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["id_env"]))) MiscFunctions::redirect("login.php?ref=admin_smilies.php", 2);
 if(!($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3)) 
 {
-	exitPage('
+	MiscFunctions::exitPage('
 		<div class="alert"><div class="alert_text">
 		<strong>Access Denied!</strong></div><div style="padding:4px;">you are not authorized to be here.</div></div>', true);
 }
@@ -112,7 +112,7 @@ if($_GET["action"] == "addnew") {
 			echo "</div></div>";
 
 			if (count($success) == count($_FILES["icon_file"]["name"]))
-			redirect("admin_smilies.php", 2);
+			MiscFunctions::redirect("admin_smilies.php", 2);
 		}
 
 		if (!empty($error))
@@ -140,7 +140,7 @@ if($_GET["action"] == "addnew") {
 	} else {
 		echo "<form action='admin_smilies.php?action=addnew' name='icon_upload' method='POST' enctype='multipart/form-data'>";
 		echo "<input type='hidden' name='MAX_FILE_SIZE' value='250000' />";
-		echoTableHeading("Add new smilie(s)", $_CONFIG);
+		MiscFunctions::echoTableHeading("Add new smilie(s)", $_CONFIG);
 		echo "<tr><th colspan='6'>Smilie File Requirements</th>";
 		echo "<tr><td class='area_2' style='padding:8px;' colspan='6'>Smiles must be gif/jpg or png files and have a maximum filesize of 50KB each</td></tr>";
 		echo "
@@ -192,7 +192,7 @@ if($_GET["action"] == "addnew") {
 			</tr>
 			<tr>
 				<td class='footer_3a' colspan='6' style='text-align:center;'><input type=submit value='Add Smilie(s)'></td></tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "</form>";
 	}
 }
@@ -213,7 +213,7 @@ elseif($_GET["action"] == "edit")
 			unset($tmp[$tmp_key[0]]);
 			$data = $bdb->query('smilies', "id='{$tmp_key[0]}'", 1, 1, array('replace'));
 			$file = $data[0]['replace'];
-			$newfile = strmstr(strstr_after($file, "'"),"'",true);
+			$newfile = MiscFunctions::strmstr(MiscFunctions::strstr_after($file, "'"),"'",true);
 			@unlink('./'.$newfile);
 			$bdb->delete('smilies',$tmp_key[0]);
 		}
@@ -236,12 +236,12 @@ elseif($_GET["action"] == "edit")
 					<div class='alert_confirm_text'>
 					<strong>Smilie Database Edit Successful</strong></div>
           <div style='padding:4px;'>Returning to Smilie Management</div></div>";
-	redirect('./admin_smilies.php',2);
+	MiscFunctions::redirect('./admin_smilies.php',2);
 	require_once('./includes/footer.php');
-	//redirect("admin_smilies.php", 3);
+	//MiscFunctions::redirect("admin_smilies.php", 3);
 }
 else {
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -252,7 +252,7 @@ else {
 	require_once("admin_navigation.php");
 	echo "</td>
 			</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 
 	$smilies = $bdb->query('smilies',"id>'0'");
 	//var_dump($smilies);
@@ -265,7 +265,7 @@ else {
 				</ul>
 				</div>
 				<div style='clear:both;'></div>";
-	echoTableHeading("Smilie Control", $_CONFIG);
+	MiscFunctions::echoTableHeading("Smilie Control", $_CONFIG);
 	echo "<tr><th colspan='4'>Smilie Management</th>";
 	if(count($smilies) == 0 or $smilies === false) {
 		echo "<tr><td bgcolor='$table1' colspan='4'><font size='$font_m' face='$font_face' color='$font_color_main'>No smilies found.</font></td></tr>";
@@ -315,7 +315,7 @@ else {
 		echo "<tr><td class='area_1' colspan='4' style='padding:8px;text-align:center;'><input type='submit' value='Submit Changes'><input type='reset' value='Reset Form'></td></tr>";
 	}
 	echo "</table>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 require_once("./includes/footer.php");
 ?>

@@ -9,18 +9,18 @@ require_once('./includes/upb.initialize.php');
 $where = "Register";
 $required = "#ff0000";
 if ($tdb->is_logged_in() && $_COOKIE['power_env'] < 3)
-exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You cannot register if you are already logged in.', ALERT_MSG)), true);
+MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You cannot register if you are already logged in.', ALERT_MSG)), true);
 
 if(!isset($_GET['action'])) $_GET['action'] = '';
 if($_GET['action'] == 'validate' && !$_REGIST['reg_approval']) {
 	if(!isset($_GET['id']) || $_GET['id'] == '' || !ctype_digit($_GET['id'])) {
-		exitPage(str_replace('__TITLE__', 'Invalid User ID.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
+		MiscFunctions::exitPage(str_replace('__TITLE__', 'Invalid User ID.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 	} elseif(FALSE === ($rec = $tdb->get('users', $_GET['id']))) {
-		exitPage(str_replace('__TITLE__', 'User Does Not Exist.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
+		MiscFunctions::exitPage(str_replace('__TITLE__', 'User Does Not Exist.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 	}
 
 	if(!isset($_GET['code']) || $_GET['code'] == '' || $_GET['code'] != $rec[0]['reg_code']) {
-		exitPage(str_replace('__TITLE__', 'Invalid Confirmation Code.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
+		MiscFunctions::exitPage(str_replace('__TITLE__', 'Invalid Confirmation Code.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 	}
 
 	$tdb->edit('users', $_GET['id'], array('reg_code' => ''));
@@ -36,11 +36,11 @@ confirmed. You can now log into the bulletin board.</div>
 	exit;
 } elseif($_GET['action'] == 'resend' && !$_REGIST['reg_approval']) {
 	if(!isset($_GET['id']) || $_GET['id'] == '' || !ctype_digit($_GET['id'])) {
-		exitPage(str_replace('__TITLE__', 'Invalid User ID.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
+		MiscFunctions::exitPage(str_replace('__TITLE__', 'Invalid User ID.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 	} elseif(FALSE === ($rec = $tdb->get('users', $_GET['id']))) {
-		exitPage(str_replace('__TITLE__', 'User Does Not Exist.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
+		MiscFunctions::exitPage(str_replace('__TITLE__', 'User Does Not Exist.', str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 	} elseif($rec[0]['reg_code'] == '') {
-		exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Confirmation Code already recieved.  You do not need to resend your Confirmation Code.', ALERT_MSG)), true);
+		MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Confirmation Code already recieved.  You do not need to resend your Confirmation Code.', ALERT_MSG)), true);
 	}
 	$reg_code = uniqid('reg_', true);
 	// get the user's email address, NOTE: password is not available as it has already been encrypted.
@@ -80,36 +80,34 @@ received it after a short while please contact an administrator.</div>
 }
 
 if($_REGIST['disable_reg'] && $_COOKIE['power_env'] < 3)
-exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Registration is disabled for this bulletin board.', ALERT_MSG)), true);
+MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Registration is disabled for this bulletin board.', ALERT_MSG)), true);
 if (empty($_POST["show_email"])) $_POST["show_email"] = "";
 if (empty($_POST["email_list"])) $_POST["email_list"] = "";
 if (!isset($_POST["submit"])) $_POST["submit"] = "";
 
-require_once('./includes/inc/encode.inc.php');
-
 if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 	if (!$tdb->is_logged_in() && (empty($_SESSION['captcha']) || strtolower(trim($_REQUEST['captcha'])) != $_SESSION['captcha'])) //checks cool php captcha, repaired registering as admin/mod
-	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You failed the CAPTCHA check.  Please enter the code <b>exactly</b> as it appears.', ALERT_MSG)), true);//captcha failed
+	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You failed the CAPTCHA check.  Please enter the code <b>exactly</b> as it appears.', ALERT_MSG)), true);//captcha failed
 	$_POST["u_login"] = strip_tags($_POST["u_login"]);
 	$_POST["u_login"] = trim($_POST["u_login"]);
 
 	if ($_POST["u_login"] == '' || $_POST["u_email"] == '')
-	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You did not fill in all required fields. (*)', ALERT_MSG)), true);
+	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You did not fill in all required fields. (*)', ALERT_MSG)), true);
 
 	if($_POST['u_email'] != $_POST['u_email2'])
-	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Your e-mails do not match.', ALERT_MSG)), true);
+	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Your e-mails do not match.', ALERT_MSG)), true);
 
 	if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*(\+[_a-z0-9-]+(\.[_a-z0-9-]+)*)*@[a-z0-9-]+(\.[a-z0-9-]+)*$/i", $_POST["u_email"]))
-	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Please enter a valid e-mail (ex: you@host.com).', ALERT_MSG)), true);
+	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Please enter a valid e-mail (ex: you@host.com).', ALERT_MSG)), true);
 
 	$q = $tdb->query("users", "user_name='".strtolower($_POST["u_login"])."'", 1, 1);
 	if (strtolower($_POST["u_login"]) == strtolower($q[0]["user_name"]))
-	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'The username you chose is already in use.', ALERT_MSG)), true);
+	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'The username you chose is already in use.', ALERT_MSG)), true);
 	unset($q);
 
 	$q = $tdb->query("users", "email='".$_POST["u_email"]."'", 1, 1);
 	if ($_POST["u_email"] == $q[0]["email"])
-	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Somebody has already registered on this bulletin board with your e-mail address.', ALERT_MSG)), true);
+	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Somebody has already registered on this bulletin board with your e-mail address.', ALERT_MSG)), true);
 	unset($q);
 
 	if($tdb->is_logged_in() || !isset($_POST['u_pass']) || !isset($_POST['u_pass2'])) {
@@ -123,16 +121,16 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 		}
 	} else {
 		if($_POST['u_pass'] != $_POST['u_pass2'])
-		exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Your passwords do not match.', ALERT_MSG)), true);
+		MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Your passwords do not match.', ALERT_MSG)), true);
 
 		elseif(strlen($_POST['u_pass']) < 6)
-		exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Your password has to be at least six characters long.', ALERT_MSG)), true);
+		MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Your password has to be at least six characters long.', ALERT_MSG)), true);
 
 		$u_pass = $_POST['u_pass'];
 	}
 	if ($_POST["show_email"] != "1") $_POST["show_email"] = 0;
 	if (strlen($_POST["u_sig"]) > 200)
-	exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You cannot have more than 200 characters in your signature.', ALERT_MSG)), true);
+	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You cannot have more than 200 characters in your signature.', ALERT_MSG)), true);
 
 	//call to checkdnsrr removed due to false negatives occuring. Some hosts use mail servers that use different domain names to the user email address.
 
@@ -142,7 +140,7 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 
 	$id = $tdb->add("users",
 	array("user_name" => $_POST["u_login"],
-		    "password" => generateHash($u_pass),
+		    "password" => Encode::generateHash($u_pass),
 		    "level" => 1,
 		    "email" => $_POST["u_email"],
 		    "view_email" => $_POST["show_email"],
@@ -156,8 +154,8 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 		    "msn" => $_POST["u_msn"],
 		    "sig" => chop($_POST["u_sig"]),
 		    "posts" => 0,
-		    "date_added" => mkdate(),
-		    "lastvisit" => mkdate(),
+		    "date_added" => DateCustom::mkdate(),
+		    "lastvisit" => DateCustom::mkdate(),
 		    "timezone" => $_POST["u_timezone"],
 		    'newTopicsData' => serialize(array('lastVisitForums' => array()))
 	));
@@ -239,12 +237,12 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 		$string = md5(rand(0, microtime() * 1000000));
 		$verify_string = substr($string, 3, 7);
 		$key = md5(rand(0, 999));
-		$encid = urlencode(md5_encrypt($verify_string, $key));
+		$encid = urlencode(Encode::md5_encrypt($verify_string, $key));
 		// rather than the hidden field we have
 		$_SESSION['u_keycheck'] = $verify_string;
 	}
 	echo "<form name='registration' id='registration' action='register.php' method='POST'>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th colspan='2' style='text-align:left;'><span style='color:$required;'>*</span> is a required field</th>
@@ -304,8 +302,8 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 
 
 
-	echoTableFooter(SKIN_DIR);
-	echoTableHeading("Other Information", $_CONFIG);
+    MiscFunctions::echoTableFooter(SKIN_DIR);
+    MiscFunctions::echoTableHeading("Other Information", $_CONFIG);
 	echo "
 			<tr>
 				<th colspan='2' style='text-align:left;'>These areas can also be completed at a later time in your account settings.</th>
@@ -354,12 +352,12 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Timezone Setting:</strong></td>
-				<td class='area_2'>".timezonelist()."</td></tr>";
+				<td class='area_2'>".MiscFunctions::timezonelist()."</td></tr>";
 	echo "
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='submit' id='submit' name='submit' value='Submit' disabled>&nbsp;<input type='reset' id='reset' name='reset' value='Reset'></td>
 			</tr>";
-	echoTableFooter(SKIN_DIR);
+    MiscFunctions::echoTableFooter(SKIN_DIR);
 	echo "</form>";
 	require_once('./includes/footer.php');
 	if(!isset($_SESSION['iplogged']) || ($_SESSION['iplogged']+300) < time()) {

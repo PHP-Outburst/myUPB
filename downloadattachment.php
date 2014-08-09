@@ -20,11 +20,11 @@ if($uploadRec !== false)
 	}
 	else 
 	{
-		exitPage("You do not have permission to download this file", true);
+		MiscFunctions::exitPage("You do not have permission to download this file", true);
 	}
 }
 else 
 {
-	exitPage("Upload does not exist", true);
+	MiscFunctions::exitPage("Upload does not exist", true);
 }
 ?>

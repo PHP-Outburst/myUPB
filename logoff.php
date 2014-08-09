@@ -11,7 +11,7 @@ require_once('config.php');
 
 if (isset($_COOKIE['id_env'])) $user_id = $_COOKIE['id_env'];
 else $user_id = getenv("REMOTE_ADDR");
-$old = mkdate() - 3600;
+$old = DateCustom::mkdate() - 3600;
 $old = $old.str_repeat(' ', 14 - strlen($old));
 //$whos_online_array = explode("\n", substr($whos_online_log, 0, -1));
 $whos_online_array = file(DB_DIR.'/whos_online.dat');

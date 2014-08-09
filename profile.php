@@ -20,16 +20,16 @@ if (isset($_POST["u_edit"])) {
 		exit;
 	} else {
 		$rec = array();
-		if (!isset($_POST["u_email"])) exitPage("please enter your email!", true);
-		if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$/i", $_POST["u_email"])) exitPage("please enter a valid email!", true);
+		if (!isset($_POST["u_email"])) MiscFunctions::exitPage("please enter your email!", true);
+		if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$/i", $_POST["u_email"])) MiscFunctions::exitPage("please enter a valid email!", true);
 		$_POST['u_sig'] = stripslashes($_POST['u_sig']);
-		if (strlen($_POST["u_sig"]) > 500) exitPage("You cannot have more than 500 characters in your signature.", true);
+		if (strlen($_POST["u_sig"]) > 500) MiscFunctions::exitPage("You cannot have more than 500 characters in your signature.", true);
 		$user = $tdb->get("users", $_COOKIE["id_env"]);
 		if (strlen($_POST["u_newpass"]) > 0) {
-			if ($user[0]['password'] != generateHash($_POST['u_oldpass'], $user[0]['password'])) exitPage('You old password does not match the one on file!', true);
-			if ($_POST["u_newpass"] != $_POST["u_newpass2"]) exitPage("your pass and pass confirm are not matching!", true);
-			if (strlen($_POST["u_newpass"]) < 6) exitPage("your password has to be longer then 6 characters", true);
-			$rec["password"] = generateHash($_POST["u_newpass"]);
+			if ($user[0]['password'] != Encode::generateHash($_POST['u_oldpass'], $user[0]['password'])) MiscFunctions::exitPage('You old password does not match the one on file!', true);
+			if ($_POST["u_newpass"] != $_POST["u_newpass2"]) MiscFunctions::exitPage("your pass and pass confirm are not matching!", true);
+			if (strlen($_POST["u_newpass"]) < 6) MiscFunctions::exitPage("your password has to be longer then 6 characters", true);
+			$rec["password"] = Encode::generateHash($_POST["u_newpass"]);
 			setcookie("user_env", "");
 			setcookie("uniquekey_env", "");
 			setcookie("power_env", "");
@@ -38,12 +38,12 @@ if (isset($_POST["u_edit"])) {
 		}
 		else $ht = "<meta http-equiv='refresh' content='2;URL=profile.php'>";
 		if ($user[0]["email"] != $_POST["u_email"]) $rec["email"] = $_POST["u_email"];
-		if ($user[0]["u_sig"] != encode_text(chop($_POST["u_sig"]))) $rec["sig"] = encode_text(chop($_POST["u_sig"]));
+		if ($user[0]["u_sig"] != PostingFunctions::encode_text(chop($_POST["u_sig"]))) $rec["sig"] = PostingFunctions::encode_text(chop($_POST["u_sig"]));
 		if ($_POST['u_sig'] == "")
 		$rec['sig'] = "";
 		if (substr(trim(strtolower($_POST["u_site"])), 0, 7) != "http://") $_POST["u_site"] = "http://".$_POST["u_site"];
 		if ($user[0]["url"] != $_POST["u_site"])
-		$rec["url"] = xml_clean($_POST["u_site"]);
+		$rec["url"] = MiscFunctions::xml_clean($_POST["u_site"]);
 		if ($_POST['u_site'] == "http://" or $rec['url'] == 'http://')
 		$rec['url'] = "";
 		for ($i = 1;$i <= 5; $i++)
@@ -51,7 +51,7 @@ if (isset($_POST["u_edit"])) {
 			if (array_key_exists("custom_profile$i",$_POST))
 			{
 				if ($user[0]["custom_profile$i"] != $_POST["custom_profile$i"])
-				$rec["custom_profile$i"] = xml_clean($_POST["custom_profile$i"]);
+				$rec["custom_profile$i"] = MiscFunctions::xml_clean($_POST["custom_profile$i"]);
 			}
 		}
 
@@ -60,11 +60,11 @@ if (isset($_POST["u_edit"])) {
 		if ($_POST["email_list"] != "1") $_POST["email_list"] = "0";
 		if ($user[0]["view_email"] != $_POST["show_email"]) $rec["view_email"] = $_POST["show_email"];
 		if ($user[0]["mail_list"] != $_POST["email_list"]) $rec["mail_list"] = $_POST["email_list"];
-		if ($user[0]["location"] != $_POST["u_loca"]) $rec["location"] = xml_clean($_POST["u_loca"]);
+		if ($user[0]["location"] != $_POST["u_loca"]) $rec["location"] = MiscFunctions::xml_clean($_POST["u_loca"]);
 		
 		$exts = array('gif','jpg','png','jpeg');
 		
-		//dump($FILES);
+		//MiscFunctions::dump($FILES);
 		
 		if ($FILES !== NULL)
 		{
@@ -98,9 +98,9 @@ if (isset($_POST["u_edit"])) {
 			}
 		}
 		elseif(isset($_POST['avatar2url']) && $_POST['avatar2url'] != '') {
-			$new_av = xml_clean($_POST['avatar2url']);
+			$new_av = MiscFunctions::xml_clean($_POST['avatar2url']);
 			$ext = pathinfo($new_av, PATHINFO_EXTENSION);
-			//dump($ext);
+			//MiscFunctions::dump($ext);
 			//die();
 			if (!in_array($ext,$exts) or $ext == "")
 				$upload_err = "The url is not a valid image file for an avatar. File must be a gif,jpg, jpeg or png. Avatar has not been updated";
@@ -108,7 +108,7 @@ if (isset($_POST["u_edit"])) {
 				$rec['avatar'] = $new_av;
 		}
 		elseif(isset($_POST['avatar']) && $_POST['avatar'] != '') {
-			$new_av = xml_clean($_POST['avatar']);
+			$new_av = MiscFunctions::xml_clean($_POST['avatar']);
 			$ext = pathinfo($new_av, PATHINFO_EXTENSION);
 			if (!in_array($new_av,$exts) or $ext == "")
 				$upload_err = "The avatar is not a valid image file. File must be a gif,jpg, jpeg or png. Avatar has not been updated";
@@ -125,12 +125,12 @@ if (isset($_POST["u_edit"])) {
 				$upload->deleteFile($id);
 			}
 		}
-		if ($user[0]["icq"] != $_POST["u_icq"]) $rec["icq"] = xml_clean($_POST["u_icq"]);
-		if ($user[0]["aim"] != $_POST["u_aim"]) $rec["aim"] = xml_clean($_POST["u_aim"]);
-		if ($user[0]["yahoo"] != $_POST["u_yahoo"]) $rec["yahoo"] = xml_clean($_POST["u_yahoo"]);
-		if ($user[0]["msn"] != $_POST["u_msn"]) $rec["msn"] = xml_clean($_POST["u_msn"]);
-		if ($user[0]["skype"] != $_POST["u_skype"]) $rec["skype"] = xml_clean($_POST["u_skype"]);
-    if ($user[0]["twitter"] != $_POST["u_twitter"]) $rec["twitter"] = xml_clean($_POST["u_twitter"]);
+		if ($user[0]["icq"] != $_POST["u_icq"]) $rec["icq"] = MiscFunctions::xml_clean($_POST["u_icq"]);
+		if ($user[0]["aim"] != $_POST["u_aim"]) $rec["aim"] = MiscFunctions::xml_clean($_POST["u_aim"]);
+		if ($user[0]["yahoo"] != $_POST["u_yahoo"]) $rec["yahoo"] = MiscFunctions::xml_clean($_POST["u_yahoo"]);
+		if ($user[0]["msn"] != $_POST["u_msn"]) $rec["msn"] = MiscFunctions::xml_clean($_POST["u_msn"]);
+		if ($user[0]["skype"] != $_POST["u_skype"]) $rec["skype"] = MiscFunctions::xml_clean($_POST["u_skype"]);
+    if ($user[0]["twitter"] != $_POST["u_twitter"]) $rec["twitter"] = MiscFunctions::xml_clean($_POST["u_twitter"]);
 		if ($user[0]["timezone"] != $_POST["u_timezone"]) {
 			$rec["timezone"] = (int) $_POST["u_timezone"];
 			setcookie("timezone", $rec["timezone"], (time() + (60 * 60 * 24 * 7)));
@@ -160,10 +160,10 @@ if (isset($_POST["u_edit"])) {
 	} else {
 		$rec = $tdb->get("users", $_GET["id"]);
 		if($rec === false) {
-			exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'This user was either deleted or not found.', ALERT_MSG)),
+			MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'This user was either deleted or not found.', ALERT_MSG)),
 			true);
 		}
-		$status_config = status($rec);
+		$status_config = PostingFunctions::status($rec);
 		$status = $status_config['status'];
 		$statuscolor = $status_config['statuscolor'];
 		$statusrank = $status_config['rank'];
@@ -177,7 +177,7 @@ if (isset($_POST["u_edit"])) {
 			$customs[] = array($custom[0]['value'],$rec[0]["custom_profile$i"]);
 		}
 
-		echoTableHeading("Viewing profile for ".$rec[0]["user_name"]."", $_CONFIG);
+		MiscFunctions::echoTableHeading("Viewing profile for ".$rec[0]["user_name"]."", $_CONFIG);
 		echo "
 			<tr>
 				<td colspan='2' id='topcontent'>
@@ -188,7 +188,7 @@ if (isset($_POST["u_edit"])) {
 						";
 		if (@$rec[0]["avatar"] != "")
 		{
-			$resize = resize_img($rec[0]['avatar'],$_REGIST["avatarupload_dim"]);
+			$resize = MiscFunctions::resize_img($rec[0]['avatar'],$_REGIST["avatarupload_dim"]);
 			echo "<img src='".$rec[0]["avatar"]."' $resize border='0' alt='' title='' /><br />";
 		}
 		echo "<br />
@@ -196,8 +196,7 @@ if (isset($_POST["u_edit"])) {
             <br />
 						<div class='link_pm'>";
 		if($_COOKIE['power_env'] >= 3 && $rec[0]['level'] <= $_COOKIE['power_env']) print "<a href='admin_members.php?action=edit&id={$_GET['id']}'>Edit Member</a><br/>";
-		require_once('./includes/inc/privmsg.inc.php');
-		$blockedList = getUsersPMBlockedList($_GET["id"]);
+		$blockedList = PrivateMessaging::getUsersPMBlockedList($_GET["id"]);
 		if ($_GET["id"] == $_COOKIE["id_env"]) {
 			echo "";
 		} elseif($_COOKIE["id_env"] == "" || $_COOKIE["id_env"] == "0") {
@@ -211,7 +210,7 @@ if (isset($_POST["u_edit"])) {
 		echo "<tr><td id='leftcontent' valign='top'>
 					<div class='pro_sig_name'>General</div>
 					<div class='pro_container'>
-						<div class='pro_area_1'><div class='pro_area_2'><strong>Joined: </strong></div>".gmdate("Y-m-d", user_date($rec[0]["date_added"]))."</div>
+						<div class='pro_area_1'><div class='pro_area_2'><strong>Joined: </strong></div>".gmdate("Y-m-d", DateCustom::user_date($rec[0]["date_added"]))."</div>
 						<div class='pro_area_1'><div class='pro_area_2'><strong>Posts made: </strong></div>".$rec[0]["posts"]."</div>";
 
 
@@ -252,17 +251,17 @@ if (isset($_POST["u_edit"])) {
 		if (@$rec[0]["sig"] != "") echo "
 						<div class='pro_sig_name'>".$rec[0]["user_name"]."'s Signature:</div>
 						<div class='pro_sig_area'>
-							<div class='pro_signature'>".format_text(UPBcoding(filterLanguage($rec[0]["sig"], $_CONFIG)))."</div>
+							<div class='pro_signature'>".PostingFunctions::format_text(PostingFunctions::UPBcoding(PostingFunctions::filterLanguage($rec[0]["sig"], $_CONFIG)))."</div>
 						</div>"; 
 		echo "              </div>
                         </td>
                     </tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 
 		if(!isset($_GET["showPrevPosts"])) {
-			echoTableHeading("View Previous Posts", $_CONFIG);
+			MiscFunctions::echoTableHeading("View Previous Posts", $_CONFIG);
 			echo "<tr><td><div class='pro_area_1' align='center'><a href='./profile.php?action=get&id={$_GET["id"]}&showPrevPosts=1'>Show all posts</a>";
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 		} else {
 			$fRecs = $tdb->listRec("forums", 1);
 			if(!empty($fRecs[0])) {
@@ -284,7 +283,7 @@ if (isset($_POST["u_edit"])) {
 							$posts[$i][] = $pRec;
 						}
 						unset($pRecs);
-						echoTableHeading("In forum \"{$fRec["forum"]}\"", $_CONFIG);
+						MiscFunctions::echoTableHeading("In forum \"{$fRec["forum"]}\"", $_CONFIG);
 						foreach($posts as $pRecs) {
 							$tRec = $posts_tdb->get("t", $pRecs[0]["t_id"]);
 							$tRec[0]["p_ids"] = ',' . $tRec[0]["p_ids"] . ',';
@@ -308,7 +307,7 @@ if (isset($_POST["u_edit"])) {
 									$page = ceil($countpost / $_CONFIG["posts_per_page"]);
 								}
 
-								$msg = display_msg($pRec['message'], '', true);
+								$msg = PostingFunctions::display_msg($pRec['message'], '', true);
 								$msg .= $tdb->getUploads($_GET['id'],$_GET['t_id'],$pRec['id'],$pRec['upload_id'],$_CONFIG['fileupload_location'],$pRec['user_id']);
 								echo "
                                 <tr>
@@ -318,7 +317,7 @@ if (isset($_POST["u_edit"])) {
                                 echo "</td></tr>";
 							}
 						}
-						echoTableFooter(SKIN_DIR);
+						MiscFunctions::echoTableFooter(SKIN_DIR);
 					}
 				}
 			} else echo "<div align='center'>No Posts</div>";
@@ -343,7 +342,7 @@ if (isset($_POST["u_edit"])) {
         	</ul>
         </div>
         <div style='clear:both;'></div>";
-		echoTableHeading("Account settings - Edit profile information", $_CONFIG);
+		MiscFunctions::echoTableHeading("Account settings - Edit profile information", $_CONFIG);
 		echo "
 			<tr>
 				<td class='area_1' style='width:45%;'><strong>Username:</strong></td>
@@ -390,10 +389,10 @@ if (isset($_POST["u_edit"])) {
 			<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+        MiscFunctions::echoTableFooter(SKIN_DIR);
 
 		$custom_avatar = (($rec[0]['posts'] >= $_REGIST['newuseravatars'] || $_COOKIE['power_env'] > 1) && $_REGIST['custom_avatars']);
-		echoTableHeading("Avatar Options", $_CONFIG);
+		MiscFunctions::echoTableHeading("Avatar Options", $_CONFIG);
 		echo "
 			<tr>
 				<th style='text-align:center;'>Current avatar</th>
@@ -404,7 +403,7 @@ if (isset($_POST["u_edit"])) {
 
 		if (@$rec[0]["avatar"] != "")
 		{
-			$resize = resize_img($rec[0]['avatar'],$_REGIST["avatarupload_dim"]);
+			$resize = MiscFunctions::resize_img($rec[0]['avatar'],$_REGIST["avatarupload_dim"]);
 			echo "<img src='".$rec[0]["avatar"]."' $resize border='0'><br />";
 		}
 		else echo "<img src='images/avatars/noavatar.gif' alt='' title='' />";
@@ -416,7 +415,7 @@ if (isset($_POST["u_edit"])) {
 								<img src='images/avatars/blank.gif' id='myImage' alt='' title='' /></td>
 							<td><select class='select' size='5' name='avatar' onchange='swap(this.options[selectedIndex].value)'>\n";
 
-		returnimages();
+		MiscFunctions::returnimages();
 		echo "</select></td></tr>
 					</table>
 				</td></tr>";
@@ -451,8 +450,8 @@ if (isset($_POST["u_edit"])) {
 			<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
-		echoTableHeading("Other Information", $_CONFIG);
+        MiscFunctions::echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableHeading("Other Information", $_CONFIG);
 		echo "
 			<tr>
 				<td class='area_1' style='width:20%;' ><strong>Homepage:</strong></td>
@@ -499,10 +498,10 @@ if (isset($_POST["u_edit"])) {
 			</tr>
     <tr>
 				<td class='area_1' valign='top'><strong>Signature:</strong></td>
-				<td class='area_2'  colspan='3'>".bbcodebuttons('u_sig','sig')."<textarea id='u_sig' name='u_sig' cols='45' rows='10'>".format_text($rec[0]["sig"],'edit')."</textarea><br /><input type='button' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','set');\" value='Preview Signature' /></td></tr>
+				<td class='area_2'  colspan='3'>".PostingFunctions::bbcodebuttons('u_sig','sig')."<textarea id='u_sig' name='u_sig' cols='45' rows='10'>".PostingFunctions::format_text($rec[0]["sig"],'edit')."</textarea><br /><input type='button' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','set');\" value='Preview Signature' /></td></tr>
       <tr>
 				<td class='area_1' valign='top'><div id='sig_title'><strong>Current Signature:</strong></div></td>
-				<td class='area_2'  colspan='3'><div style='display:inline;' id='sig_preview'>".display_msg($rec[0]["sig"])."</div></td>
+				<td class='area_2'  colspan='3'><div style='display:inline;' id='sig_preview'>".PostingFunctions::display_msg($rec[0]["sig"])."</div></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='4'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
@@ -510,12 +509,12 @@ if (isset($_POST["u_edit"])) {
 			<tr>
 				<td class='area_1'><strong>Timezone Setting:</strong></td>
 				<td class='area_2' colspan='3'>";
-		print timezonelist($rec[0]["timezone"]);
+		print MiscFunctions::timezonelist($rec[0]["timezone"]);
 		echo "</td></tr>
 			<tr>
 				<td class='footer_3a' colspan='4' style='text-align:center;'><input type='reset' name='reset' value='Reset' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','reset');\" /><input type='submit' name='u_edit' value='Submit' /></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR,4);
+        MiscFunctions::echoTableFooter(SKIN_DIR,4);
 		echo "</form>";
 		require_once('./includes/footer.php');
 	}
@@ -536,7 +535,7 @@ if (isset($_POST["u_edit"])) {
 		</ul>
 	</div>
 	<div style='clear:both;'></div>";
-	echoTableHeading("Bookmarked Topics", $_CONFIG);
+	MiscFunctions::echoTableHeading("Bookmarked Topics", $_CONFIG);
 	echo "
 	<tr>
 		<th style='width: 75%;'>Topic</th>
@@ -578,7 +577,7 @@ if (isset($_POST["u_edit"])) {
 			<div class='box_posts'><strong>Replies:</strong>&nbsp;".$tRec[0]["replies"]."</div></td>
 		<td class='area_1' style='text-align:center;'>
 			<img src='icon/".$tRec[0]["icon"]."' class='post_image'>
-			<span class='latest_topic'><span class='date'>".gmdate("M d, Y g:i:s a", user_date($tRec[0]["last_post"]))."</span>
+			<span class='latest_topic'><span class='date'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($tRec[0]["last_post"]))."</span>
 			<br />
 			<strong>By:</strong> ";
 			if ($tRec[0]["user_id"] != "0") echo "<span class='link_2'><a href='profile.php?action=get&id=".$tRec[0]["user_id"]."'>".$tRec[0]["user_name"]."</a></span></td>
@@ -587,7 +586,7 @@ if (isset($_POST["u_edit"])) {
 	</tr>";
 		}
 	}
-	echoTableFooter(SKIN_DIR);
+    MiscFunctions::echoTableFooter(SKIN_DIR);
 	require_once('./includes/footer.php');
-} else redirect('index.php', 0);
+} else MiscFunctions::redirect('index.php', 0);
 ?>

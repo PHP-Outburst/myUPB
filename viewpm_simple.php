@@ -18,16 +18,16 @@ $table_color = "area_1";
 
 $user = $tdb->get("users", $pmRec[0]["from"]);
 
-$status_config = status($user);
+$status_config = PostingFunctions::status($user);
 $status = $status_config['status'];
 $statuscolor = $status_config['statuscolor'];
 
-$message = display_msg($pmRec[0]["message"]);
+$message = PostingFunctions::display_msg($pmRec[0]["message"]);
 echo "
 		<table id='simple_table' style='background-color:#ffffff;' cellspacing='12'>
 			<tr>
 				<td valign='top'>
-					<div class='simple_date' style='float:left;'>Message Sent: ".gmdate("M d, Y g:i:s a", user_date($pmRec[0]["date"]))."</div>
+					<div class='simple_date' style='float:left;'>Message Sent: ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pmRec[0]["date"]))."</div>
 					
 					<div class='simple_content'><div style='margin-bottom:20px;'>$message</div></div></td>
 			</tr>

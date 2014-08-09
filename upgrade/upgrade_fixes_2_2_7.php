@@ -47,7 +47,7 @@ function updateMonitorTopics_v2_2_7()
 					{
 						$id_array = array();
 						$monitors = explode(",",$tRec['monitor']);
-						//dump($monitors);
+						//MiscFunctions::dump($monitors);
 						
 						if(!empty($monitors))
 						{

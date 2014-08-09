@@ -8,7 +8,7 @@ require_once("./includes/upb.initialize.php");
 $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." Checking for updates";
 require_once('./includes/header.php');
 if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -19,13 +19,13 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 	require_once("admin_navigation.php");
 	echo "</td>
 			</tr>";
-	echoTableFooter(SKIN_DIR);
-	echoTableHeading("Checking for myUPB updates", $_CONFIG);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableHeading("Checking for myUPB updates", $_CONFIG);
 	echo "
 		<tr>
 			<td class='review_container'><div class='review_sub'><iframe src='http://www.myupb.com/upbcheckupdate.php?ver=".UPB_VERSION."' class='review_frame' scrolling='auto' frameborder='0'></iframe></div></td>
 		</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 } else {
 	echo "
 			<div class='alert'><div class='alert_text'>

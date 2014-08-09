@@ -32,11 +32,11 @@ if ($tdb->is_logged_in()) {
 		//NEW VERSION
 		$ses_info = $r['lastvisit'];
 		if ($ses_info == 0)
-		$ses_info = mkdate();
-		$tdb->edit("users",$_COOKIE["id_env"],array('lastvisit'=>mkdate()));
+		$ses_info = DateCustom::mkdate();
+		$tdb->edit("users",$_COOKIE["id_env"],array('lastvisit'=>DateCustom::mkdate()));
 
 		if (!headers_sent()) {
-			$uniquekey = generateUniqueKey();
+			$uniquekey = MiscFunctions::generateUniqueKey();
 			$tdb->edit('users', $_COOKIE['id_env'], array('uniquekey' => $uniquekey));
 			setcookie("lastvisit", $ses_info); //time of this login/view
 			setcookie("previousvisit",$r['lastvisit']); //time of previous login/view
@@ -51,7 +51,7 @@ if ($tdb->is_logged_in()) {
 		}
 		$refresh = true;
 	}
-	if ($refresh && $_GET["a"] != 1 && $_POST["a"] != 1 && $_GET["s"] != 1 && $_POST["s"] != 1) redirect($_SERVER['PHP_SELF']."?".$QUERY_STRING, 0);
+	if ($refresh && $_GET["a"] != 1 && $_POST["a"] != 1 && $_GET["s"] != 1 && $_POST["s"] != 1) MiscFunctions::redirect($_SERVER['PHP_SELF']."?".$QUERY_STRING, 0);
 	if(!isset($_SESSION['newTopics'])) {
 		$user = $tdb->get('users', $_COOKIE['id_env']);
 		$_SESSION['newTopics'] = unserialize($user[0]['newTopicsData']);
@@ -59,7 +59,7 @@ if ($tdb->is_logged_in()) {
 	}
 } else {
 	$default_timezone = '0';
-	$now = mkdate();
+	$now = DateCustom::mkdate();
 	if (!isset($_COOKIE["timezone"]) && !headers_sent()) setcookie("timezone", $default_timezone, (time() + (60 * 60 * 24 * 7)));
 	if (!isset($_COOKIE["lastvisit"]) && !headers_sent()) setcookie("lastvisit", $now, (time() + (60 * 60 * 24 * 7)));
 	$_COOKIE['lastvisit'] = $now;
@@ -67,7 +67,7 @@ if ($tdb->is_logged_in()) {
 }
 if (isset($_COOKIE['password_env'])) {
 	setcookie('password_env', '', time() - 3600);
-	redirect($_SERVER['PHP_SELF']."?".$QUERY_STRING, 0);
+	MiscFunctions::redirect($_SERVER['PHP_SELF']."?".$QUERY_STRING, 0);
 }
 $h_f = fopen(DB_DIR."/hits_today.dat", "r");
 $hits = explode(":", fread($h_f, filesize(DB_DIR."/hits_today.dat")));
@@ -191,7 +191,7 @@ echo "
 	</div>
 	<div style='clear:both;'></div>
 		";
-echoTableHeading(stripslashes($_CONFIG['title']), $_CONFIG);
+MiscFunctions::echoTableHeading(stripslashes($_CONFIG['title']), $_CONFIG);
 echo "
 		<tr>
 			<td class='area_welcome'><div class='welcome_text'>";
@@ -212,7 +212,7 @@ if ($tdb->is_logged_in()) echo "
 				echo "
 			</div></td>
 		</tr>";
-				echoTableFooter(SKIN_DIR);
+				MiscFunctions::echoTableFooter(SKIN_DIR);
 				//login information
 
 				if (!$tdb->is_logged_in() && isset($_COOKIE['user_env']) && isset($_COOKIE['uniquekey_env']) && isset($_COOKIE['id_env'])) {
@@ -229,12 +229,12 @@ if ($tdb->is_logged_in()) echo "
 
 				if ($_CONFIG["servicemessage"] != "" && ($_SESSION['servicemessage'] != md5($_CONFIG['servicemessage']) || basename($_SERVER['PHP_SELF']) == 'index.php')) {
 	    $_SESSION['servicemessage'] = md5($_CONFIG['servicemessage']);
-	    echoTableHeading("Announcements", $_CONFIG);
+	    MiscFunctions::echoTableHeading("Announcements", $_CONFIG);
 	    echo "
 			<tr>
 			<td class='area_1' style='text-align:left;'>".$_CONFIG["servicemessage"]."</td>
 			</tr>";
-	    echoTableFooter(SKIN_DIR);
+	    MiscFunctions::echoTableFooter(SKIN_DIR);
 
 				}
 

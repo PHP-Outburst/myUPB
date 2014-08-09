@@ -5,9 +5,8 @@
 // Addon Created by J. Moore aka Rebles
 // Using textdb Version: 4.4.2
 require_once("./includes/upb.initialize.php");
-require_once("./includes/inc/post.inc.php");
 $where = "<a href='pmsystem.php'>Messenger</a> ".$_CONFIG["where_sep"]." New message";
-if ($tdb->is_logged_in() === false) exitPage("You are not even Logged in.");
+if ($tdb->is_logged_in() === false) MiscFunctions::exitPage("You are not even Logged in.");
 $PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
 $PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 if ($_GET["action"] == "ClearOutBox") {
@@ -23,8 +22,8 @@ if ($_GET["action"] == "ClearOutBox") {
 	}
 	echo str_replace('__TITLE__','Redirecting:',str_replace('__MSG__',"Message successfully sent!",CONFIRM_MSG));
 	require_once("./includes/footer.php");
-	if ($_GET["ref"] != "" && $_GET["section"] != "" && $_GET["r"] != "") redirect($_POST["ref"]."?section=".$_GET["section"]."&id=".$_GET["r"], "2");
-	else redirect("pmsystem.php", "2");
+	if ($_GET["ref"] != "" && $_GET["section"] != "" && $_GET["r"] != "") MiscFunctions::redirect($_POST["ref"]."?section=".$_GET["section"]."&id=".$_GET["r"], "2");
+	else MiscFunctions::redirect("pmsystem.php", "2");
 	exit;
 } elseif($_POST["s"] == 1) {
 
@@ -50,7 +49,7 @@ if ($_GET["action"] == "ClearOutBox") {
 		$error_msg .= str_replace('__TITLE__','Caution!',str_replace('__MSG__',"You cannot send yourself a Private Message.",ALERT_MSG));
 
 	} else {
-		$ids = getUsersPMBlockedList($_POST["to"]);
+		$ids = PrivateMessaging::getUsersPMBlockedList($_POST["to"]);
 		if (in_array($_COOKIE['id_env'], $ids)) {
 			$error_msg .= str_replace('__TITLE__','Denied!',str_replace('__MSG__',"The User you are sending does not wish to recieve messages from you. (You are blocked)",ALERT_MSG));
 				
@@ -64,8 +63,8 @@ if ($_GET["action"] == "ClearOutBox") {
 		if ($_POST["icon"] == "") $_POST["icon"] = "icon1.gif";
 		if (trim($_POST["subject"]) == "") $_POST["subject"] = "No Subject";
 		if (isset($_POST["del"]) && isset($_POST["r"])) $PrivMsg->delete("CuBox", $_POST["r"]);
-		$PrivMsg->add("ToBox", array("box" => "inbox", "from" => $_COOKIE["id_env"], "to" => $_POST["to"], "icon" => $_POST["icon"], "subject" => $_POST["subject"], "date" => mkdate(), "message" => chop($_POST["message"])));
-		$PrivMsg->add("CuBox", array("box" => "outbox", "from" => $_COOKIE["id_env"], "to" => $_POST["to"], "icon" => $_POST["icon"], "subject" => $_POST["subject"], "date" => mkdate(), "message" => chop($_POST["message"])));
+		$PrivMsg->add("ToBox", array("box" => "inbox", "from" => $_COOKIE["id_env"], "to" => $_POST["to"], "icon" => $_POST["icon"], "subject" => $_POST["subject"], "date" => DateCustom::mkdate(), "message" => chop($_POST["message"])));
+		$PrivMsg->add("CuBox", array("box" => "outbox", "from" => $_COOKIE["id_env"], "to" => $_POST["to"], "icon" => $_POST["icon"], "subject" => $_POST["subject"], "date" => DateCustom::mkdate(), "message" => chop($_POST["message"])));
 		$f = fopen(DB_DIR."/new_pm.dat", 'r+');
 		fseek($f, (((int)$_POST["to"] * 2) - 2));
 		$new_pm = trim(fread($f, 2));
@@ -76,7 +75,7 @@ if ($_GET["action"] == "ClearOutBox") {
 		fwrite($f, $new_pm);
 		fclose($f);
 		require_once('./includes/footer.php');
-		redirect("newpm.php?action=ClearOutBox&ref=".$_POST["ref"]."&section=".$_POST["section"]."&r=".$_POST["r"], '2');
+		MiscFunctions::redirect("newpm.php?action=ClearOutBox&ref=".$_POST["ref"]."&section=".$_POST["section"]."&r=".$_POST["r"], '2');
 		exit;
 	} else {
 		if ($_POST["r"] != "") $_GET["r_id"] = $_POST["r"];
@@ -91,7 +90,7 @@ if ($error_msg != "") echo $error_msg;
 if (isset($_GET["r_id"]) && is_numeric($_GET["r_id"])) {
 	$reply = $PrivMsg->get("CuBox", $_GET["r_id"]);
 	$u_reply = $tdb->get("users", $reply[0]["from"]);
-	$ids = getUsersPMBlockedList($u_reply[0]['id']);
+	$ids = PrivateMessaging::getUsersPMBlockedList($u_reply[0]['id']);
 	if(in_array($_COOKIE['id_env'], $ids)) {
 		echo str_replace('__TITLE__','Denied!',str_replace('__MSG__',"The User you are sending does not wish to recieve messages from you. (You are blocked)",ALERT_MSG));
 		require_once('./includes/footer.php');
@@ -127,7 +126,7 @@ if (isset($_GET["r_id"]) && is_numeric($_GET["r_id"])) {
 	$hed = "New Topic";
 	$iframe = "";
 }
-$icons = message_icons();
+$icons = PostingFunctions::message_icons();
 
 //commented out PM blocking system
 if($_GET["to"] == $_COOKIE["id_env"])
@@ -152,7 +151,7 @@ else
 
 	echo "<form action='".$_SERVER['PHP_SELF'].(isset($_GET['to']) ? "?to=".$_GET['to'] : '')."' method='POST' name='newentry' onSubmit='return validate_topic();' enctype='multipart/form-data'><input type='hidden' name='s' value='1'><input type='hidden' name='r' value='".$_GET["r_id"]."'>";
 
-	echoTableHeading($hed, $_CONFIG);
+	MiscFunctions::echoTableHeading($hed, $_CONFIG);
 	echo "
 			<tr>
 				<th colspan='2'>$hed</th>
@@ -189,10 +188,10 @@ else
 					<div style='text-align:center;margin-top:20px;margin-bottom:20px;'>";
 	echo "</div>
 					<div style='text-align:center;'></div></td>
-				<td class='area_2'>".bbcodebuttons('look1')."
+				<td class='area_2'>".PostingFunctions::bbcodebuttons('look1')."
         <textarea name='message' id='look1'>".$msg."</textarea><br>
 					<span id='msg_err' class='err'></span>
-					<div style='padding:8px;'>".getSmilies('look1')."</div></td>
+					<div style='padding:8px;'>".PostingFunctions::getSmilies('look1')."</div></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='6'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
@@ -204,13 +203,13 @@ else
 	echo "> <input name='reset' id='reset' type='reset' value='Reset'></td>
 			</tr>
 	</form>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 if (isset($_GET["r_id"]) && is_numeric($_GET["r_id"])) {
-	echoTableHeading("".$u_reply[0]["user_name"]."'s Message to you:", $_CONFIG);
+	MiscFunctions::echoTableHeading("".$u_reply[0]["user_name"]."'s Message to you:", $_CONFIG);
 	echo "
 	$iframe";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 require_once("./includes/footer.php");
 ?>
