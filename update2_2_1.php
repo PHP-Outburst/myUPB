@@ -14,7 +14,7 @@ if(!function_exists('array_fill_keys')) {
 
 require_once("./includes/upb.initialize.php");
 //FPs already set in func.class.php
-//dump($_POST);
+//MiscFunctions::dump($_POST);
 $proceed = true;
 $last_step = 7;
 if (!isset($_POST['next']) or $_POST['next'] == '') $_POST['next'] = 0;
@@ -74,7 +74,7 @@ if ($_POST['next'] == 0) {
 			echo "<option value='".$member['id']."'>".$member['user_name']."</option>";
 		}
 		echo "</select>";
-		//dump($members);
+		//MiscFunctions::dump($members);
 		echo "</td></tr>";
 		echo "<tr>
 			<th colspan='2'><strong>Update Register E-mail Message</strong></th>
@@ -191,7 +191,7 @@ if ($_POST['next'] == 0) {
 	}
 	$tdb->removeField('uploads', 'data');
 
-	$old_upload = directory('./uploads/');
+	$old_upload = MiscFunctions::directory('./uploads/');
 	if (!empty($old_upload)) {
 		foreach ($old_upload as $file)
 		unlink($_CONFIG['fileupload_location'].'/'.$file);
@@ -316,14 +316,14 @@ if ($_POST['next'] == 0) {
 	$tdb->add('smilies',array("bbcode"=>" LOL","replace"=> " <img src='./smilies/lol.gif' border='0' alt='LOL'> ","type" => "main"));
 
 	//MORE SMILIES -- need to add code to check for custom smilies added to more smilies folder.
-	$more = directory("./smilies/moresmilies/","gif,jpg");
+	$more = MiscFunctions::directory("./smilies/moresmilies/","gif,jpg");
 	if (count($more) > 0) {
 		foreach ($more as $smiley) {
 			$tdb->add("smilies",array("bbcode"=>"[img]".$smiley."[/img]","replace"=>"<img src='./smilies/".$smiley."' border='0' alt='".$smiley."'>","type"=>"more"));
 			if (!file_exists('./smilies/'.$smiley))
 			rename('./smilies/moresmilies/'.$smiley,'./smilies/'.$smiley);
 		}
-		$contents = directory("./smilies/moresmilies/");
+		$contents = MiscFunctions::directory("./smilies/moresmilies/");
 		foreach ($contents as $file)
 		unlink("./smilies/moresmilies/".$file);
 	}
@@ -337,7 +337,7 @@ if ($_POST['next'] == 0) {
 	print '<tr><td class="area_2">';
 	$delete_array = array('admin_forum.php', 'admin_cat.php', 'admin_reset_stats.php', 'install-uploads.php', 'more_smilies_create_list.php', 'setallread.php', './includes/wrapper_scripts_names.txt', './includes/class/mod_avatar.class.php','./includes/board_help.php','./includes/board_post.php','./includes/board_view.php','./skins/default/coding.php','./skins/default/icons/deletetopic.gif','./skins/default/icons/head_but_pms.JPG','./skins/default/icons/closetopic.gif','./skins/default/icons/lastpost.jpg','./skins/default/icons/manage.gif','./skins/default/icons/monitor.gif','./skins/default/icons/nav.gif','./skins/default/icons/off.gif','./skins/default/icons/on.gif','./skins/default/icons/opentopic.gif','./skins/default/icons/pb_delete.JPG','./skins/default/icons/pb_edit.JPG','./skins/default/icons/pb_email.JPG','./skins/default/icons/pb_profile.JPG','./skins/default/icons/pb_quote.JPG','./skins/default/icons/pb_www.JPG','./skins/default/icons/redirect.png','./skins/default/icons/sendpm.jpg','./skins/default/icons/reply.gif','./skins/default/icons/replylocked.gif','./skins/default/icons/topic.gif','./skins/default/icons/stats.gif','./skins/default/icons/user.gif','./skins/default/images/footer_bg.JPG','./skins/default/images/footer_bg.PNG','./skins/default/images/head_but_donations.JPG','./skins/default/images/head_but_faq.JPG','./skins/default/images/head_but_loginout.JPG','./skins/default/images/head_but_members.JPG','./skins/default/images/head_but_pms.JPG','./skins/default/images/head_but_register.JPG','./skins/default/images/head_but_search.JPG','./skins/default/images/bead_but_usercp.JPG','./skins/default/images/head_logo.JPG','./skins/default/images/head_logo_right.JPG','./skins/default/images/head_top_left_bg.JPG','./skins/default/images/head_top_middle.JPG','./skins/default/images/head_top_right_bg.JPG','./skins/default/images/on.gif','./skins/default/images/sound.wav','./skins/default/images/cat_bottom_bg.jpg','./skins/default/images/cat_bottom_left.jpg','./skins/default/images/cat_bottom_left.gif','./skins/default/images/cat_bottom_right.gif','./skins/default/images/cat_bottom_right.JPG','./skins/default/images/cat_top_bg.gif','./skins/default/images/cat_top_left.gif','./skins/default/images/cat_top_right.gif','./skins/default/images/top_leftc.gif','./skins/default/images/top_rightc.gif', DB_DIR.'/constants.php');
 
-	$icons_dir = directory("./icon/");
+	$icons_dir = MiscFunctions::directory("./icon/");
 	foreach ($icons_dir as $icon)
 	$delete_array[] = './icon/'.$icon;
 
@@ -372,7 +372,7 @@ if($_POST['next'] != $last_step) {
     			<td colspan='2' class='footer_3a' style='text-align:center;'><input type='hidden' name='next' value='$next'><input type='submit' value='Next >>' name='submit'></td>
     		</tr>";
 	}
-	echoTableFooter(SKIN_DIR);
+    MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 echo "</form>";
 include_once('./includes/footer.php');

@@ -34,22 +34,22 @@ if (!($tdb->is_logged_in())) {
 	$_COOKIE["power_env"] = 0;
 	$_COOKIE["id_env"] = 0;
 }
-if ($_COOKIE["power_env"] < $fRec[0]["post"] && $_GET["t"] == 1 || $_COOKIE["power_env"] < $fRec[0]["reply"] && $_GET["t"] == 0) exitPage("<div class='alert'><div class='alert_text'>
+if ($_COOKIE["power_env"] < $fRec[0]["post"] && $_GET["t"] == 1 || $_COOKIE["power_env"] < $fRec[0]["reply"] && $_GET["t"] == 0) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>You do not have the rights to perform this action.</div></div>");
-if (!($_GET["id"] != "" && ctype_digit($_GET["id"]))) exitPage("<div class='alert'><div class='alert_text'>
+if (!($_GET["id"] != "" && ctype_digit($_GET["id"]))) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>Invalid Forum ID/Information.</div></div>");
-if (!($_GET["t_id"] != "" && ctype_digit($_GET["t_id"]) || $_GET["t"] != 0)) exitPage("<div class='alert'><div class='alert_text'>
+if (!($_GET["t_id"] != "" && ctype_digit($_GET["t_id"]) || $_GET["t"] != 0)) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>Invalid Topic ID/Information.</div></div>");
 if ($_POST["a"] == "1") {
 	if (isset($_POST['subject'])) $_POST['subject'] = encode_text(stripslashes($_POST["subject"]));
 	$_POST['message'] = encode_text(stripslashes($_POST["message"]));
-	if ($_POST["icon"] == "") exitPage("<div class='alert'><div class='alert_text'>
+	if ($_POST["icon"] == "") MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 			<strong>Caution!</strong></div><div style='padding:4px;'>Please select a message icon.</div></div>");
-	if ($_GET["t"] == 1 && trim($_POST["subject"]) == "") exitPage("<div class='alert'><div class='alert_text'>
+	if ($_GET["t"] == 1 && trim($_POST["subject"]) == "") MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 			<strong>Caution!</strong></div><div style='padding:4px;'>You must enter a subject!</div></div>");
-	if ($_POST["message"] == "") exitPage("<div class='alert'><div class='alert_text'>
+	if ($_POST["message"] == "") MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 			<strong>Caution!</strong></div><div style='padding:4px;'>You must type in a message!</div></div>");
-	if ($_GET["t"] != 1 && isset($_GET["t_id"]) && (bool) $tRec[0]["locked"]) exitPage("<div class='alert'><div class='alert_text'>
+	if ($_GET["t"] != 1 && isset($_GET["t_id"]) && (bool) $tRec[0]["locked"]) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 			<strong>Caution!</strong></div><div style='padding:4px;'>The topic is closed to further posting.</div></div>");
 	//FILE UPLOAD BEGIN
 
@@ -98,7 +98,7 @@ if ($_POST["a"] == "1") {
 			$files[$i]['size'] = $_FILES['upload']['size'][$i];
 		}
 
-		//dump($error);
+		//MiscFunctions::dump($error);
     
     $error_msg = "";
     
@@ -141,7 +141,7 @@ if ($_POST["a"] == "1") {
 		if (!isset($_POST["sticky"])) $_POST["sticky"] = "0";
 		if (!isset($_POST["locked"])) $_POST["locked"] = "0";
 		$_POST["subject"] = trim($_POST["subject"], $_CONFIG['stick_note']);
-		if (trim($_POST["subject"]) == "") exitPage("<div class='alert'><div class='alert_text'>
+		if (trim($_POST["subject"]) == "") MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 				<strong>Caution!</strong></div><div style='padding:4px;'>You must enter a subject!</div></div>");
 		$_GET['t_id'] = $posts_tdb->add("topics", array(
 			"icon" => $_POST["icon"],
@@ -223,7 +223,7 @@ if ($_POST["a"] == "1") {
 	$_SESSION['view_'.$_GET['id'].'_'.$_GET['t_id']] = time();
 	
   if ($error_msg == "")
-    redirect($redirect.'#'.$p_id, 1);
+    MiscFunctions::redirect($redirect.'#'.$p_id, 1);
   else
     {
     $error_msg .= "<br><a href='viewtopic.php?id=".$_GET['id']."&t_id=".$_GET['t_id']."&page=".$vars['page']."'>Click here to continue</a>";
@@ -278,7 +278,7 @@ if ($_POST["a"] == "1") {
 	echo "
 			<form action='newpost.php?id=".$_GET["id"]."&t=".$_GET["t"]."&quote=".$_GET["quote"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"]."' method='POST' name='newentry' enctype='multipart/form-data' onSubmit='return validate_$check();'>
 			<input type='hidden' name='a' value='1'>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<td class='area_1' style='padding:8px;'><strong>User Name:</strong></td>
@@ -328,7 +328,7 @@ if ($_POST["a"] == "1") {
 			<tr>
 				<td class='footer_3a' style='text-align:center;' colspan='2'><input type='reset' name='reset' value='Reset'><input type='button' onclick='postPreview()' value='Preview Post'><input type='submit' name='submit' value='Submit'></td>
 			</tr>";
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 			echo "
 	</form> <div id='preview'></div>
 	".$iframe."";

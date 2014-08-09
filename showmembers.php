@@ -19,10 +19,10 @@ if ($tdb->is_logged_in()) {
 	$c = $tdb->getNumberOfRecords("users");
 
 	$num_pages = ceil(($c + 1) / $_CONFIG["topics_per_page"]);
-	$p = createPageNumbers($_GET["page"], $num_pages, $_SERVER['QUERY_STRING']);
+	$p = MiscFunctions::createPageNumbers($_GET["page"], $num_pages, $_SERVER['QUERY_STRING']);
 	echo pagination($p,$_GET['page'],$num_pages);
 
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th style='width:3%; text-align:center;'>ID</th>
@@ -70,7 +70,7 @@ if ($tdb->is_logged_in()) {
 			</tr>";
 		}
 	}
-	echoTableFooter(SKIN_DIR);
+    MiscFunctions::echoTableFooter(SKIN_DIR);
 	echo pagination($p,$_GET['page'],$num_pages);
 } else {
 	echo "<div class='alert'><div class='alert_text'>

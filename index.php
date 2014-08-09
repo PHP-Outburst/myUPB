@@ -26,7 +26,7 @@ if($_GET['action'] == 'markallread') {
 		$_SESSION['newTopics']['lastVisitForums'][$key] = $now;
 	}
 	$ref = ((isset($_GET['ref'])) ? urldecode($_GET['ref']) : 'index.php');
-	redirect($ref, 0);
+	MiscFunctions::redirect($ref, 0);
 }
 
 if ($_COOKIE["power_env"] == "" || empty($_COOKIE["power_env"]) || trim($_COOKIE["power_env"]) == "") $_COOKIE["power_env"] = "0";
@@ -88,7 +88,7 @@ if ($cRecs[0]["id"] == "") {
 		$t_p = 0;
 		foreach($cRecs as $cRec) {
 			if ($_COOKIE["power_env"] >= $cRec["view"]) {
-				echoTableHeading($cRec["name"], $_CONFIG);
+				MiscFunctions::echoTableHeading($cRec["name"], $_CONFIG);
 				echo "
     			<tr>
     				<th style='width: 75%;'>Forum</th>
@@ -167,7 +167,7 @@ if ($cRecs[0]["id"] == "") {
 						unset($when);
 					}
 				}
-				echoTableFooter(SKIN_DIR);
+				MiscFunctions::echoTableFooter(SKIN_DIR);
 			}
 			unset($cRec);
 		}
@@ -192,8 +192,7 @@ echo "
 echo "
 			</ul>
 		</div>
-		<div style='clear:both;'></div>";
-echoTableHeading("Community Information", $_CONFIG);
+		<div style='clear:bMiscFunctions::echoTableHeading(hoTableHeading("Community Information", $_CONFIG);
 echo "
 			<tr>
 				<th>Users online in the last 15 minutes: $whos_t</th>
@@ -224,7 +223,7 @@ echo "
 					<strong>Busiest Day:</strong> $hits_record Page Views on $hits_date<br />
           <strong>Page Rendering Time:</strong> ".round($script_end_time - $script_start_time, 5)." seconds</span></td>
 			</tr>";
-echoTableFooter(SKIN_DIR);
+MiscFunctions::echoTableFooter(SKIN_DIR);
 //End Statistic Table
 require_once("./includes/footer.php");
 

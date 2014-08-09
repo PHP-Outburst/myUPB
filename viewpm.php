@@ -53,18 +53,18 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 					</div>
 					</div>";
 			require_once('./includes/footer.php');
-			redirect("pmsystem.php?section=".$_GET["section"], 2);
+			MiscFunctions::redirect("pmsystem.php?section=".$_GET["section"], 2);
 		} elseif($_POST["action"] == "<< Last Message") {
-			redirect($PHP_SELF."?section=".$_GET["section"]."&id=".$back_id.$extra, "0");
+			MiscFunctions::redirect($PHP_SELF."?section=".$_GET["section"]."&id=".$back_id.$extra, "0");
 			$_GET["id"] = $pmRec[0]["id"];
 		} elseif($_POST["action"] == "Next Message >>") {
-			redirect($PHP_SELF."?section=".$_GET["section"]."&id=".$next_id.$extra, "0");
+			MiscFunctions::redirect($PHP_SELF."?section=".$_GET["section"]."&id=".$next_id.$extra, "0");
 			$_GET["id"] = $pmRec[0]["id"];
 		} elseif($_POST["action"] == "Block User") {
-			redirect("pmblocklist.php?action=add&section=".$_GET["section"]."&ref=viewpm.php&id=".$_GET["id"], "0");
+			MiscFunctions::redirect("pmblocklist.php?action=add&section=".$_GET["section"]."&ref=viewpm.php&id=".$_GET["id"], "0");
 		} else {
 			$where = "<a href='pmsystem.php'>Messenger</a>";
-			exitPage("
+			MiscFunctions::exitPage("
 					<div class='alert'><div class='alert_text'>
 					<strong>Access Denied!</strong></div><div style='padding:4px;'>You should not be here (Invalid Action).</div></div>", true);
 		}
@@ -73,7 +73,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 	if (!isset($pmRec) || $pmRec == "" || !is_array($pmRec)) $pmRec = $PrivMsg->get("CuBox", $_GET["id"]);
 	$user = $tdb->get("users", $pmRec[0][$users_id]);
 	if ($_GET["section"] == "inbox") {
-		if(in_array($_COOKIE['id_env'], PrivateMessaging::getUsersPMBlockedList($pmRec[0][$users_id]))) $reply_disabled = " DISABLED";
+		if(in_array($_COOKIE['id_env'], getUsersPMBlockedList($pmRec[0][$users_id]))) $reply_disabled = " DISABLED";
 		else $reply_disabled = '';
 		if($user[0]['level'] > 1) $block_disabled = " DISABLED";
 		else $block_disabled = "";
@@ -93,7 +93,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 		</form>
 		<br />";
 	echo $pm_navegate;
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	$table_color = $table1;
 
 	if ($user[0]["sig"] != "") $user[0]["sig"] = "
@@ -106,7 +106,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 	echo "
 			<tr>
 				<th style='width:15%;'><div class='post_name'><a href='profile.php?action=get&id=".$user[0]["id"]."'>".$user[0]["user_name"]."</a></div></th>
-				<th style='width:85%;'><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pmRec[0]["icon"]."' alt='' title='' /></div><div style='line-height:15px;margin-right:4px;'>&nbsp;&nbsp;PM Sent: ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pmRec[0]["date"]))."</div></th>
+				<th style='width:85%;'><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pmRec[0]["icon"]."' alt='' title='' /></div><div style='line-height:15px;margin-right:4px;'>&nbsp;&nbsp;PM Sent: ".gmdate("M d, Y g:i:s a", user_date($pmRec[0]["date"]))."</div></th>
 			</tr>
 				<tr>
 					<td class='area_1' valign='top'>";
@@ -118,7 +118,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 							<strong>Posts:</strong> ".$user[0]["posts"]."
 							<br />
 							<strong>Registered:</strong><br />
-							".gmdate("Y-m-d", DateCustom::user_date($user[0]["date_added"]))."
+							".gmdate("Y-m-d", user_date($user[0]["date_added"]))."
 						</div>
 						<br />
 						<div class='post_info_extra'>";
@@ -139,7 +139,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 	echo "
 						<div class='button_pro2'><a href='email.php?id=".$pmRec["user_id"]."'>email ".$pmRec["user_name"]."</a></div>";
 	echo "</td></tr>";
-	echoTableFooter(SKIN_DIR);
+    MiscFunctions::echoTableFooter(SKIN_DIR);
 	echo $pm_navegate;
 } else {
 	require_once('./includes/header.php');

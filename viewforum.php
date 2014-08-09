@@ -5,10 +5,10 @@
 // Version: 2.0
 // Using textdb Version: 4.3.2
 require_once('./includes/upb.initialize.php');
-if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) exitPage(str_replace('__TITLE__', "Invalid Forum", str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
+if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) MiscFunctions::exitPage(str_replace('__TITLE__', "Invalid Forum", str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 
 $fRec = $tdb->get("forums", $_GET["id"]);
-if(empty($fRec[0])) exitPage(str_replace('__TITLE__', "Forum Does Not Exist", str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
+if(emMiscFunctions::exitPage([0])) exitPage(str_replace('__TITLE__', "Forum Does Not Exist", str_replace('__MSG__', ALERT_GENERIC_MSG, ALERT_MSG)), true);
 
 $access = false;
 if($tdb->is_logged_in() == false)
@@ -24,9 +24,7 @@ else
     {
         $access = true;
     }
-}
-
-if($access == false)
+MiscFunctions::exitPage(cess == false)
 {
     exitPage(str_replace('__TITLE__', "Permission Denied", str_replace('__MSG__', "You do not have enough Power to view this forum.<br>".ALERT_GENERIC_MSG, ALERT_MSG)), true);
 }
@@ -83,7 +81,7 @@ if ($vars["cTopics"] <= $_CONFIG["topics_per_page"]) $num_pages = 1;
 elseif (($vars["cTopics"] % $_CONFIG["topics_per_page"]) == 0) $num_pages = ($vars["cTopics"] / $_CONFIG["topics_per_page"]);
 else $num_pages = ($vars["cTopics"] / $_CONFIG["topics_per_page"]) + 1;
 $num_pages = (int) $num_pages;
-$p = createPageNumbers($vars["page"], $num_pages, $_SERVER['QUERY_STRING']);
+$p = MiscFunctions::createPageNumbers($vars["page"], $num_pages, $_SERVER['QUERY_STRING']);
 require_once('./includes/header.php');
 //$_SESSION['newTopics'] = array('lastVisitForums' => array());
 //print '<pre>'; print_r($_SESSION['newTopics']['f'.$_GET['id']]); print '</pre>';
@@ -111,7 +109,7 @@ $tdb->updateVisitedTopics();
 echo "<br>";
 $posts_tdb->d_topic($p,$vars['page'],$num_pages);
 
-echoTableHeading($fRec[0]["forum"], $_CONFIG);
+MiscFunctions::echoTableHeading($fRec[0]["forum"], $_CONFIG);
 echo "
 		<tr>
 			<th style='width: 75%;'>Topic</th>
@@ -187,7 +185,7 @@ if (empty($tRecs[0]['id'])) {
 		}
 	}
 }
-echoTableFooter(SKIN_DIR);
+MiscFunctions::echoTableFooter(SKIN_DIR);
 echo "<br />".$posts_tdb->d_posting(false, false, $p, $vars['page'], $num_pages, 'bottom', 'forum');
 
 require_once('./includes/footer.php');

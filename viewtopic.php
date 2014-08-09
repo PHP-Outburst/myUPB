@@ -13,11 +13,11 @@ require_once('./includes/upb.initialize.php');
 $posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 $vars['page'] = ((isset($_GET['page'])) ? $_GET['page'] : '');
 //check if the id exists
-if (!(is_numeric($_GET["id"]) && $posts_tdb->isTable($_GET["id"]))) exitPage("Forum does not exist.", true);
-if (FALSE === ($fRec = $tdb->get("forums", $_GET["id"]))) exitPage("Forum does not exist.", true);
+if (!(is_numeric($_GET["id"]) && $posts_tdb->isTable($_GET["id"]))) MiscFunctions::exitPage("Forum does not exist.", true);
+if (FALSE === ($fRec = $tdb->get("forums", $_GET["id"]))) MiscFunctions::exitPage("Forum does not exist.", true);
 $posts_tdb->setFp("topics", $_GET["id"]."_topics");
 $posts_tdb->setFp("posts", $_GET["id"]);
-if (FALSE === ($tRec = $posts_tdb->get("topics", $_GET["t_id"]))) exitPage("Invalid Topic.", true);
+if (FALSE === ($tRec = $posts_tdb->get("topics", $_GET["t_id"]))) MiscFunctions::exitPage("Invalid Topic.", true);
 
 $posts_tdb->set_topic($tRec);
 $posts_tdb->set_forum($fRec);
@@ -29,9 +29,9 @@ else $posts_tdb->set_user_info($_COOKIE["user_env"], $_COOKIE["uniquekey_env"], 
 $where = "<a href='viewforum.php?id=".$_GET["id"]."'>".$fRec[0]["forum"]."</a> ".$_CONFIG["where_sep"]." ".$tRec[0]["subject"];
 require_once('./includes/header.php');
 
-if ((int)$_COOKIE["power_env"] < $fRec[0]["view"]) exitPage("You do not have enough Power to view this topic");
-if (!isset($_GET["id"]) || !ctype_digit($_GET["id"])) exitPage("Invalid Forum ID");
-if (!isset($_GET["t_id"]) || !ctype_digit($_GET["t_id"])) exitPage("Invalid Topic ID");
+if ((int)$_COOKIE["power_env"] < $fRec[0]["view"]) MiscFunctions::exitPage("You do not have enough Power to view this topic");
+if (!isset($_GET["id"]) || !ctype_digit($_GET["id"])) MiscFunctions::exitPage("Invalid Forum ID");
+if (!isset($_GET["t_id"]) || !ctype_digit($_GET["t_id"])) MiscFunctions::exitPage("Invalid Topic ID");
 
 //because session_start() is in header.php CONSIDER MOVING TO FUNC.INC.PHP or FUNC.CLASS.PHP
 $sess_name = 'view_'.$_GET['id'].'_'.$_GET['t_id'];
@@ -59,7 +59,7 @@ if (empty($pRecs)) {
 	die();
 }
 $num_pages = ceil(($tRec[0]["replies"] + 1) / $_CONFIG["posts_per_page"]);
-$p = createPageNumbers($vars["page"], $num_pages, $_SERVER['QUERY_STRING']);
+$p = MiscFunctions::createPageNumbers($vars["page"], $num_pages, $_SERVER['QUERY_STRING']);
 //$isWatching = in_array($useremail, explode(',', $tRec[0]['monitor']));
 if($tdb->is_logged_in()) {
 	$email_mode = $_CONFIG['email_mode'];
@@ -156,7 +156,7 @@ foreach($pRecs as $pRec) {
 				<td class='$table_color' style='width:15%; vertical-align:top;'>";
 	if (@$user[0]["avatar"] != "")
 	{
-		$resize = resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
+		$resize = MiscFunctions::resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
 		echo "<br /><style='align:center'><img src=\"".$user[0]["avatar"]."\" border='0' $resize alt='' title=''></style><br />";
 	}
 	else if ($pRec["user_id"] != "0")
@@ -197,13 +197,13 @@ foreach($pRecs as $pRec) {
 	{
 		echo "
 					<div class='button_pro2'><a href='profile.php?action=get&amp;id=".$pRec["user_id"]."'>Profile</a></div>";
-		if (isValidUrl($user[0]['url']))
+		if (MiscFunctions::isValidURL($user[0]['url']))
 		echo "<div class='button_pro2'><a href='".$user[0]["url"]."' target = '_blank'>Homepage</a></div>";
 		if ($_CONFIG['email_mode'])
 		echo "
 					<div class='button_pro2'><a href='email.php?id=".$pRec["user_id"]."'>email ".$pRec["user_name"]."</a></div>";
 	}
-	echo "</td></tr>".echoTableFooter(SKIN_DIR)."</div>";
+	echo "</td></tr>".MiscFunctions::echoTableFooter(SKIN_DIR)."</div>";
 
 }
 echo "</div>";
@@ -213,7 +213,7 @@ if (!($_COOKIE["power_env"] < $fRec[0]["post"] && $_GET["t"] == 1 || $_COOKIE["p
 {
 	echo "<br><div id='enabled_msg'><div id='quickreplyform' name='quickreplyform'>";
 	echo "<form name='quickreplyfm' action='newpost.php?id=".$_GET["id"]."&amp;t_id=".$_GET["t_id"]."&amp;page=".$vars["page"]."' id='quickreplyfm' method='POST'>\n";
-	echoTableHeading("Quick Reply", $_CONFIG);
+	MiscFunctions::echoTableHeading("Quick Reply", $_CONFIG);
 	echo "<table class='main_table'>";
 	foreach ($_GET as $key => $value)
 	{
@@ -236,7 +236,7 @@ if (!($_COOKIE["power_env"] < $fRec[0]["post"] && $_GET["t"] == 1 || $_COOKIE["p
 	echo "<tr><td class='footer_3a' style='text-align:center;' colspan='2'>\n
     <input type='button' name='quickreply' value='Quick Reply' onclick=\"document.quickreplyfm.quickreply.disabled=true;javascript:getReply(document.getElementById('quickreply'));\">\n
     <input type='submit' name='submit' value='Advanced'>\n</td></tr></form>";
-	echoTableFooter(SKIN_DIR);
+    MiscFunctions::echoTableFooter(SKIN_DIR);
 	echo "</div></div>";
 }
 //END QUICK REPLY SEGMENT

@@ -8,8 +8,6 @@
 
 $loader = require 'vendor/autoload.php';
 $loader->add('', 'classes');
-	
-require_once 'includes/inc/func.inc.php';
 
 ignore_user_abort();
 if(!isset($_POST['add'])) $_POST['add'] = '0';
@@ -486,7 +484,7 @@ switch($_POST["add"]{0}) {
 				}
         //$config_table = $config_tdb->query("config","id>'0'");//maybe this will be helpful?
        //
-       // dump($config_table);//I'm just copying code without thinking how it works
+       // MiscFunctions::dump($config_table);//I'm just copying code without thinking how it works
 				//SMILIES
 				$tdb->add('smilies',array("bbcode"=>" :)","replace"=> " <img src='./smilies/smile.gif' border='0' alt=':)'> ","type" => "main"));
 				$tdb->add('smilies',array("bbcode"=>" :(", "replace"=>" <img src='./smilies/frown.gif' border='0' alt=':('> ","type" => "main"));
@@ -581,7 +579,6 @@ switch($_POST["add"]{0}) {
 		</form>
 		<?php
 			} else if ($_POST["add"] == "2") {
-				require_once("includes/inc/func.inc.php");
 				//Set up admin acccount
 				$required = "#ff0000";
 				if (!isset($_POST["username"])) $_POST["username"] = "";
@@ -664,7 +661,7 @@ switch($_POST["add"]{0}) {
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Timezone Setting:</strong></td>
-				<td class='area_2'>".timezonelist($_POST["timezone"], "timezone")."</td>
+				<td class='area_2'>".MiscFunctions::timezonelist($_POST["timezone"], "timezone")."</td>
 			</tr>
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='hidden' name='add' value='2auth'><input type='submit' value='Submit' name='B1'><input type='reset' value='Reset' name='B2'></td>";

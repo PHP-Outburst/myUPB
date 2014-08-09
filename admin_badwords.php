@@ -12,9 +12,9 @@ if (!(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($
 	echo "
 			<div class='alert'><div class='alert_text'>
 			<strong>Access Denied!</strong></div><div style='padding:4px;'>you are not logged in!</div></div>";
-	redirect("login.php?ref=admin_badwords.php", 2);
+	MiscFunctions::redirect("login.php?ref=admin_badwords.php", 2);
 }
-if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) exitPage("
+if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) MiscFunctions::exitPage("
 		<div class='alert'><div class='alert_text'>
 		<strong>Access Denied!</strong></div><div style='padding:4px;'>you are not authorized to be here.</div></div>");
 if ($_GET["action"] == "delete" && $_GET["word"] != "") {
@@ -32,10 +32,10 @@ if ($_GET["action"] == "delete" && $_GET["word"] != "") {
 			$config_tdb->editVars('config', array('banned_words' => $words));
 			echo "Done!</div>
     				</div>";
-			redirect("admin_badwords.php", 1);
+			MiscFunctions::redirect("admin_badwords.php", 1);
 		} else print 'Could not delete "'.$_GET['word'].'"</div></div>';
-	} elseif($_POST["verify"] == "Cancel") redirect("admin_badwords.php", 1);
-	else ok_cancel("admin_badwords.php?action=delete&word=".$_GET["word"], "Are you sure you want to remove the <b>".$_GET["word"]."</b> from the filter list?");
+	} elseif($_POST["verify"] == "Cancel") MiscFunctions::redirect("admin_badwords.php", 1);
+	else MiscFunctions::ok_cancel("admin_badwords.php?action=delete&word=".$_GET["word"], "Are you sure you want to remove the <b>".$_GET["word"]."</b> from the filter list?");
 } elseif($_GET["action"] == "addnew") {
 	if ($_POST["newword"] != "") {
 		echo "
@@ -47,10 +47,10 @@ if ($_GET["action"] == "delete" && $_GET["word"] != "") {
 		$config_tdb->editVars('config', array('banned_words' => $words));
 		echo "Done!</div>
 				</div>";
-		redirect("admin_badwords.php", 1);
+		MiscFunctions::redirect("admin_badwords.php", 1);
 	} else {
 		echo "<form action='admin_badwords.php?action=addnew' method=POST>";
-		echoTableHeading("Adding a filtered word", $_CONFIG);
+		MiscFunctions::echoTableHeading("Adding a filtered word", $_CONFIG);
 		echo "
 			<tr>
 				<th colspan='2'>Add the word you wish to be censored below</th>
@@ -65,13 +65,13 @@ if ($_GET["action"] == "delete" && $_GET["word"] != "") {
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='submit' value='Add'></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "</form>";
 	}
 } else {
 
 	$words = explode(",", $_CONFIG['banned_words']);
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -82,7 +82,7 @@ if ($_GET["action"] == "delete" && $_GET["word"] != "") {
 	require_once("admin_navigation.php");
 	echo "</td>
 			</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 	echo "
 			<div id='tabstyle_2'>
 			<ul>
@@ -90,7 +90,7 @@ if ($_GET["action"] == "delete" && $_GET["word"] != "") {
 			</ul>
 			</div>
 			<div style='clear:both;'></div>";
-	echoTableHeading("Filtered Words", $_CONFIG);
+	MiscFunctions::echoTableHeading("Filtered Words", $_CONFIG);
 	echo "
 			<tr>
 				<th style='width:65%;'>Word</th>
@@ -110,7 +110,7 @@ if ($_GET["action"] == "delete" && $_GET["word"] != "") {
 			</tr>";
 		}
 	}
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 require_once("./includes/footer.php");
 ?>

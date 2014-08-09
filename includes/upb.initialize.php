@@ -151,7 +151,6 @@ if(file_exists(DB_DIR.'/banneduser.dat')) {
 }
 
 require_once('./includes/inc/post.inc.php');
-require_once("./includes/inc/func.inc.php");
 //whos_online.php included at last line
 
 //installation precausion

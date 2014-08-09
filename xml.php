@@ -20,9 +20,9 @@ $posts_tdb->set_forum($fRec);
 if (!isset($_GET['t_id'])) {
 	$tRecs = $posts_tdb->listRec('topics', 1, -1);
 
-	$xml .= "<title>".xml_clean($fRec[0]['forum'])."</title>
-	<link>".xml_clean($_SERVER['HTTP_REFERER'])."</link>
-	<description>".xml_clean($fRec[0]['des'])."</description>
+	$xml .= "<title>".MiscFunctions::xml_clean($fRec[0]['forum'])."</title>
+	<link>".MiscFunctions::xml_clean($_SERVER['HTTP_REFERER'])."</link>
+	<description>".MiscFunctions::xml_clean($fRec[0]['des'])."</description>
 	<language>en-us</language>";
 	$posts_tdb->set_topic($tRecs);
 	foreach ($tRecs as $key => $tRec) {
@@ -37,10 +37,10 @@ if (!isset($_GET['t_id'])) {
 		$replace = "viewtopic.php?id=".$_GET['id']."&t_id=".$tRec['id'];
 		$newurl = str_replace('xml.php',$replace,$url);
 		$xml .= "<item>
-		<title>".xml_clean($tRec['subject'])."</title>
-		<link>".xml_clean($newurl)."</link>
-		<description>".xml_clean(format_text(filterLanguage($post[0]['message'])))."</description>
-		<guid isPermaLink=\"false\">".xml_clean($url)."</guid>
+		<title>".MiscFunctions::xml_clean($tRec['subject'])."</title>
+		<link>".MiscFunctions::xml_clean($newurl)."</link>
+		<description>".MiscFunctions::xml_clean(format_text(filterLanguage($post[0]['message'])))."</description>
+		<guid isPermaLink=\"false\">".MiscFunctions::xml_clean($url)."</guid>
 		</item>";
 	}
 
@@ -55,19 +55,19 @@ if (!isset($_GET['t_id'])) {
 	$url= "http://".$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF'];
 	$replace = "viewtopic.php?id=".$_GET['id']."&t_id=".$_GET['t_id'];
 	$newurl = str_replace('xml.php',$replace,$url);
-	$xml .= "<title>".xml_clean($desc)."</title>
-	<link>".xml_clean($_SERVER['HTTP_REFERER'])."</link>
-	<description>Topic of ".xml_clean($desc)."</description>
+	$xml .= "<title>".MiscFunctions::xml_clean($desc)."</title>
+	<link>".MiscFunctions::xml_clean($_SERVER['HTTP_REFERER'])."</link>
+	<description>Topic of ".MiscFunctions::xml_clean($desc)."</description>
 	<language>en-us</language>";
 
 	foreach ($pRecs as $key => $pRec) {
 		$newurl = str_replace('xml.php',$replace,$url);
 		$newurl .= '&page='.$pRec['page']."#".$pRec['id'];
 		$xml .= "<item>
-	  <title>Post by ".xml_clean($pRec['user_name'])." on ".xml_clean(gmdate("M d, Y @ g:i:s a", DateCustom::user_date($pRec["date"])))."</title>
-	  <link>".xml_clean($newurl)."</link>
-	  <description>".xml_clean(format_text(filterLanguage($pRec['message'])))."</description>
-	  <guid isPermaLink=\"false\">".xml_clean($url)."</guid>
+	  <title>Post by ".MiscFunctions::xml_clean($pRec['user_name'])." on ".MiscFunctions::xml_clean(gmdate("M d, Y @ g:i:s a", DateCustom::user_date($pRec["date"])))."</title>
+	  <link>".MiscFunctions::xml_clean($newurl)."</link>
+	  <description>".MiscFunctions::xml_clean(format_text(filterLanguage($pRec['message'])))."</description>
+	  <guid isPermaLink=\"false\">".MiscFunctions::xml_clean($url)."</guid>
 	  </item>";
 	}
 

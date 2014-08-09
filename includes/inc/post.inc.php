@@ -53,7 +53,7 @@ function filterLanguage($text) {
 	$msg = $text;
 	//start bad words filter
 	$words = explode(",", $_CONFIG['banned_words']);
-	deleteWhiteIndex($words);
+	MiscFunctions::deleteWhiteIndex($words);
 	for($pp=0;$pp<count($words);$pp++) {
 		$words[$pp] = html_entity_decode($words[$pp]);
 		$msg = preg_replace('/\b'.$words[$pp].'\b/i', $_CONFIG["censor"], $msg);

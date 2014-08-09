@@ -30,11 +30,11 @@ if(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE
 <div class='alert'><div class='alert_text'>
 <strong>Error!</strong></div><div style='padding:4px;'>Edit Failed.</div></div>";
 			require_once("./includes/footer.php");
-			redirect($PHP_SELF."?action=".$_POST["action"], 2);
+			MiscFunctions::redirect($PHP_SELF."?action=".$_POST["action"], 2);
 			die();
 		}
 
-		echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+		MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 
 		echo "
 			<tr>
@@ -47,7 +47,7 @@ if(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE
 		require_once("admin_navigation.php");
 		echo "</td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 
 		echo "<a name='skip_nav'>&nbsp;</a>
 			<div id='tabstyle_2'>
@@ -64,10 +64,10 @@ if(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE
 
 		$minicats = $config_tdb->fetchMiniCategories($_GET['action']);
 		$configVars = $config_tdb->getVars($_GET["action"], true);
-		//dump($configVars);
+		//MiscFunctions::dump($configVars);
 		echo "<form action=\"admin_config.php?action=".$_GET["action"]."\" method='POST' name='form'><input type='hidden' name='action' value='".$_GET["action"]."'>";
 
-		echoTableHeading("&nbsp;", $_CONFIG);
+		MiscFunctions::echoTableHeading("&nbsp;", $_CONFIG);
 		while(list($minicat_id, $minicat_title) = each($minicats)) {
 			echo "
 		<tr>
@@ -163,7 +163,7 @@ if(isset($_COOKIE["power_env"]) && isset($_COOKIE["user_env"]) && isset($_COOKIE
 		echo "<input type=submit value='Submit'>";
 		echo "</td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "</form>";
 
 		/*

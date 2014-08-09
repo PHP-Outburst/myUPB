@@ -11,13 +11,13 @@ $post_tdb->setFp("posts", $_GET["id"]);
 if ($_GET["t"] == 1) $where = "Delete a Topic";
 else $where = "Delete a Post";
 require_once("./includes/header.php");
-if ($tdb->is_logged_in() === false) exitPage("<div class='alert'><div class='alert_text'>
+if ($tdb->is_logged_in() === false) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>You are not logged in, therefore unable to perform this action.</div></div>");
-if (!isset($_GET["id"]) || !isset($_GET["t_id"]) || ($_GET["t"] == 0 && !isset($_GET["p_id"]))) exitPage("<div class='alert'><div class='alert_text'>
+if (!isset($_GET["id"]) || !isset($_GET["t_id"]) || ($_GET["t"] == 0 && !isset($_GET["p_id"]))) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>Not enough information to perform this function.</div></div>");
-if ($_COOKIE["power_env"] < 2 && $_GET['t'] != 0) exitPage("<div class='alert'><div class='alert_text'>
+if ($_COOKIE["power_env"] < 2 && $_GET['t'] != 0) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>You do not have enough power to delete this topic.</div></div>");
-if ($_GET['action'] != "delete") exitPage("<div class='alert'><div class='alert_text'>
+if ($_GET['action'] != "delete") MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>Unknown Action.  Seek Administrative Help.</div></div>");
 $tRec = $post_tdb->get("topics", $_GET["t_id"]);
 if ($_GET["t"] == 1) {
@@ -53,14 +53,14 @@ if ($_GET["t"] == 1) {
 			echo "
 					<div class='alert_confirm'><div class='alert_confirm_text'>
 					<strong>Redirecting:</strong></div><div style='padding:4px;'>Successfully deleted \"".$tRec[0]["subject"]."\"(T_ID:".$_GET["t_id"].")<br />from ".$fRec[0]["forum"]." (F_ID:".$_GET["id"].").</div></div>";
-			redirect("viewforum.php?id=".$_GET["id"], "2");
+			MiscFunctions::redirect("viewforum.php?id=".$_GET["id"], "2");
 			exit;
 		}
 	} elseif($_POST["verify"] == "Cancel") {
 		if ($_GET["ref"] == "") $_GET["ref"] = "viewtopic.php";
-		redirect($_GET["ref"]."?id=".$_GET["id"]."&t_id=".$_GET["t_id"], "0");
+		MiscFunctions::redirect($_GET["ref"]."?id=".$_GET["id"]."&t_id=".$_GET["t_id"], "0");
 	} else {
-		ok_cancel($_SERVER['PHP_SELF']."?action=".$_GET['action']."&t=".$_GET["t"]."&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&ref=".$_GET["ref"], "Are you sure you want to delete a topic?");
+		MiscFunctions::ok_cancel($_SERVER['PHP_SELF']."?action=".$_GET['action']."&t=".$_GET["t"]."&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&ref=".$_GET["ref"], "Are you sure you want to delete a topic?");
 	}
 } elseif($_GET["t"] == 0) {
 	$p_ids = explode(",", $tRec[0]["p_ids"]);
@@ -70,7 +70,7 @@ if ($_GET["t"] == 1) {
                 </div></div>";
 	}
 	$pRec = $post_tdb->get("posts", $_GET["p_id"]);
-	if (!(($pRec[0]["user_id"] == $_COOKIE["id_env"]) || ($_COOKIE["power_env"] >= 2))) exitPage("<div class='alert'><div class='alert_text'><strong>You are not authorized to delete this post</strong></div><div style='padding:4px;'></div></div>");
+	if (!(($pRec[0]["user_id"] == $_COOKIE["id_env"]) || ($_COOKIE["power_env"] >= 2))) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'><strong>You are not authorized to delete this post</strong></div><div style='padding:4px;'></div></div>");
 
 	if ($_POST["verify"] == "Ok") {
 		if (($key = array_search($_GET["p_id"], $p_ids)) === FALSE) {
@@ -112,12 +112,12 @@ if ($_GET["t"] == 1) {
 					</div>
 					</div>";
 			require_once("./includes/footer.php");
-			redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"], "2");
+			MiscFunctions::redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"], "2");
 			exit;
 		}
-	} elseif($_POST["verify"] == "Cancel") redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"], 0);
+	} elseif($_POST["verify"] == "Cancel") MiscFunctions::redirect("viewtopic.php?id=".$_GET["id"]."&t_id=".$_GET["t_id"], 0);
 	else {
-		ok_cancel("delete.php?action=".$_GET["action"]."&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&p_id=".$_GET["p_id"], "Are you sure you want to delete this post?");
+		MiscFunctions::ok_cancel("delete.php?action=".$_GET["action"]."&id=".$_GET["id"]."&t_id=".$_GET["t_id"]."&p_id=".$_GET["p_id"], "Are you sure you want to delete this post?");
 	}
 } else {
 	echo "<div class='alert'><div class='alert_text'>

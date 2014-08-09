@@ -83,7 +83,7 @@ class TdbFunctions extends Tdb
 
         $rec = $this->get('users', $_COOKIE['id_env']);
         /*        if(strlen($_COOKIE['password_env']) != Encode::HASH_LENGTH && basename($_SERVER['PHP_SELF']) != 'login.php') {
-         redirect('logoff.php?ref=login.php', 0);
+         MiscFunctions::redirect('logoff.php?ref=login.php', 0);
          exit;
          } */
 

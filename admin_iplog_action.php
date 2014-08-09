@@ -15,7 +15,7 @@ $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin
 if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset($_COOKIE["power_env"]) || !isset($_COOKIE["id_env"]))
 {
 	require_once("./includes/header.php");
-	exitPage("
+	MiscFunctions::exitPage("
 	<div class='alert'><div class='alert_text'>
 	<strong>Access Denied!</strong></div><div style='padding:4px;'>You are not logged in.</div></div>
 	<meta http-equiv='refresh' content='2;URL=login.php?ref=admin_iplog.php'>");
@@ -27,7 +27,7 @@ if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset(
 if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3)
 {
 	require_once("./includes/header.php");
-	exitPage("
+	MiscFunctions::exitPage("
 	<div class='alert'><div class='alert_text'>
 	<strong>Access Denied!</strong></div><div style='padding:4px;'>you are not authorized to be here.</div></div>");
 	require_once("./includes/footer.php");
@@ -59,13 +59,13 @@ switch($_GET['action'])
 		</div>
 	</div>";
 
-		redirect("admin_iplog.php", 1);
+		MiscFunctions::redirect("admin_iplog.php", 1);
 		require_once("./includes/footer.php");
 		break;
 
 	default:
 		require_once("./includes/header.php");
-		exitPage("
+		MiscFunctions::exitPage("
 	<div class='alert'><div class='alert_text'>
 	<strong>No Action Specified!</strong></div><div style='padding:4px;'>An action must be specified to use this page</div></div>");
 		require_once("./includes/footer.php");

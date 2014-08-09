@@ -38,10 +38,10 @@ switch ($ajax_type)
 		$posts_tdb->setFp("posts", $_POST["forumid"]);
 		$pRec = $posts_tdb->get("posts", $_POST["postid"]);
 		//STORES THE EDITED VERSION OF THE POST IN THE DATABASE AND RETURNS THE EDITED PAGE TO THE USER
-		if(!(isset($_POST["userid"]) && isset($_POST["forumid"]) && isset($_POST["threadid"]) && isset($_POST["postid"]))) exitPage("Not enough information to perform this function.");
-		if(!($tdb->is_logged_in())) exitPage("You are not logged in, therefore unable to perform this action.");
+		if(!(isset($_POST["userid"]) && isset($_POST["forumid"]) && isset($_POST["threadid"]) && isset($_POST["postid"]))) MiscFunctions::exitPage("Not enough information to perform this function.");
+		if(!($tdb->is_logged_in())) MiscFunctions::exitPage("You are not logged in, therefore unable to perform this action.");
 
-		if($pRec[0]["user_id"] != $_COOKIE["id_env"] && $_COOKIE["power_env"] < 2) exitPage("You are not authorized to edit this post.");
+		if($pRec[0]["user_id"] != $_COOKIE["id_env"] && $_COOKIE["power_env"] < 2) MiscFunctions::exitPage("You are not authorized to edit this post.");
 		$msg = "";
 
 		$msg = display_msg(encode_text($_POST['newedit']));
@@ -166,7 +166,7 @@ switch ($ajax_type)
 
 		$query = "id={$_POST['id']}&t_id={$_POST['t_id']}";
 
-		$p = createPageNumbers($page, $num_pages, $query,true);
+		$p = MiscFunctions::createPageNumbers($page, $num_pages, $query,true);
 		$p = str_replace('ajax.php', 'viewtopic.php', $p);
 		$pagelinks1 = $posts_tdb->d_posting($email_mode, $isWatching,$p,$page,$num_pages);
 		$pagelinks2 = $posts_tdb->d_posting($email_mode, $isWatching,$p,$page,$num_pages,"bottom") . "</div>";
@@ -249,7 +249,7 @@ switch ($ajax_type)
 				<td class='$table_color' valign='top' style='width:15%;'>";
 			if (@$user[0]["avatar"] != "")
 			{
-				$resize = resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
+				$resize = MiscFunctions::resize_img($user[0]['avatar'],$_REGIST["avatarupload_dim"]);
 				$output .= "<br /><center><img src=\"".$user[0]["avatar"]."\" border='0' $resize alt='' title=''></center><br />";
 			}
 			else $output .= "<br /><br />";
@@ -290,7 +290,7 @@ switch ($ajax_type)
 			{
 				$output .= "
 					<div class='button_pro2'><a href='profile.php?action=get&id=".$pRec["user_id"]."'>Profile</a></div>";
-				if (isValidUrl($user[0]['url']))
+				if (MiscFunctions::isValidURL($user[0]['url']))
 				$output .= "<div class='button_pro2'><a href='".$user[0]["url"]."' target = '_blank'>Homepage</a></div>";
 				if ($_CONFIG['email_mode'])
 				$output .= "<div class='button_pro2'><a href='email.php?id=".$pRec["user_id"]."'>email ".$pRec["user_name"]."</a></div>";
@@ -430,7 +430,7 @@ switch ($ajax_type)
 		} else {
 			for($i=0,$c1=count($cRecs);$i<$c1;$i++) {
 				//show each category
-				$view = createUserPowerMisc($cRecs[$i]["view"], 2);
+				$view = MiscFunctions::createUserPowerMisc($cRecs[$i]["view"], 2);
 				$output .= "
 			<tr>
 			    <td class='area_1' style='padding:8px;text-align:center;'>".(($i>0) ? "<a href=\"javascript:forumSort('cat','up','".$cRecs[$i]['id']."');\"><img src='./images/up.gif'></a>" : "&nbsp;&nbsp;&nbsp;").(($i<($c1-1)) ? "<a href=\"javascript:forumSort('cat','down','".$cRecs[$i]['id']."');\"><img src='./images/down.gif'></a>" : "")."</td>
@@ -451,9 +451,9 @@ switch ($ajax_type)
 						$fRec = $tdb->get('forums', $ids[$j]);
 						//$post_tdb->setFp("topics", $fRec[0]["id"]."_topics");
 						//$post_tdb->setFp("posts", $fRec[0]["id"]);
-						$whoView = createUserPowerMisc($fRec[0]["view"], 3);
-						$whoPost = createUserPowerMisc($fRec[0]["post"], 3);
-						$whoReply = createUserPowerMisc($fRec[0]["reply"], 3);
+						$whoView = MiscFunctions::createUserPowerMisc($fRec[0]["view"], 3);
+						$whoPost = MiscFunctions::createUserPowerMisc($fRec[0]["post"], 3);
+						$whoReply = MiscFunctions::createUserPowerMisc($fRec[0]["reply"], 3);
 						//show each forum
 						$output .= "
 			<tr>
@@ -618,10 +618,10 @@ switch ($ajax_type)
 		echo "";
 		else
 		{
-			echoTableHeading("Post Preview", $_CONFIG);
+			MiscFunctions::echoTableHeading("Post Preview", $_CONFIG);
 			$msg = display_msg(encode_text($_POST["message"]));
 			echo "<tr><td class='area_2'><div class='msg_block'>".$msg."</div></td></tr>";
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 		}
 		break 1;
 

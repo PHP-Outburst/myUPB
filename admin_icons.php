@@ -14,16 +14,16 @@ $bdb->setFP('icons','icons');
 
 if(!(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["power_env"]) && isset($_COOKIE["id_env"]))) {
 	echo "you are not even logged in";
-	redirect("login.php?ref=admin_smilies.php", 2);
+	MiscFunctions::redirect("login.php?ref=admin_smilies.php", 2);
 }
 
 if(!($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3)) 
 {
-	exitPage("<div class='alert'><div class='alert_text'>
+	MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Access Denied!</strong></div><div style='padding:4px;'>you are not authorized to be here.</div></div>");
 }
 
-echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -34,7 +34,7 @@ echo "
 require_once("admin_navigation.php");
 echo "</td>
 			</tr>";
-echoTableFooter(SKIN_DIR);
+MiscFunctions::echoTableFooter(SKIN_DIR);
 //REMOVE ALL TRACES OF $_GET['word']
 
 		
@@ -112,7 +112,7 @@ if($_GET["action"] == "addnew")
 			echo "</div></div>";
 
 			if (count($success) == count($_FILES["icon_file"]["name"]))
-			redirect("admin_icons.php", 2);
+			MiscFunctions::redirect("admin_icons.php", 2);
 		}
 
 		if (!empty($error))
@@ -142,7 +142,7 @@ if($_GET["action"] == "addnew")
 	{
 		echo "<form action='admin_icons.php?action=addnew' name='icon_upload' method='POST' enctype='multipart/form-data'>";
 		echo "<input type='hidden' name='MAX_FILE_SIZE' value='15500' />";
-		echoTableHeading("Add new post icon(s)", $_CONFIG);
+		MiscFunctions::echoTableHeading("Add new post icon(s)", $_CONFIG);
 		echo "<tr><th colspan='2'>Post Icon File Requirements</th>";
 		echo "<tr><td class='area_2' style='padding:8px;' colspan='2'>Post Icons must be gif files and have a maximum filesize of 3KB each</td></tr>";
 		echo "
@@ -175,7 +175,7 @@ if($_GET["action"] == "addnew")
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type=submit value='Add Post Icon(s)'></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "
 	</form>";
 	}
@@ -204,7 +204,7 @@ else if ($_GET['action'] == 'delete')
           <div style='padding:4px;'>The Post Icon(s) has been deleted.
 					</div>
 					</div>";
-				redirect("admin_icons.php", 2);
+				MiscFunctions::redirect("admin_icons.php", 2);
 			}
 			else
 			{
@@ -226,7 +226,7 @@ else if ($_GET['action'] == 'delete')
 }
 else {
 	$icons = $bdb->query('icons',"id>'0'");
-	//var_dump($smilies);
+	//var_MiscFunctions::dump($smilies);
 
 
 	echo "
@@ -236,7 +236,7 @@ else {
 				</ul>
 				</div>
 				<div style='clear:both;'></div>";
-	echoTableHeading("Post Icon Management", $_CONFIG);
+	MiscFunctions::echoTableHeading("Post Icon Management", $_CONFIG);
 	echo "<tr><th colspan='4'>Post Icon Management</th>";
 	echo "<tr><td class='area_2' style='padding:8px;' colspan='4'>
     There must always be at least one post icon.</td></tr>";
@@ -271,7 +271,7 @@ else {
 	echo "<tr><td class='area_1' colspan='4' style='padding:8px;text-align:center;'><input type='submit' value='Submit Changes'><input type='reset' value='Reset Form'></td></tr>";
 
 	echo "</table>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 require_once("./includes/footer.php");
 ?>

@@ -50,7 +50,7 @@ if (isset($_POST['passcode']) && isset($_POST['request_ID'])) {
 			require_once('includes/header.php');
 			echo "Your password was successfully changed";
 			require_once("includes/footer.php");
-			redirect('login.php', 2);
+			MiscFunctions::redirect('login.php', 2);
 			exit;
 		}
 	} else {
@@ -68,7 +68,7 @@ if (isset($_GET['passcode']) && isset($_GET['request_ID'])) {
 			$where = "Lost Password ".$_CONFIG["where_sep"]." Create New";
 			require_once('./includes/header.php');
 			echo '<form action="'.basename(__FILE__).'" method="POST"><input type="hidden" name="passcode" value="'.$_GET['passcode'].'"><input type="hidden" name="request_ID" value="'.$_GET["request_ID"].'">';
-			echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+			MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 			echo "
 			<tr>
 				<td class='area_1' style='text-align:right;'><strong>New Password:</strong></td>
@@ -82,7 +82,7 @@ if (isset($_GET['passcode']) && isset($_GET['request_ID'])) {
 				<td class='footer_3a' style='text-align:center;' colspan='2'><input type=submit value='Submit'></td>
 			</tr>
 	</form>";
-			echoTableFooter(SKIN_DIR);
+			MiscFunctions::echoTableFooter(SKIN_DIR);
 			require_once('includes/footer.php');
 			exit;
 		} else {
@@ -107,7 +107,7 @@ if (isset($error)) {
 if (!$tdb->is_logged_in()) {
 	if (!isset($_POST['u_name'])) $_POST['u_name'] = '';
 	echo "<form action='".basename(__FILE__)."?ref=$ref' method=POST>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th colspan='2'>Enter your username and a confirmation e-mail will be emailed to you.</th>
@@ -120,7 +120,7 @@ if (!$tdb->is_logged_in()) {
 				<td class='footer_3a' style='text-align:center;' colspan='2'><input type=submit value='Submit'></td>
 			</tr>
 	</form>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 require_once("./includes/footer.php");
 ?>

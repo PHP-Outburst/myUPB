@@ -8,7 +8,7 @@ require_once("./includes/upb.initialize.php");
 $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <A href='admin_members.php'>Manage Members</a>";
 if($_GET['action'] == 'confirm') $where .= " ".$_CONFIG["where_sep"]." Confirm Newly Registered Users";
 require_once("./includes/header.php");
-if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) exitPage("
+if (!$tdb->is_logged_in() || $_COOKIE["power_env"] < 3) MiscFunctions::exitPage("
 		<div class='alert'><div class='alert_text'>
 		<strong>Access Denied!</strong></div><div style='padding:4px;'>you are not authorized to be here.</div></div>");
 if(!isset($_GET["action"])) $_GET["action"] = '';
@@ -46,7 +46,7 @@ if($_GET['action'] == 'confirm') {
 					$_SESSION['reg_approval_count']--;
 				}
 			}
-			array_reset_keys($users);
+			MiscFunctions::array_reset_keys($users);
 			$msg = "<div class='alert_confirm'>
 					<div class='alert_confirm_text'>
 					<strong>Attention:</strong></div><div style='padding:4px;'>Successfully ".(($_POST['a']=='Reject')?'rejected':'approved').' '.count($_POST['ids']).' user(s)</div></div><br /><br />';
@@ -66,7 +66,7 @@ if($_GET['action'] == 'confirm') {
 			}
 			if($_CONFIG['email_mode']) {
 				print $hidden;
-				echoTableHeading('E-mail format', $_CONFIG);
+				MiscFunctions::echoTableHeading('E-mail format', $_CONFIG);
 				print '<tr>
             			    <td class="area_1" style="width:50%;"><strong>Admin E-mail</strong><br />This is the return address for the e-mail.</td>
             				<td class="area_2" style="width:50%;"><input type="text" name="email" value="'.$_REGIST['admin_email'].'" size="40"></td>
@@ -87,16 +87,16 @@ if($_GET['action'] == 'confirm') {
 				print '</textarea></td></tr>';
 				print "<tr><td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td></tr>";
 				print "<tr><td class='area_2' colspan=2><input type=submit name='verify' value='Ok'> <input type=reset value='Reset'> <input type=submit name='verify' value='Cancel'></td></tr>";
-				echoTableFooter(SKIN_DIR);
+				MiscFunctions::echoTableFooter(SKIN_DIR);
 				print '</form>';
 			} else {
-				ok_cancel($_SERVER['PHP_SELF'].'?action=confirm#skip_nav', $hidden.'Are you sure you wish to <b>'.strtolower($_POST['a']).'</b> '.count($ids).' user(s)?');
+				MiscFunctions::ok_cancel($_SERVER['PHP_SELF'].'?action=confirm#skip_nav', $hidden.'Are you sure you wish to <b>'.strtolower($_POST['a']).'</b> '.count($ids).' user(s)?');
 			}
 			require_once('./includes/footer.php');
 			exit;
 		}
 	}
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 		<tr>
 			<th>Admin Panel Navigation</th>
@@ -107,7 +107,7 @@ if($_GET['action'] == 'confirm') {
 	require_once("admin_navigation.php");
 	echo "</td>
 		</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
  
 	print '<a name="skip_nav">'.((isset($msg)) ? $msg : '&nbsp;').'</a><form action="'.$_SERVER['PHP_SELF'].'?action=confirm#skip_nav" method="POST">';
 	
@@ -118,7 +118,7 @@ if($_GET['action'] == 'confirm') {
 	{
 		$page = ((isset($_GET['page'])) ? $_GET['page'] : '1');
 		$num_pages = ceil((count($users) + 1) / $_CONFIG['topics_per_page']);
-		$p = createPageNumbers($page, $num_pages, $_SERVER['QUERY_STRING']);
+		$p = MiscFunctions::createPageNumbers($page, $num_pages, $_SERVER['QUERY_STRING']);
 		echo "<div id='pagelink1' name='pagelink1'><table><tr><td class='pagination_title'>Pages ($num_pages):</td>$p</tr></table><div style='clear:both;'></div>";
 	}
 	echo "
@@ -131,7 +131,7 @@ if($_GET['action'] == 'confirm') {
         </div>
         <div style='clear:both;'></div>";
 	
-	echoTableHeading('Unconfirmed Users', $_CONFIG);
+	MiscFunctions::echoTableHeading('Unconfirmed Users', $_CONFIG);
 	
 	echo "
 			<tr>
@@ -183,23 +183,23 @@ if($_GET['action'] == 'confirm') {
         		</tr>";
 		print "<tr><td class='area_2' colspan='6'><input type='submit' name='a' value='Validate'>&nbsp;&nbsp;&nbsp;<input type='submit' name='a' value='Reject'></td></tr>";
 	}
-	echoTableFooter(SKIN_DIR,6);
+	MiscFunctions::echoTableFooter(SKIN_DIR,6);
 } elseif ($_GET["action"] == "edit") {
-	if (!isset($_GET["id"])) exitPage("
+	if (!isset($_GET["id"])) MiscFunctions::exitPage("
 				<div class='alert'><div class='alert_text'>
 				<strong>Error!</strong></div><div style='padding:4px;'>No id selected!</div></div>");
 	$rec = $tdb->get("users", $_GET["id"]);
-	if($_COOKIE['power_env'] < $rec[0]['level']) exitPage("
+	if($_COOKIE['power_env'] < $rec[0]['level']) MiscFunctions::exitPage("
 				<div class='alert'><div class='alert_text'>
 				<strong>Attention</strong></div><div style='padding:4px;'>You do not have enough access to edit this user.</div></div>");
 	if (isset($_POST["a"])) {
-		if (!isset($_POST["email"])) exitPage("
+		if (!isset($_POST["email"])) MiscFunctions::exitPage("
 				<div class='alert'><div class='alert_text'>
 				<strong>Error!</strong></div><div style='padding:4px;'>Please enter a valid email!</div></div>");
-		if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$/i", $_POST["email"])) exitPage("
+		if (!preg_match("/^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*$/i", $_POST["email"])) MiscFunctions::exitPage("
 				<div class='alert'><div class='alert_text'>
 				<strong>Error!</strong></div><div style='padding:4px;'>Please enter a valid email!</div></div>");
-		if (strlen(chop($_POST["sig"])) > 200) exitPage("
+		if (strlen(chop($_POST["sig"])) > 200) MiscFunctions::exitPage("
 				<div class='alert'><div class='alert_text'>
 				<strong>Error!</strong></div><div style='padding:4px;'>You cannot have more than 200 characters in the signature.</div></div>");
 		if (substr(trim(strtolower($_POST["url"])), 0, 7) != "http://") $_POST["url"] = "http://".$_POST["url"];
@@ -207,18 +207,18 @@ if($_GET['action'] == 'confirm') {
 		$_POST["u_timezone"] = substr($_POST["u_timezone"], 1);
 		$new = array();
 		if ($_POST["level"] != $rec[0]["level"]) $new["level"] = $_POST["level"];
-		if ($_POST["email"] != $rec[0]["email"]) $new["email"] = xml_clean($_POST["email"]);
-		if ($_POST["status"] != $rec[0]["status"]) $new["status"] = xml_clean($_POST["status"]);
-		if ($_POST["location"] != $rec[0]["location"]) $new["location"] = xml_clean($_POST["location"]);
-		if ($_POST["url"] != $rec[0]["url"]) $new["url"] = xml_clean($_POST["url"]);
-		if ($_POST["avatar"] != $rec[0]["avatar"]) $new["avatar"] = xml_clean($_POST["avatar"]);
-		if ($_POST["icq"] != $rec[0]["icq"]) $new["icq"] = xml_clean($_POST["icq"]);
-		if ($_POST["yahoo"] != $rec[0]["yahoo"]) $new["yahoo"] = xml_clean($_POST["yahoo"]);
-		if ($_POST["msn"] != $rec[0]["msn"]) $new["msn"] = xml_clean($_POST["msn"]);
-		if ($_POST["aim"] != $rec[0]["aim"]) $new["aim"] = xml_clean($_POST["aim"]);
-		if ($_POST["skype"] != $rec[0]["skype"]) $new["skype"] = xml_clean($_POST["skype"]);
-    if ($_POST["twitter"] != $rec[0]["twitter"]) $new["twitter"] = xml_clean($_POST["twitter"]);
-		if (chop($_POST["sig"]) != $rec[0]["sig"]) $new["sig"] = xml_clean(chop($_POST["sig"]));
+		if ($_POST["email"] != $rec[0]["email"]) $new["email"] = MiscFunctions::xml_clean($_POST["email"]);
+		if ($_POST["status"] != $rec[0]["status"]) $new["status"] = MiscFunctions::xml_clean($_POST["status"]);
+		if ($_POST["location"] != $rec[0]["location"]) $new["location"] = MiscFunctions::xml_clean($_POST["location"]);
+		if ($_POST["url"] != $rec[0]["url"]) $new["url"] = MiscFunctions::xml_clean($_POST["url"]);
+		if ($_POST["avatar"] != $rec[0]["avatar"]) $new["avatar"] = MiscFunctions::xml_clean($_POST["avatar"]);
+		if ($_POST["icq"] != $rec[0]["icq"]) $new["icq"] = MiscFunctions::xml_clean($_POST["icq"]);
+		if ($_POST["yahoo"] != $rec[0]["yahoo"]) $new["yahoo"] = MiscFunctions::xml_clean($_POST["yahoo"]);
+		if ($_POST["msn"] != $rec[0]["msn"]) $new["msn"] = MiscFunctions::xml_clean($_POST["msn"]);
+		if ($_POST["aim"] != $rec[0]["aim"]) $new["aim"] = MiscFunctions::xml_clean($_POST["aim"]);
+		if ($_POST["skype"] != $rec[0]["skype"]) $new["skype"] = MiscFunctions::xml_clean($_POST["skype"]);
+    if ($_POST["twitter"] != $rec[0]["twitter"]) $new["twitter"] = MiscFunctions::xml_clean($_POST["twitter"]);
+		if (chop($_POST["sig"]) != $rec[0]["sig"]) $new["sig"] = MiscFunctions::xml_clean(chop($_POST["sig"]));
 		if ($_POST["timezone"] != $rec[0]["timezone"]) $new["timezone"] = (int) $_POST["timezone"];
 		if (!empty($new)) $tdb->edit("users", $_GET["id"], $new);
 		echo "
@@ -230,7 +230,7 @@ if($_GET['action'] == 'confirm') {
 				</div>";
 	} else {
 		echo "<form method='POST' action={$_SERVER['PHP_SELF']}?action=edit&id={$_GET["id"]}&page={$_GET["page"]}><input type='hidden' name='a' value='1'>";
-		echoTableHeading("Editing member: ".$rec[0]["user_name"]."", $_CONFIG);
+		MiscFunctions::echoTableHeading("Editing member: ".$rec[0]["user_name"]."", $_CONFIG);
 		echo "
 			<tr>
 				<th colspan='2'>Complete the information below to edit this member</th>
@@ -246,7 +246,7 @@ if($_GET['action'] == 'confirm') {
 			<tr>
 				<td class='area_1' style='padding:8px;'><strong>User group:</strong></td>
 				<td class='area_2'>";
-		echo "<select size='1' name='level'>".createUserPowerMisc($rec[0]["level"], 7, TRUE);
+		echo "<select size='1' name='level'>".MiscFunctions::createUserPowerMisc($rec[0]["level"], 7, TRUE);
 		echo "</td>
 			</tr>
 			<tr>
@@ -354,7 +354,7 @@ if($_GET['action'] == 'confirm') {
 			</tr>
 			<tr>
 				<td class='area_1' style='padding:8px;'><strong>Time zone:</strong></td>
-				<td class='area_2'>".timezonelist($rec[0]['timezone'], "timezone")."</td>
+				<td class='area_2'>".MiscFunctions::timezonelist($rec[0]['timezone'], "timezone")."</td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='2'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
@@ -362,14 +362,14 @@ if($_GET['action'] == 'confirm') {
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='submit' value='Submit' name='B1' /><input type='reset' value='Reset' name='B2' /></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "</form>";
 	}
 } elseif($_GET["action"] == "pass" && isset($_GET["id"])) {
 	$user = $tdb->get("users", $_GET["id"]);
 	if (isset($_POST["a"])) {
-		if ($_POST["pass"] != $_POST["pass2"]) exitPage("The passwords don't match!");
-		if (strlen($_POST["pass"]) < 4) exitPage("The password has to be longer then 4 characters");
+		if ($_POST["pass"] != $_POST["pass2"]) MiscFunctions::exitPage("The passwords don't match!");
+		if (strlen($_POST["pass"]) < 4) MiscFunctions::exitPage("The password has to be longer then 4 characters");
 		$tdb->edit("users", $_GET["id"], array("password" => Encode::generateHash($_POST["pass"])));
 		$msg = "You Password was changed by ".$_COOKIE["user_env"]." on the website ".$_CONFIG["homepage"]." to \"".$_POST["pass"]."\"";
 		if (isset($_POST["reason"])) $msg .= "\n\n".$_COOKIE["user_env"]."'s reason was this:\n".$_POST["reason"];
@@ -378,7 +378,7 @@ if($_GET['action'] == 'confirm') {
 		if(!$_CONFIG['email_mode']) $config_tdb->editVars('config', array('email_mode' => '0'));
 		else
 		if($_CONFIG['email_mode']) $config_tdb->editVars('config', array('email_mode' => '1'));
-		echoTableHeading("Password changed!", $_CONFIG);
+		MiscFunctions::echoTableHeading("Password changed!", $_CONFIG);
 		echo "
 		<tr>
 			<td class='area_1'><div class='description'><strong>";
@@ -386,10 +386,10 @@ if($_GET['action'] == 'confirm') {
 		if ($email_status !== true)
 		echo "<p>The automated email was unable to be sent.<p>Please email them at ".$user[0]['email']." to inform them of the change of password";
 		echo "</div></td></tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 	} else {
 		echo "<script language='javascript' src='includes/pwd_meter.js'></script>";
-		echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+		MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 		echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -400,9 +400,9 @@ if($_GET['action'] == 'confirm') {
 		require_once("admin_navigation.php");
 		echo "</td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "<form method='POST' action=".$_SERVER['PHP_SELF']."?action=pass&id=".$_GET["id"]."><input type='hidden' name='a' value='1'>";
-		echoTableHeading("Setting a new password for: ".$user[0]["user_name"]."", $_CONFIG);
+		MiscFunctions::echoTableHeading("Setting a new password for: ".$user[0]["user_name"]."", $_CONFIG);
 		echo "
 			<tr>
 				<th colspan='2'>Complete the information below to change the password for this member</th>
@@ -433,7 +433,7 @@ if($_GET['action'] == 'confirm') {
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='submit' value='Change Password'></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "</form>";
 	}
 }
@@ -448,7 +448,7 @@ elseif($_GET['action'] == "changeuser" && isset($_GET["id"])) {
 		if(!$_CONFIG['email_mode']) $config_tdb->editVars('config', array('email_mode' => '0'));
 		else
 		if($_CONFIG['email_mode']) $config_tdb->editVars('config', array('email_mode' => '1'));
-		echoTableHeading("Username changed!", $_CONFIG);
+		MiscFunctions::echoTableHeading("Username changed!", $_CONFIG);
 		echo "
 		<tr>
 			<td class='area_1'><div class='description'><strong>";
@@ -456,9 +456,9 @@ elseif($_GET['action'] == "changeuser" && isset($_GET["id"])) {
 		if ($email_status !== true)
 		echo "<p>The automated email was unable to be sent.<p>Please email them at ".$user[0]['email']." to inform them of the change of password";
 		echo "</div></td></tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 	} else {
-		echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+		MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 		echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -469,9 +469,9 @@ elseif($_GET['action'] == "changeuser" && isset($_GET["id"])) {
 		require_once("admin_navigation.php");
 		echo "</td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "<form method='POST' action=".$_SERVER['PHP_SELF']."?action=changeuser&id=".$_GET["id"]."><input type='hidden' name='a' value='1'>";
-		echoTableHeading("Setting a new username for: ".$user[0]["user_name"]."", $_CONFIG);
+		MiscFunctions::echoTableHeading("Setting a new username for: ".$user[0]["user_name"]."", $_CONFIG);
 		echo "
 			<tr>
 				<th colspan='2'>Complete the information below to change the username for this member</th>
@@ -498,12 +498,12 @@ elseif($_GET['action'] == "changeuser" && isset($_GET["id"])) {
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='submit' name='submit' id='submit' value='Change Password' disabled><input type='reset' name='reset' id='reset' value='Reset'></td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo "</form>";
 	}
 }
 elseif($_GET["action"] == "delete") {
-	if (!isset($_GET["id"])) exitPage("No id selected.");
+	if (!isset($_GET["id"])) MiscFunctions::exitPage("No id selected.");
 	$rec = $tdb->get("users", $_GET["id"]);
 	if ($_POST["verify"] == "Ok") {
 		$tdb->delete("users", $_GET["id"]);
@@ -517,10 +517,10 @@ elseif($_GET["action"] == "delete") {
 	} elseif($_POST["verify"] == "Cancel") {
 		echo "<meta http-equiv='refresh' content='0;URL=admin_members.php?page={$_GET['page']}'>";
 	} else {
-		ok_cancel("admin_members.php?action=delete&id={$_GET["id"]}&page={$_GET['page']}", "Are you sure you want to delete <strong><a href='profile.php?action=get&id=".$_GET["id"]."' targer='_blank'>".$rec[0]["user_name"]."</a></strong>?");
+		MiscFunctions::ok_cancel("admin_members.php?action=delete&id={$_GET["id"]}&page={$_GET['page']}", "Are you sure you want to delete <strong><a href='profile.php?action=get&id=".$_GET["id"]."' targer='_blank'>".$rec[0]["user_name"]."</a></strong>?");
 	}
 } else {
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 			<tr>
 				<th>Admin Panel Navigation</th>
@@ -531,9 +531,9 @@ elseif($_GET["action"] == "delete") {
 	require_once("admin_navigation.php");
 	echo "</td>
 			</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 	print '<a name="skip_nav">&nbsp;</a>';
-	echoTableHeading("Search", $_CONFIG);
+	MiscFunctions::echoTableHeading("Search", $_CONFIG);
 	?>
 <tr>
 	<td class='area_1' style='padding: 8px;'>
@@ -548,7 +548,7 @@ elseif($_GET["action"] == "delete") {
 	</td>
 </tr>
 		<?php
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		if (!isset($_GET['page']) || $_GET["page"] == "") $_GET["page"] = 1;
 		$start = ($_GET["page"] * $_CONFIG["topics_per_page"] - $_CONFIG["topics_per_page"] + 1);
 		if($_GET['action'] != 'Search') {
@@ -560,7 +560,7 @@ elseif($_GET["action"] == "delete") {
  
 		$num_pages = ceil(($c + 1) / $_CONFIG["topics_per_page"]);
  
-		$p = createPageNumbers($_GET["page"], $num_pages, $_SERVER['QUERY_STRING']);
+		$p = MiscFunctions::createPageNumbers($_GET["page"], $num_pages, $_SERVER['QUERY_STRING']);
 		echo pagination($p,$_GET['page'],$num_pages);
  
 		echo "<div id='tabstyle_2'>
@@ -571,7 +571,7 @@ elseif($_GET["action"] == "delete") {
             </ul>
           </div>
           <div style='clear:both;'></div>";
-		echoTableHeading("Current member management options", $_CONFIG);
+		MiscFunctions::echoTableHeading("Current member management options", $_CONFIG);
 		echo "
 			<tr>
 				<th style='width:5%;'>ID#</th>
@@ -605,7 +605,7 @@ elseif($_GET["action"] == "delete") {
 			<tr>
 				<td class='area_1' style='padding:8px;'><strong>".$user["id"]."</strong></td>
 				<td class='area_2'><span class='link_1'><a href='profile.php?action=get&id=".$user["id"]."' style='color:#".$statuscolor."'>".$user["user_name"]."</a></span></td>
-				<td class='area_1' style='text-align:center;'>".createUserPowerMisc($user["level"], 4)."</td>";
+				<td class='area_1' style='text-align:center;'>".MiscFunctions::createUserPowerMisc($user["level"], 4)."</td>";
 				if ($user['view_email']) echo "
 				<td class='area_2'>".$user["email"]."</td>";
 				else echo "
@@ -649,7 +649,7 @@ elseif($_GET["action"] == "delete") {
 			<tr>
 				<td class='area_1' style='text-align:center;font-weight:bold;padding:12px;line-height:20px;' colspan='10'>An <i>italized</i> e-mail states that this member has chosen to have his/her email address non-viewable to all but admins.</td>
 			</tr>";
-		echoTableFooter(SKIN_DIR);
+		MiscFunctions::echoTableFooter(SKIN_DIR);
 		echo pagination($p,$_GET['page'],$num_pages);
 }
 require_once("./includes/footer.php");

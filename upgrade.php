@@ -25,7 +25,6 @@ include_once(dirname( __FILE__ )."/includes/thirdparty/xajax-0.6beta1/xajax_core
 
 // Helper functions
 include_once(dirname( __FILE__ )."/upgrade/upgrade_tools.php");
-include_once(dirname( __FILE__ )."/includes/inc/func.inc.php");
 
 $auth = new UPB_Authentication($tdb);
 
@@ -34,10 +33,8 @@ if( $auth->access("upgrade", 'a') == false )
 {
 	if( $auth->access("loggedin") == false )
 	{
-		exitPage("You must be logged in to perform an upgrade. Proceed to <a href=\"login.php?ref=upgrade.php\">login</a>.", true);
-		exit;
-	}
-	else
+		MiscFunctions::exitPage("You must be logged in to perform an upgrade. Proceed to <a href=\"login.php?ref=upgrade.php\">login</a>.", true);
+		exit;MiscFunctions::exitPage(
 	{
 		exitPage("You do not have sufficient permission to perform an upgrade.", true);
 		exit;
@@ -45,7 +42,7 @@ if( $auth->access("upgrade", 'a') == false )
 }
 
 // Make sure we actually need to perform an update
-if(UPB_VERION == UPB_NEW_VERSION)
+if(UPB_MiscFunctions::exitPage( UPB_NEW_VERSION)
 {
 	exitPage("It seems the forums are already up to date.", true);
 	exit;
@@ -55,7 +52,7 @@ if(UPB_VERION == UPB_NEW_VERSION)
 // version 2.2.6 or later for this updater. This isn't to say we couldn't extend
 // the functionality to include older versions, it just hasn't been done.
 list($major, $minor, $revision) = explode(".", UPB_VERSION);
-if($major < 2 && $minor < 2 && $revision < 6)
+if($MiscFunctions::exitPage( && $minor < 2 && $revision < 6)
 {
 	exitPage("This forum is to far out of date to use this upgrader. Please consult readme.txt for upgrading instructions.");
 	exit;

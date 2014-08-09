@@ -2,7 +2,7 @@
 require_once("./includes/upb.initialize.php");
 $where = "Frequently Asked Questions - FAQ";
 require_once("./includes/header.php");
-echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 echo "
 			<tr>
 				<th>Using BBcode</th>
@@ -60,7 +60,7 @@ Offtopic text can be placed using [offtopic][/offtopic] tags or you can just use
 			<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>";
-//dump($_SERVER);
+//MiscFunctions::dump($_SERVER);
 echo "<tr><th>Using Smilies</th></tr><tr><td class='area_2'>Smilies can be inserted by either clicking the image under the message box or entering the text.<p>
 Default smilies codes include: <ul class='tabstyle_2'><li class='tabstyle_2'>:) - a happy face which is replaced by <img src='./smilies/smile.gif' alt='smile' title='smile' class='example' /><li class='tabstyle_2'>:( - a frown which is replaced by <img src='./smilies/frown.gif' alt='frown' title='frown' class='example' /><li class='tabstyle_2'>;) - a wink which is replaced by <img src='./smilies/wink.gif' alt='wink' title='wink' class='example' /></ul></p></td></tr>
 <tr>
@@ -73,6 +73,6 @@ echo "
 			<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>
 			</tr>";
-echoTableFooter(SKIN_DIR);
+MiscFunctions::echoTableFooter(SKIN_DIR);
 require_once("./includes/footer.php");
 ?>

@@ -8,10 +8,10 @@ require_once('./includes/upb.initialize.php');
 $where = "<a href='pmsystem.php'>Messenger</a>";
 if (isset($_GET["section"]) && $_GET["section"] != "") $where .= " ".$_CONFIG["where_sep"]." ".ucfirst($_GET["section"]);
 require_once('./includes/header.php');
-if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset($_COOKIE["power_env"]) || !isset($_COOKIE["id_env"])) exitPage("
+if (!isset($_COOKIE["user_env"]) || !isset($_COOKIE["uniquekey_env"]) || !isset($_COOKIE["power_env"]) || !isset($_COOKIE["id_env"])) MiscFunctions::exitPage("
 		<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>You are not logged in.</div></div>");
-if (!$tdb->is_logged_in()) exitPage("
+if (!$tdb->is_logged_in()) MiscFunctions::exitPage("
 		<div class='alert'><div class='alert_text'>
 		<strong>Access Denied!</strong></div><div style='padding:4px;'>Invalid Login!</div></div>");
 $PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
@@ -33,7 +33,7 @@ elseif($_GET['section'] != '') {
 				</ul>
 			</div>
 			<div style='clear:both;'></div>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 				<tr>
 					<th>&nbsp;</th>
@@ -41,7 +41,7 @@ elseif($_GET['section'] != '') {
 				<tr>
 					<td class='area_2' style='text-align:center;font-weight:bold;padding:12px;line-height:20px;'>No Messages in your ".$_GET["section"]."</td>
 				</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 	require_once('./includes/footer.php');
 	exit;
 }
@@ -129,7 +129,7 @@ if ($_GET["section"] == "inbox") {
 			</div>
 			<div style='clear:both;'></div>";
 	echo "<form name='main' action='pmsystem.php?section=inbox&amp;action=delete' method='post' onSubmit='submitonce(this)' enctype='multipart/form-data'>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 				<tr>
 					<th style='width:5%;text-align:center;'>&nbsp;</th>
@@ -154,10 +154,10 @@ if ($_GET["section"] == "inbox") {
 					<td class='footer_3a' colspan='6' style='text-align:center;'><input type='submit' name='action' value='Delete Selected PMs' $disable></td>
 				</tr>
 		</form>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 } elseif($_GET["section"] == "outbox") {
 	if ($_GET['action'] == "delete") {
-		//dump($_POST);
+		//MiscFunctions::dump($_POST);
 		$num = 0;
 		$delete = array();
 		for($i = 0; $i < $count; $i++) {
@@ -192,7 +192,7 @@ if ($_GET["section"] == "inbox") {
 			</div>
 			<div style='clear:both;'></div>";
 	echo "<form name='main' action='pmsystem.php?section=outbox&amp;action=delete' method='post' onSubmit='submitonce(this)' enctype='multipart/form-data'>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 				<tr>
 					<th style='width:5%;'>&nbsp;</th>
@@ -227,7 +227,7 @@ if ($_GET["section"] == "inbox") {
 	echo "<tr>
 					<td class='footer_3a' colspan='4' style='text-align:center;'><input type='submit' name='action' value='Delete Selected PMs' $disable></td>
 				</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 } else {
 
 	$old_pm = ($count - $new_pm);
@@ -242,7 +242,7 @@ if ($_GET["section"] == "inbox") {
 				</ul>
 			</div>
 			<div style='clear:both;'></div>";
-	echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
+	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 				<tr>
 					<th><strong>Messenger status</strong></th>
@@ -250,7 +250,7 @@ if ($_GET["section"] == "inbox") {
 				<tr>
 					<td class='area_2' style='text-align:center;font-weight:bold;padding:12px;line-height:20px;'>$new_pm New Private Msg(s) and <strong>$old_pm</strong> Old Private Msg(s)</td>
 				</tr>";
-	echoTableFooter(SKIN_DIR);
+	MiscFunctions::echoTableFooter(SKIN_DIR);
 }
 require_once("./includes/footer.php");
 ?>
