@@ -2,7 +2,6 @@
 //XML FEED PAGE
 //header("Content-type: text/xml charset=utf8");
 require_once("./includes/upb.initialize.php");
-require_once('./includes/class/posts.class.php');
 $xml = "<?xml version=\"1.0\"?>";
 $xml .= "<rss version=\"2.0\"><channel>";
 
@@ -12,7 +11,7 @@ if (!isset($_GET["id"]) || !ctype_digit($_GET["id"])) die("Invalid Forum ID");
 $fRec = $tdb->get("forums", $_GET["id"]);
 //if ((int)$_COOKIE["power_env"] < $fRec[0]["view"]) die("You do not have enough Power to view this topic");
 
-$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 $posts_tdb->setFp("topics", $_GET['id']."_topics");
 $posts_tdb->setFp("posts", $_GET["id"]);
 

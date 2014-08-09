@@ -6,6 +6,9 @@
 // Version: 2.2.7
 // Using textdb Version: 4.4.1
 
+$loader = require 'vendor/autoload.php';
+$loader->add('', 'classes');
+	
 require_once 'includes/inc/func.inc.php';
 
 ignore_user_abort();
@@ -184,8 +187,7 @@ switch($_POST["add"]{0}) {
 				}
 
 				//Set the errorHandler
-				require_once('./includes/class/error.class.php');
-				$errorHandler = new errorhandler();
+				$errorHandler = new ErrorHandler();
 				set_error_handler(array(&$errorHandler, 'add_error'));
 				error_reporting(E_ALL ^ E_NOTICE);
 
@@ -256,13 +258,12 @@ switch($_POST["add"]{0}) {
 				fclose($f);
 				//end
 				//begin db files
-				require_once('./includes/class/tdb.class.php');
-				$tdb = new tdb('', '');
+				$tdb = new Tdb('', '');
 				$tdb->createDatabase(DB_DIR."/", "main.tdb");
 				$tdb->createDatabase(DB_DIR."/", "posts.tdb");
 				$tdb->createDatabase(DB_DIR."/", "privmsg.tdb");
 				$tdb->createDatabase(DB_DIR."/", "bbcode.tdb");
-				$tdb->tdb(DB_DIR."/", "main.tdb");
+				$tdb->__construct(DB_DIR."/", "main.tdb");
 				$tdb->createTable("members", array(
 				array("user_name", "string", 20),
 				array("password", "string", 49),
@@ -342,7 +343,7 @@ switch($_POST["add"]{0}) {
 				), 2048);
 				$tdb->setFp("config", "config");
 				$tdb->setFp("ext_config", "ext_config");
-				$tdb->tdb(DB_DIR."/", "privmsg.tdb");
+				$tdb->__construct(DB_DIR."/", "privmsg.tdb");
 				$tdb->createTable("1", array(
 				array("box", "string", 6),
 				array("from", "number", 7),
@@ -474,7 +475,7 @@ switch($_POST["add"]{0}) {
 				}
 
 
-				$tdb->tdb(DB_DIR.'/', 'bbcode.tdb');
+				$tdb->__construct(DB_DIR.'/', 'bbcode.tdb');
 				$tdb->createTable('smilies',array(array('id','id'),array('bbcode','memo'),array('replace','memo'),array('type','string',4)));
 				$tdb->createTable('icons',array(array('id','id'),array('filename','memo')));
 				$tdb->setFp("smilies","smilies");
@@ -673,7 +674,6 @@ switch($_POST["add"]{0}) {
 
 				if($_POST["add"] == "3adduser") {
 					//add admin to the db
-					require_once("./includes/class/tdb.class.php");
 					require_once("./includes/inc/encode.inc.php");
 					require_once("./includes/inc/date.inc.php");
 
@@ -693,7 +693,7 @@ switch($_POST["add"]{0}) {
 						"date_added" => mkdate(),
 						"lastvisit" => mkdate(), 
 						"timezone" => $_POST["timezone"]);
-					$tdb = new tdb(DB_DIR, "main");
+					$tdb = new Tdb(DB_DIR, "main");
 					$tdb->setFp("users", "members");
 					$tdb->add("users", $admin);
 					$f = fopen(DB_DIR."/new_pm.dat", 'w');
@@ -788,7 +788,6 @@ switch($_POST["add"]{0}) {
 			<tr>
 				<td class='footer_3a' colspan='2' style='text-align:center;'><input type='hidden' name='add' value='3auth'><input type='submit' value='Submit' name='B1'><input type='reset' value='Reset' name='B2'></td>";
 			} else if ($_POST['add'] == "4") {
-				require_once("./includes/class/tdb.class.php");
 				require_once("./includes/class/config.class.php");
 				$config_tdb = new configSettings();
 				$edit_config = array("title" => $_POST["title"], "fileupload_size" => $_POST["fileupload_size"], "fileupload_types" => $_POST["fileupload_types"], "homepage" => $_POST["homepage"]);

@@ -15,7 +15,7 @@ if (!$tdb->is_logged_in()) exitPage("
 		<div class='alert'><div class='alert_text'>
 		<strong>Access Denied!</strong></div><div style='padding:4px;'>Invalid Login!</div></div>");
 require_once('./includes/inc/privmsg.inc.php');
-$PrivMsg = new functions(DB_DIR."/", "privmsg.tdb");
+$PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
 $PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 if ($_GET["section"] != "outbox") $pmRecs = $PrivMsg->query("CuBox", "box='inbox'&&to='".$_COOKIE["id_env"]."'");
 else $pmRecs = $PrivMsg->query("CuBox", "box='outbox'&&from='".$_COOKIE["id_env"]."'");

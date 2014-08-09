@@ -8,7 +8,7 @@ require_once("./includes/upb.initialize.php");
 require_once("./includes/inc/post.inc.php");
 $where = "<a href='pmsystem.php'>Messenger</a> ".$_CONFIG["where_sep"]." New message";
 if ($tdb->is_logged_in() === false) exitPage("You are not even Logged in.");
-$PrivMsg = new functions(DB_DIR."/", "privmsg.tdb");
+$PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
 $PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 if ($_GET["action"] == "ClearOutBox") {
 	require_once("./includes/header.php");

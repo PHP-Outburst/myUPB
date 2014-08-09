@@ -5,9 +5,8 @@
 // Version: 2.0
 // Using textdb Version: 4.3.2
 require_once('./includes/upb.initialize.php');
-require_once("./includes/class/upload.class.php");
 $fRec = $tdb->get("forums", $_GET["id"]);
-$posts_tdb = new functions(DB_DIR."/", "posts.tdb");
+$posts_tdb = new TdbFunctions(DB_DIR."/", "posts.tdb");
 $posts_tdb->setFp("topics", $_GET["id"]."_topics");
 $posts_tdb->setFp("posts", $_GET["id"]);
 $message = "";
@@ -123,7 +122,7 @@ if ($_POST["a"] == "1") {
 			foreach ($files as $file)
 			{
 				if($_file['upload']['error'][$i] == UPLOAD_ERR_OK) {
-					$upload = new upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
+					$upload = new Upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
 						
 					$result = $upload->storeFile($file, $_GET["id"], $_GET["t_id"]);
 					if (!is_int($result))

@@ -9,9 +9,8 @@
  */
 
 require_once('./includes/upb.initialize.php');
-require_once('./includes/class/posts.class.php');
 
-$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 $vars['page'] = ((isset($_GET['page'])) ? $_GET['page'] : '');
 //check if the id exists
 if (!(is_numeric($_GET["id"]) && $posts_tdb->isTable($_GET["id"]))) exitPage("Forum does not exist.", true);

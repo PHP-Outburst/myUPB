@@ -1,7 +1,5 @@
 <?php
 require_once('./includes/upb.initialize.php');
-require_once("./includes/class/upload.class.php");
-require_once("./includes/class/posts.class.php");
 
 $ajax_type = $_POST['type'];
 
@@ -9,7 +7,7 @@ switch ($ajax_type)
 {
 	case "getpost" :
 		//GETS THE POST INFORMATION FROM THE DATABASE AND PLACES IN TEXT AREA FOR EDITING
-		$posts_tdb = new posts(DB_DIR, "posts.tdb");
+		$posts_tdb = new Posts(DB_DIR, "posts.tdb");
 		$posts_tdb->setFp("topics", $_POST["forumid"]."_topics");
 		$posts_tdb->setFp("posts", $_POST["forumid"]);
 		$pRec = $posts_tdb->get("posts", $_POST["postid"]);
@@ -35,7 +33,7 @@ switch ($ajax_type)
 		break 1;
 
 	case "edit" :
-		$posts_tdb = new posts(DB_DIR, "posts.tdb");
+		$posts_tdb = new Posts(DB_DIR, "posts.tdb");
 		$posts_tdb->setFp("topics", $_POST["forumid"]."_topics");
 		$posts_tdb->setFp("posts", $_POST["forumid"]);
 		$pRec = $posts_tdb->get("posts", $_POST["postid"]);
@@ -69,7 +67,7 @@ switch ($ajax_type)
 	case "reply" :
 		//QUICK REPLY TO TOPIC, STORES POST IN DATABASE AND RETURNS THE USER TO THE NEW POST AND ADDS NEW QUICK REPLY FORM
 		$fRec = $tdb->get("forums", $_POST["id"]);
-		$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+		$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 		$posts_tdb->setFp("topics", $_POST["id"]."_topics");
 		$posts_tdb->setFp("posts", $_POST["id"]);
 		$tRec = $posts_tdb->get("topics", $_POST["t_id"]);
@@ -596,10 +594,10 @@ switch ($ajax_type)
 
 	case "delfile":
 		$fRec = $tdb->get("forums", $_POST["forumid"]);
-		$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+		$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 		$posts_tdb->setFp("topics", $_POST["forumid"]."_topics");
 		$posts_tdb->setFp("posts", $_POST["forumid"]);
-		$upload = new upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
+		$upload = new Upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
 
 		$upload->deleteFile($_POST['fileid']);
 		$pRec = $posts_tdb->get("posts", $_POST["postid"]);

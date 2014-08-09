@@ -3,9 +3,7 @@ require_once('includes/upb.initialize.php');
 $from_version = UPB_VERSION;
 $to_version = "2.2.5";
 
-require_once('includes/class/posts.class.php');
-
-$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 $where = "Updating $from_version to $to_version";
 ?>
 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en' lang='en'>

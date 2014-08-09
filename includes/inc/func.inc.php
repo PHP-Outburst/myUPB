@@ -401,7 +401,7 @@ function delete_topics($tRec,$forumid)
 
 			$upload_ids = explode(",",$pRec[0]['upload_id']);
 
-			$upload = new upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
+			$upload = new Upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
 
 			foreach ($upload_ids as $upload_id)
 			$upload->deleteFile($upload_id);

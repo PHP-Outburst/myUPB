@@ -1,76 +1,20 @@
 <?php
-/*
- Text Database system (v.4)
- Author: Pilot and Rebles on PHP Outburst http://myupb.com
-
- The idea of this version is to offer a quicker and more complex way of dealing with the files
- this version of textdb uses the extension tdb for all its database files.
-
- 4.4.4 update: Fixed MEMO corruption bug:
- Fixed an if-then statement that checks if the index link list contained a cycle.
- Fixed an if-then statement that updates the last written block's index pointer to the block that is represented by EOF.  This statement only executes if there are no more free blocks in the file.  When writing the EOF index, it might right pad the index with an incorrect number of spaces, which may result in a corrupted index, which may result in data corruption.
-
- 4.4.3 update: added SELECT columns functionability when retrieving record(s)
- bug fixed with isTable()
- renamed sortAndBuild() to sort(); left placeholder for sortAndBuild() for backwards compadibility
-
- 4.4.2 update: query results cached
- memo file's first unused block cached
- more bugs fixed
- rewrote memo functions; same process
- tdb::sendError now can use custom error handlers
- TDB_ERROR_INCLUDE_ORIGIN constant added
- TDB_PRINT_ERRORS constant added
- tdb::define_error_handler();
- TDB Errors are assigned Error numbers and include the line the error was generated on
-
- 4.4.1 update: sortAndBuild() clears record reference cache
- minor bug fixed in removeTable()
- minor bug fixed in listRec()
- debugging code removed from memo functions
-
- 4.4.0 update: NOT COMPADABLE WITH PREVIOUS VERSIONS
- Separated memo's into blocks
- Added readMemo(), writeMemo(), and deleteMemo(); removed rewriteMemo()
- Changed record deletion and storage method; multiple functions affected;
- Added the extention ".ta" to the main table file.
- Added Db's name to tables' names to allow multiple Dbs to exist in one directory
- Added descriptions to functions
- check() now validates workingDir, Db, and Fp
-
- 4.3.5 update: added rewriteMemo()
-
- 4.3.4 update: added support for memo field in query()
-
- 4.3.3 update: added $start and $howmany in query()
- added editField() and removeField()
-
- 4.3.2 update: limited file locking
- fixed bug with removing databases
- added '<' '>' usage in query()
-
- 4.3 update: all chars are allowed in string fields now
- header buffering
- wrote new query() algorithm increasing query speeds over 3 times
-
- 4.2 update: removed $start and $howmany from basicQuery()
- added query()
+/**
+ *
+ * @author Rouven Wachhaus <rouven@wachhaus.xyz>
+ * @todo doc
+ * @todo cc wrt variable/method names
+ * @todo cc in general from fileIdById() on
+ * @todo original author?
  */
-
-/*
- variable types:
- string - anything goes, length restriction (>1 bytes)
- number - numbers only (some symbols allowed), length restriction (>1 bytes)
- memo - anything goes, NO length restriction (7 bytes)
- id - auto-increment id field used to retrieve specific records (7 bytes)
+/**
+ * Class Tdb
  */
+class Tdb
+{
+    const TDB_PRINT_ERRORS = false; //TDB will print errors instead of using trigger_error() or a user defined error handler
+    const TDB_ERROR_INCLUDE_ORIGIN = true; //TDB will include the file and line number of your script that led to the error
 
-//TDB will print errors instead of using trigger_error() or a user defined error handler
-DEFINE('TDB_PRINT_ERRORS', FALSE);
-//TDB will include the file and line number of your script that led to the error
-DEFINE('TDB_ERROR_INCLUDE_ORIGIN', TRUE);
-
-class tdb {
 	var $fp = array();     // allowing for multiply file pointers
 	var $workingDir;       // working directory
 	var $Db;               // database.tdb
@@ -140,34 +84,46 @@ class tdb {
 	 * @param string $db
 	 * @return bool
 	 */
-	function tdb($dir="", $db="") {
-		if($dir == "" && $db == "") return false;
+	function __construct($dir = '', $db='')
+    {
+		if ($dir == "" && $db == "")
+            return false;
 
 		$dir = str_replace("../", "", $dir);
-		if(substr($dir, -1) != "/") $dir .= "/";
-		if(substr($db, -4) != '.tdb') $db .= '.tdb';
-		if(is_dir($dir)) {
-			if(!is_writable($dir)) {
+
+		if (substr($dir, -1) != "/")
+            $dir .= "/";
+
+        if (substr($db, -4) != '.tdb')
+            $db .= '.tdb';
+
+        if (is_dir($dir)) {
+			if (!is_writable($dir)) {
 				$this->sendError(E_ERROR, "Fatal: Working directory ($dir) is not writable, try chmod 777 if 666 does not work.", __LINE__);
 			} else {
-				if(is_writable($dir.$db)) {
-					if(filesize($dir.$db) != 0) {
+				if (is_writable($dir.$db)) {
+					if (filesize($dir.$db) != 0) {
 						$f = fopen($dir.$db, "rb");
 						@$this->Tables = trim(@fread($f, filesize($dir.$db)));
 						fclose($f);
 						$this->Tables = explode("\n", $this->Tables);
-					} else $this->Tables = array();
-					$this->Db = $db;
+					} else
+                        $this->Tables = array();
+
+                    $this->Db = $db;
 					$this->workingDir = $dir;
-					return true;
+
+                    return true;
 				} else {
 					$this->sendError(E_ERROR, "Fatal: Database ($db) is not writable, try chmod 777 if 666 does not work.", __LINE__);
-					return false;
+
+                    return false;
 				}
 			}
 		} else {
 			$this->sendError(E_USER_ERROR, "Failed setting working directory ($dir), not a valid path.", __LINE__);
-			return false;
+
+            return false;
 		}
 		return true;
 	}
@@ -179,34 +135,40 @@ class tdb {
 	 * @param string $name
 	 * @return bool
 	 */
-	function createDatabase($dir, $filename) {
+	public function createDatabase($dir, $filename)
+    {
 		$dir = str_replace("../", "", $dir);
-		if(substr($dir, -1) != "/") {
+
+        if (substr($dir, -1) != "/") {
 			$dir .= "/";
 		}
 
-		if(substr($filename, -4) != ".tdb") {
+		if (substr($filename, -4) != ".tdb") {
 			$filename .= ".tdb";
 		}
 
-		if(file_exists($dir.$filename)) {
+		if (file_exists($dir.$filename)) {
 			$this->sendError(E_WARNING, "Database already exists", __LINE__);
-			return false;
+
+            return false;
 		}
 
-		if(is_dir($dir)) {
-			if(!is_writable($dir)) {
+		if (is_dir($dir)) {
+			if (!is_writable($dir)) {
 				$this->sendError(E_ERROR, "Fatal: $dir is not writable, try chmod 777 if 666 does not work.", __LINE__);
-				return false;
+
+                return false;
 			} else {
 				$f = fopen($dir.$filename, "wb");
 				fwrite($f, "");
 				fclose($f);
-				return true;
+
+                return true;
 			}
 		} else {
 			$this->sendError(E_ERROR, "Failed creating database, $dir is not a valid path.", __LINE__);
-			return false;
+
+            return false;
 		}
 	}
 
@@ -215,13 +177,19 @@ class tdb {
 	 *
 	 * @return bool
 	 */
-	function removeDatabase() {
-		if(FALSE === $this->check(__LINE__)) return false;
-		foreach($this->Tables as $ta) {
-			if(trim($ta) != "") $this->removeTable($ta);
+	public function removeDatabase()
+    {
+		if ($this->check(__LINE__) === false)
+            return false;
+
+        foreach ($this->Tables as $ta) {
+			if (trim($ta) != "")
+                $this->removeTable($ta);
 		}
+
 		unlink($this->workingDir.$this->Db);
-		return true;
+
+        return true;
 	}
 
 	/**
@@ -230,31 +198,35 @@ class tdb {
 	 * @param string $tableName
 	 * @return bool
 	 */
-	function removeTable($tableName) {
-		if(FALSE === $this->check(__LINE__)) return false;
+	public function removeTable($tableName)
+    {
+		if($this->check(__LINE__) === false)
+            return false;
 
-		if(substr($tableName, 0, (strlen($this->Db)-4)) != substr($this->Db, 0, -4)) $tableName = substr($this->Db, 0, -4).'_'.$tableName;
-		if(!$this->isTable($tableName)) {
+		if (substr($tableName, 0, (strlen($this->Db)-4)) != substr($this->Db, 0, -4))
+            $tableName = substr($this->Db, 0, -4) . '_' . $tableName;
+
+        if (!$this->isTable($tableName)) {
 			$this->sendError(E_WARNING, "Table ($tableName) does not exist in the database.", __LINE__);
-			return false;
+
+            return false;
 		}
 
-		foreach($this->Tables as $key => $ta) {
-			if($ta == $tableName) {
+		foreach ($this->Tables as $key => $ta) {
+			if ($ta == $tableName) {
 				unset($this->Tables[$key]);
-				$f = fopen($this->workingDir.$this->Db, 'wb');
-
+				$f = fopen($this->workingDir . $this->Db, 'wb');
 				flock($f, 2);
 				fwrite($f, implode("\n", $this->Tables));
 				flock($f, 3);
-
 				fclose($f);
 			}
 		}
 
-		unlink($this->workingDir.$tableName.'.ta');
-		unlink($this->workingDir.$tableName.'.memo');
-		unlink($this->workingDir.$tableName.'.ref');
+		unlink($this->workingDir . $tableName . '.ta');
+		unlink($this->workingDir . $tableName . '.memo');
+		unlink($this->workingDir . $tableName . '.ref');
+
 		return true;
 	}
 
@@ -264,8 +236,10 @@ class tdb {
 	 * @param string $fp
 	 * @return int count on success, bool false on fail
 	 */
-	function getNumberOfRecords($fp) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function getNumberOfRecords($fp)
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
 		/*$header = array();
 		 $this->readHeader($fp, $header);
@@ -293,9 +267,12 @@ class tdb {
 	 *
 	 * @return array tables on success, bool false on fail
 	 */
-	function getTableList() {
-		if(FALSE === $this->check(__LINE__)) return false;
-		return $this->Tables;
+	public function getTableList()
+    {
+		if ($this->check(__LINE__) === false)
+            return false;
+
+        return $this->Tables;
 	}
 
 	/**
@@ -304,16 +281,17 @@ class tdb {
 	 * @param string $fp
 	 * @return array fields on success, bool false on fail
 	 */
-	function getFieldList($fp) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function getFieldList($fp)
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
 		$header = array();
 		$this->readHeader($fp, $header);
-
 		$returnArr = array();
-
 		$cHeader = count($header) - 8;
-		for($i=1;$i<=$cHeader;$i++) {
+
+        for ($i = 1; $i <= $cHeader; $i++) {
 			$returnArr[] = $header[$i];
 		}
 
@@ -327,75 +305,105 @@ class tdb {
 	 * @param array $header
 	 * @return bool
 	 */
-	function readHeader($fp, &$header) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function readHeader($fp, &$header)
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
-		if(isset($this->_header[$fp])) {
+		if (isset($this->_header[$fp])) {
 			$header = $this->_header[$fp];
-			return true;
+
+            return true;
 		}
 
 		$header = array();
-		$f = fopen($this->fp[$fp].'.ta', 'rb');
-		if(!$f) return false;
+		$f = fopen($this->fp[$fp] . '.ta', 'rb');
+
+		if (!$f)
+            return false;
 
 		$header["headLen"] = "";
-		while(!feof($f)) {
+
+        while (!feof($f)) {
 			$next = fgetc($f);
-			if(ord($next) == 28) break;
-			else $header["headLen"] .= $next;
+
+            if (ord($next) == 28)
+                break;
+			else
+                $header["headLen"] .= $next;
 		}
-		if(is_numeric($header['headLen'])) $header['headLen'] = (int)$header['headLen'];
+
+		if (is_numeric($header['headLen']))
+            $header['headLen'] = (int)$header['headLen'];
 
 		$header["raw"] = fread($f, $header["headLen"]);
 		$header["fieldsraw"] = explode(chr(29), $header["raw"]);
-		for($i=0;$i<count($header["fieldsraw"]);$i++) {
+
+        for ($i = 0; $i < count($header["fieldsraw"]); $i++) {
 			$tmp = explode(chr(31), $header["fieldsraw"][$i]);
 			$header[$tmp[0]]["fName"] = $tmp[3];
 			$header[$tmp[0]]["fType"] = $tmp[1];
 			$header[$tmp[0]]["fLength"] = (int)$tmp[2];
 			unset($tmp);
 		}
-		unset($header["raw"],$header["fieldsraw"]);
 
+		unset($header["raw"], $header["fieldsraw"]);
 		$header["recLen"] = "";
-		while(!feof($f)) {
+
+        while (!feof($f)) {
 			$next = fgetc($f);
-			if(ord($next) == 28) break;
-			else $header["recLen"] .= $next;
+
+            if (ord($next) == 28)
+                break;
+			else
+                $header["recLen"] .= $next;
 		}
-		if(is_numeric($header['recLen'])) $header['recLen'] = (int)$header['recLen'];
+
+		if (is_numeric($header['recLen']))
+            $header['recLen'] = (int)$header['recLen'];
 
 		$header["curId"] = "";
 		$header["idPos"] = ftell($f);
-		while(!feof($f)) {
-			$next = fgetc($f);
-			if(ord($next) == 28) break;
-			else $header["curId"] .= $next;
-		}
-		$header["curId"] = (int)trim($header["curId"]);
 
+        while (!feof($f)) {
+			$next = fgetc($f);
+
+            if (ord($next) == 28)
+                break;
+			else
+                $header["curId"] .= $next;
+		}
+
+		$header["curId"] = (int)trim($header["curId"]);
 		$header["lastBlank"] = "";
 		$header["blankPos"] = ftell($f);
-		while(!feof($f)) {
-			$next = fgetc($f);
-			if(ord($next) == 28) break;
-			else $header["lastBlank"] .= $next;
-		}
-		$header["lastBlank"] = (int)trim($header["lastBlank"]);
 
-		$header["blockLength"] = "";
-		while(!feof($f)) {
+        while (!feof($f)) {
 			$next = fgetc($f);
-			if(ord($next) == 28) break;
-			else $header["blockLength"] .= $next;
+
+            if (ord($next) == 28)
+                break;
+			else
+                $header["lastBlank"] .= $next;
 		}
-		if(is_numeric($header['blockLength'])) $header['blockLength'] = (int)$header['blockLength'];
+
+		$header["lastBlank"] = (int)trim($header["lastBlank"]);
+		$header["blockLength"] = "";
+
+        while (!feof($f)) {
+			$next = fgetc($f);
+
+            if (ord($next) == 28)
+                break;
+			else
+                $header["blockLength"] .= $next;
+		}
+
+		if (is_numeric($header['blockLength']))
+            $header['blockLength'] = (int)$header['blockLength'];
 
 		$header["recPos"] = ftell($f);
-
 		fclose($f);
-
 		$this->_header[$fp] = $header;
 
 		return true;
@@ -408,10 +416,13 @@ class tdb {
 	 * @param string $table
 	 * @return bool
 	 */
-	function setFp($fp, $table) {
-		if(substr($table, 0, (strlen($this->Db)-4)) != substr($this->Db, 0, -4)) $table = substr($this->Db, 0, -4).'_'.$table;
-		if($this->isTable($table)) {
-			$this->fp[$fp] = $this->workingDir.$table;
+	public function setFp($fp, $table)
+    {
+		if (substr($table, 0, (strlen($this->Db)-4)) != substr($this->Db, 0, -4))
+            $table = substr($this->Db, 0, -4) . '_' . $table;
+
+        if ($this->isTable($table)) {
+			$this->fp[$fp] = $this->workingDir . $table;
 			unset($this->_header[$fp]);
 			unset($this->_query[$fp]);
 			unset($this->_fileId[$fp]);
@@ -419,8 +430,10 @@ class tdb {
 			unset($this->_firstBlankMemoBlockRef[$fp]);
 		} else {
 			$this->sendError(E_WARNING, "$table is not a valid table in $this->Db", __LINE__);
-			return false;
+
+            return false;
 		}
+
 		return true;
 	}
 
@@ -428,7 +441,8 @@ class tdb {
 	 * Clears cached information on tables aswell as filepoints ($fp)
 	 *
 	 */
-	function cleanUp() {
+	public function cleanUp()
+    {
 		$this->fp = array();
 		$this->_header = array();
 		$this->_query = array();
@@ -443,11 +457,18 @@ class tdb {
 	 * @param string $table
 	 * @return bool
 	 */
-	function isTable($table) {
-		if(FALSE === $this->check(__LINE__)) return false;
-		if(substr($table, 0, (strlen($this->Db) -4)) != substr($this->Db, 0, -4)) $table = substr($this->Db, 0, -4).'_'.$table;
-		foreach($this->Tables as $ta) {
-			if($ta == $table) return true;
+	public function isTable($table)
+    {
+		if ($this->check(__LINE__) === false)
+            return false;
+
+        if (substr($table, 0, (strlen($this->Db) -4)) != substr($this->Db, 0, -4))
+            $table = substr($this->Db, 0, -4) . '_' . $table;
+
+
+        foreach ($this->Tables as $ta) {
+			if ($ta == $table)
+                return true;
 		}
 
 		return false;
@@ -461,58 +482,66 @@ class tdb {
 	 * @param int $block_length[optional]
 	 * @return bool
 	 */
-	function createTable($table, $fields, $block_length="100") {
-		if(FALSE === $this->check(__LINE__)) return false;
-		$block_length = $block_length + 8; //To store the next fp of every block + end of text chr
-		if(substr($table, 0, (strlen($this->Db) -4) != substr($this->Db, 0, -4))) $table = substr($this->Db, 0, -4).'_'.$table;
+	public function createTable($table, $fields, $block_length = "100")
+    {
+		if ($this->check(__LINE__) === false)
+            return false;
 
-		if(!is_array($fields)) {
+        $block_length = $block_length + 8; //To store the next fp of every block + end of text chr
+
+        if (substr($table, 0, (strlen($this->Db) -4) != substr($this->Db, 0, -4)))
+            $table = substr($this->Db, 0, -4) . '_' . $table;
+
+		if (!is_array($fields)) {
 			$this->sendError(E_USER_ERROR, "\$fields must be an array", __LINE__);
-			return false;
+
+            return false;
 		} else {
 			// check if table already exists
-			if(file_exists($this->workingDir.$table) || in_array($table, $this->Tables)) {
+			if (file_exists($this->workingDir.$table) || in_array($table, $this->Tables)) {
 				$this->sendError(E_WARNING, "Table ($this->workingDir$table) already exists", __LINE__);
-				return false;
+
+                return false;
 			}
 
 			// start building the header
 			$h_fields = array();
 			$h_recLen = 0;
 
-			for($i=0;$i<count($fields);$i++) {
-				if($fields[$i][1] != "string" && $fields[$i][1] != "number" && $fields[$i][1] != "memo" && $fields[$i][1] != "id") {
+			for ($i = 0; $i < count($fields); $i++) {
+				if ($fields[$i][1] != "string" && $fields[$i][1] != "number" && $fields[$i][1] != "memo" && $fields[$i][1] != "id") {
 					$this->sendError(E_USER_ERROR, "Field type must be either string, number, memo, or id.", __LINE__);
-					return false;
+
+                    return false;
 				}
 
-				if($fields[$i][1] == "id" || $fields[$i][1] == 'memo') $fields[$i][2] = "7";
+				if ($fields[$i][1] == "id" || $fields[$i][1] == 'memo')
+                    $fields[$i][2] = "7";
 				//if($fields[$i][1] == "memo") $fields[$i][2] = "10"; //memo functions only use 7 chars
 
-				$h_fields[] = ($i + 1).chr(31).$fields[$i][1].chr(31).$fields[$i][2].chr(31).$fields[$i][0];
+				$h_fields[] = ($i + 1) . chr(31) . $fields[$i][1] . chr(31) . $fields[$i][2] . chr(31) . $fields[$i][0];
 				$h_recLen += $fields[$i][2];
 			}
 
 			$h_fields = implode(chr(29), $h_fields);
 			$h_cid =       "0      ";
 			$h_lastBlank = "-1     ";
-
-			$header = strlen($h_fields).chr(28).$h_fields.$h_recLen.chr(28).$h_cid.chr(28).$h_lastBlank.chr(28).$block_length.chr(28);
+			$header = strlen($h_fields) . chr(28) . $h_fields . $h_recLen . chr(28) . $h_cid . chr(28) . $h_lastBlank . chr(28) . $block_length . chr(28);
 
 			// write the table header
-			$f = fopen($this->workingDir.$table.'.ta', 'wb');
+			$f = fopen($this->workingDir . $table . '.ta', 'wb');
 			fwrite($f, $header);
 			fclose($f);
-			$f = fopen($this->workingDir.$table.'.memo', 'wb');
+			$f = fopen($this->workingDir . $table . '.memo', 'wb');
 			fwrite($f, '-1'.str_repeat(' ', 5).str_repeat(' ', ($block_length - 7))); //This is the memo header aswell as block #0.
 			fclose($f);
-			$f = fopen($this->workingDir.$table.'.ref', 'wb');
+			$f = fopen($this->workingDir . $table . '.ref', 'wb');
 			fwrite($f, "");
 			fclose($f);
 
 			// write the table in the database
 			$this->Tables[] = $table;
-			$f = fopen($this->workingDir.$this->Db, 'wb');
+			$f = fopen($this->workingDir . $this->Db, 'wb');
 			fwrite($f, implode("\n", $this->Tables));
 			fclose($f);
 
@@ -527,30 +556,34 @@ class tdb {
 	 * @param array $field
 	 * @return bool
 	 */
-	function addField($fp, $field) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function addField($fp, $field)
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
 		$header = array();
 		$this->readHeader($fp, $header);
-
 		$cHeader = count($header) - 8;
 
-		for($i=1;$i<=$cHeader;$i++) {
-			if($header[$i]["fName"] == $field[0]) {
+		for ($i = 1; $i <= $cHeader; $i++) {
+			if ($header[$i]["fName"] == $field[0]) {
 				$this->sendError(E_USER_WARNING, "Field already exists, aborting...", __LINE__);
-				return false;
+
+                return false;
 			}
 		}
 
 		$cHeader += 1; // for the new field
 
 		//name, type, size
-		if($field[1] != "string" && $field[1] != "number" && $field[1] != "memo" && $field[1] != "id") {
+		if ($field[1] != "string" && $field[1] != "number" && $field[1] != "memo" && $field[1] != "id") {
 			$this->sendError(E_USER_ERROR, "Field type must be either string, number, memo, or id.", __LINE__);
-			return false;
+
+            return false;
 		}
 
-		if($field[1] == "id" || $field[1] == "memo") $field[2] = "7";
+		if ($field[1] == "id" || $field[1] == "memo")
+            $field[2] = "7";
 		//if($field[1] == "memo") $field[2] = "10";
 
 		$header[$cHeader]["fName"] = $field[0];
@@ -561,8 +594,8 @@ class tdb {
 		$h_fields = array();
 		$h_recLen = 0;
 
-		for($i=1;$i<=$cHeader;$i++) {
-			$h_fields[] = $i.chr(31).$header[$i]["fType"].chr(31).$header[$i]["fLength"].chr(31).$header[$i]["fName"];
+		for ($i = 1; $i <= $cHeader; $i++) {
+			$h_fields[] = $i . chr(31) . $header[$i]["fType"] . chr(31) . $header[$i]["fLength"] . chr(31) . $header[$i]["fName"];
 			$h_recLen += $header[$i]["fLength"];
 		}
 
@@ -570,56 +603,58 @@ class tdb {
 		$h_cid = $header["curId"].str_repeat(" ", 7 - strlen($header["curId"]));
 		$h_lastBlank = $header["lastBlank"].str_repeat(" ", 7 - strlen($header["lastBlank"]));
 
-		$h_header = strlen($h_fields).chr(28).$h_fields.$h_recLen.chr(28).$h_cid.chr(28).$h_lastBlank.chr(28).$header["blockLength"].chr(28);
+		$h_header = strlen($h_fields) . chr(28) . $h_fields . $h_recLen . chr(28) . $h_cid . chr(28) . $h_lastBlank . chr(28) . $header["blockLength"] . chr(28);
 
 		// rebuild the table with the new field
-		$eRecSize = filesize($this->fp[$fp].'.ta') - $header["recPos"];
+		$eRecSize = filesize($this->fp[$fp] . '.ta') - $header["recPos"];
 		$eRecCount = $eRecSize / $header["recLen"];
 
-		$f = fopen($this->fp[$fp].'.ta', 'rb');
+		$f = fopen($this->fp[$fp] . '.ta', 'rb');
 
 		// open up temp file for writing the buffers
-		$newFnam = $this->workingDir."tmpF_".md5(uniqid(rand()));
+		$newFnam = $this->workingDir . "tmpF_" . md5(uniqid(rand()));
 		$newF = fopen($newFnam, "wb");
 
 		// write the header to the new table file
 		fwrite($newF, $h_header);
 
 		$value = "";
-		if($header[$cHeader]["fType"] == "id") {
+		if ($header[$cHeader]["fType"] == "id") {
 			$ref_data = $this->get_ref_data($fp);
 			$ref_arr = explode(chr(31), $ref_data);
 			$rfArr = array();
-			foreach($ref_arr as $ref_tmp) {
+
+			foreach ($ref_arr as $ref_tmp) {
 				$ref_tmp = explode(':', $ref_tmp);
 				$rfArr[$ref_tmp[1]-1] = $ref_tmp[0];
 			}
 		}
 
 		$cid = 1;
-		while(!feof($f)) {
-			if($cid > $eRecCount) break;
-			$value = "";
+		while (!feof($f)) {
+			if ($cid > $eRecCount)
+                break;
 
+            $value = "";
 			fseek($f, $this->bytesToSeek($fp, $header, $cid));
 
-			if($header[$cHeader]["fType"] == "id" && isset($rfArr[$cid])) $value = $rfArr[$cid];
+			if ($header[$cHeader]["fType"] == "id" && isset($rfArr[$cid]))
+                $value = $rfArr[$cid];
 
 			// write the record with the new field
 			fwrite($newF, fread($f, $header["recLen"]).$value.str_repeat(" ", $header[$cHeader]["fLength"] - strlen($value)));
-
 			$cid++;
 		}
 
 		fclose($newF);
 		fclose($f);
-
 		unlink($this->fp[$fp].'.ta');
+		rename($newFnam, $this->fp[$fp] . '.ta');
 
-		rename($newFnam, $this->fp[$fp].'.ta');
+		if (isset($this->_header[$fp]))
+            unset($this->_header[$fp]);
 
-		if(isset($this->_header[$fp])) unset($this->_header[$fp]);
-		return true;
+        return true;
 	}
 
 	/**
@@ -630,35 +665,39 @@ class tdb {
 	 * @param array $field
 	 * @return bool
 	 */
-	function editField($fp, $oldfield, $field=array()) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function editField($fp, $oldfield, $field = array())
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
 		$header = array();
 		$this->readHeader($fp, $header);
-
 		$cHeader = count($header) - 8;
-
 		$foundField = false;
-		for($i=1;$i<=$cHeader;$i++) {
-			if($header[$i]["fName"] == $oldfield) {
+
+        for ($i = 1; $i <= $cHeader; $i++) {
+			if ($header[$i]["fName"] == $oldfield) {
 				$foundField = true;
 				$fieldId = $i;
 				break;
 			}
 		}
 
-		if(!$foundField) {
+		if (!$foundField) {
 			$this->sendError(E_USER_WARNING, "Cannot remove '$oldfield' field, it does not exist.", __LINE__);
-			return false;
+
+            return false;
 		}
 
 		//name, type, size
-		if($field[1] != "string" && $field[1] != "number" && $field[1] != "memo" && $field[1] != "id") {
+		if ($field[1] != "string" && $field[1] != "number" && $field[1] != "memo" && $field[1] != "id") {
 			$this->sendError(E_USER_ERROR, "New field type must be either string, number, memo, or id.", __LINE__);
-			return false;
+
+            return false;
 		}
 
-		if($field[1] == "id" || $field[1] == 'memo') $field[2] = "7";
+		if ($field[1] == "id" || $field[1] == 'memo')
+            $field[2] = "7";
 		//if($field[1] == "memo") $field[2] = "10"; //memo functions only use 7 chars
 
 		$oldlength = $header[$fieldId]["fLength"];
@@ -671,64 +710,68 @@ class tdb {
 		$h_fields = array();
 		$h_recLen = 0;
 
-		for($i=1;$i<=$cHeader;$i++) {
+		for ($i = 1; $i <= $cHeader; $i++) {
 			$h_fields[] = $i.chr(31).$header[$i]["fType"].chr(31).$header[$i]["fLength"].chr(31).$header[$i]["fName"];
 			$h_recLen += $header[$i]["fLength"];
 		}
 
 		$h_fields = implode(chr(29), $h_fields);
-		$h_cid = $header["curId"].str_repeat(" ", 7 - strlen($header["curId"]));
-		$h_lastBlank = $header["lastBlank"].str_repeat(" ", 7 - strlen($header["lastBlank"]));
+		$h_cid = $header["curId"] . str_repeat(" ", 7 - strlen($header["curId"]));
+		$h_lastBlank = $header["lastBlank"] . str_repeat(" ", 7 - strlen($header["lastBlank"]));
 
-		$h_header = strlen($h_fields).chr(28).$h_fields.$h_recLen.chr(28).$h_cid.chr(28).$h_lastBlank.chr(28).$header["blockLength"].chr(28);
+		$h_header = strlen($h_fields) . chr(28) . $h_fields . $h_recLen . chr(28) . $h_cid . chr(28) . $h_lastBlank . chr(28) . $header["blockLength"] . chr(28);
 
 		// rebuild the table with the new field
-		$eRecSize = filesize($this->fp[$fp].'.ta') - $header["recPos"];
+		$eRecSize = filesize($this->fp[$fp] . '.ta') - $header["recPos"];
 		$eRecCount = $eRecSize / $header["recLen"];
 
-		$f = fopen($this->fp[$fp].'.ta', 'rb');
+		$f = fopen($this->fp[$fp] . '.ta', 'rb');
 
 		// open up temp file for writing the buffers
-		$newFnam = $this->workingDir."tmpF_".md5(uniqid(rand()));
+		$newFnam = $this->workingDir . "tmpF_" . md5(uniqid(rand()));
 		$newF = fopen($newFnam, "wb");
 
 		// write the header to the new table file
 		fwrite($newF, $h_header);
 
 		$cid = 1;
-		while(!feof($f)) {
-			if($cid > $eRecCount) break;
+
+		while (!feof($f)) {
+			if ($cid > $eRecCount)
+                break;
 
 			fseek($f, $this->bytesToSeek($fp, $header, $cid));
-			if(fread($f, 1) == chr(24)) {
-				fwrite($newF, chr(24).fread($f, 7).str_repeat(' ', $h_recLen - 8));
+
+            if (fread($f, 1) == chr(24)) {
+				fwrite($newF, chr(24) . fread($f, 7) . str_repeat(' ', $h_recLen - 8));
 				$cid++;
 				continue;
-			} else fseek($f, -1, SEEK_CUR);
+			} else
+                fseek($f, -1, SEEK_CUR);
 
-			for($i=1;$i<=$cHeader;$i++) {
-
-				if($i != $fieldId) {
+			for ($i = 1; $i <= $cHeader; $i++) {
+				if ($i != $fieldId) {
 					fwrite($newF, fread($f, $header[$i]["fLength"]));
 				} else {
 					$value = rtrim(fread($f, $oldlength));
 
-					if($oldType == "memo" && $header[$i]["fType"] != "memo") {
+					if ($oldType == "memo" && $header[$i]["fType"] != "memo") {
 						$memo = $value;
 						$value = $this->readMemo($fp, $memo, $header);
 						$this->deleteMemo($fp, $memo, $header);
 						unset($memo);
 					}
-					$field = $value;
 
-					if($header[$i]["fType"] == "memo") {
+                    $field = $value;
+
+					if ($header[$i]["fType"] == "memo") {
 						$this->writeMemo($fp, $field, $header);
-					} elseif($header[$i]["fType"] == "string") {
+					} elseif ($header[$i]["fType"] == "string") {
 						$field = substr($field, 0, $header[$i]["fLength"]);
-					} elseif($header[$i]["fType"] == "number") {
+					} elseif ($header[$i]["fType"] == "number") {
 						$field = preg_replace("/[^0-9.-]/i", "", $field);
 						$field = substr($field, 0, $header[$i]["fLength"]);
-					} elseif($header[$i]["fType"] == "id") {
+					} elseif ($header[$i]["fType"] == "id") {
 						$field = $header["curId"];
 					}
 
@@ -742,13 +785,12 @@ class tdb {
 
 		fclose($newF);
 		fclose($f);
+		unlink($this->fp[$fp] . '.ta');
 
-		unlink($this->fp[$fp].'.ta');
-
-		rename($newFnam, $this->fp[$fp].'.ta');
-
+		rename($newFnam, $this->fp[$fp] . '.ta');
 		$this->_header[$fp] = $header;
-		return true;
+
+        return true;
 	}
 
 	/**
@@ -758,73 +800,80 @@ class tdb {
 	 * @param string $field
 	 * @return bool
 	 */
-	function removeField($fp, $field) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function removeField($fp, $field)
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
 		$header = array();
 		$this->readHeader($fp, $header);
-
 		$cHeader = count($header) - 8;
-
 		$foundField = false;
-		for($i=1;$i<=$cHeader;$i++) {
-			if($header[$i]["fName"] == $field) {
+
+        for ($i = 1; $i <= $cHeader; $i++) {
+			if ($header[$i]["fName"] == $field) {
 				$foundField = true;
 				break;
 			}
 		}
 
-		if(!$foundField) {
+		if (!$foundField) {
 			$this->sendError(E_USER_WARNING, "Cannot remove '$field' field, it does not exist.", __LINE__);
-			return false;
+
+            return false;
 		}
 
 		// start building the header
 		$h_fields = array();
 		$h_recLen = 0;
 
-		for($i=1,$j=1;$i<=$cHeader;$i++) {
-			if($header[$i]["fName"] != $field) {
-				$h_fields[] = $j++.chr(31).$header[$i]["fType"].chr(31).$header[$i]["fLength"].chr(31).$header[$i]["fName"];
+		for ($i = 1, $j = 1; $i <= $cHeader; $i++) {
+			if ($header[$i]["fName"] != $field) {
+				$h_fields[] = $j++ . chr(31) . $header[$i]["fType"] . chr(31) . $header[$i]["fLength"] . chr(31) . $header[$i]["fName"];
 				$h_recLen += $header[$i]["fLength"];
 			}
 		}
 
 		$h_fields = implode(chr(29), $h_fields);
-		$h_cid = $header["curId"].str_repeat(" ", 7 - strlen($header["curId"]));
-		$h_lastBlank = $header["lastBlank"].str_repeat(" ", 7 - strlen($header["lastBlank"]));
+		$h_cid = $header["curId"] . str_repeat(" ", 7 - strlen($header["curId"]));
+		$h_lastBlank = $header["lastBlank"] . str_repeat(" ", 7 - strlen($header["lastBlank"]));
 
-		$h_header = strlen($h_fields).chr(28).$h_fields.$h_recLen.chr(28).$h_cid.chr(28).$h_lastBlank.chr(28).$header["blockLength"].chr(28);
+		$h_header = strlen($h_fields) . chr(28) . $h_fields . $h_recLen . chr(28) . $h_cid . chr(28) . $h_lastBlank . chr(28) . $header["blockLength"] . chr(28);
 
 		// rebuild the table with the field removed
-		$eRecSize = filesize($this->fp[$fp].'.ta') - $header["recPos"];
+		$eRecSize = filesize($this->fp[$fp] . '.ta') - $header["recPos"];
 		$eRecCount = $eRecSize / $header["recLen"];
 
-		$f = fopen($this->fp[$fp].'.ta', 'rb');
+		$f = fopen($this->fp[$fp] . '.ta', 'rb');
 
 		// open up temp file for writing the buffers
-		$newFnam = $this->workingDir."tmpF_".md5(uniqid(rand()));
+		$newFnam = $this->workingDir . "tmpF_" . md5(uniqid(rand()));
 		$newF = fopen($newFnam, "wb");
 
 		// write the header to the new table file
 		fwrite($newF, $h_header);
-
 		$cid = 1;
-		while(!feof($f)) {
-			if($cid > $eRecCount) break;
+
+        while (!feof($f)) {
+			if ($cid > $eRecCount)
+                break;
 
 			fseek($f, $this->bytesToSeek($fp, $header, $cid));
-			if(fread($f, 1) == chr(24)) {
-				fwrite($newF, chr(24).fread($f, 7).str_repeat(' ', $h_recLen - 8));
+
+            if (fread($f, 1) == chr(24)) {
+				fwrite($newF, chr(24) . fread($f, 7) . str_repeat(' ', $h_recLen - 8));
 				$cid++;
 				continue;
-			} else fseek($f, -1, SEEK_CUR);
+			} else
+                fseek($f, -1, SEEK_CUR);
 
-			for($i=1;$i<=$cHeader;$i++) {
-				if($header[$i]["fName"] != $field) {
+			for ($i = 1; $i <= $cHeader; $i++) {
+				if ($header[$i]["fName"] != $field) {
 					fwrite($newF, fread($f, $header[$i]["fLength"]));
-				} elseif($header[$i]["fType"] != "memo") fseek($f, $header[$i]["fLength"], SEEK_CUR);
-				else $this->deleteMemo($fp, trim(fread($f, $header[$i]["fLength"])), $header);
+				} elseif ($header[$i]["fType"] != "memo")
+                    fseek($f, $header[$i]["fLength"], SEEK_CUR);
+				else
+                    $this->deleteMemo($fp, trim(fread($f, $header[$i]["fLength"])), $header);
 			}
 
 			$cid++;
@@ -832,13 +881,13 @@ class tdb {
 
 		fclose($newF);
 		fclose($f);
+		unlink($this->fp[$fp] . '.ta');
+		rename($newFnam, $this->fp[$fp] . '.ta');
 
-		unlink($this->fp[$fp].'.ta');
+		if (isset($this->_header[$fp]))
+            unset($this->_header[$fp]);
 
-		rename($newFnam, $this->fp[$fp].'.ta');
-
-		if(isset($this->_header[$fp])) unset($this->_header[$fp]);
-		return true;
+        return true;
 	}
 
 	/**
@@ -849,48 +898,49 @@ class tdb {
 	 * @param array $recArr
 	 * @return bool
 	 */
-	function edit($fp, $id, $recArr) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function edit($fp, $id, $recArr)
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
 		$header = array();
 
-		if(FALSE === ($fileId = $this->fileIdById($fp, $id))) {
+		if (($fileId = $this->fileIdById($fp, $id)) === false) {
 			$this->sendError(E_WARNING, "Unable to execute edit().  Unable to retrieve fileID", __LINE__);
 			return false;
 		}
 
 		$this->readHeader($fp, $header);
-
-		$f = fopen($this->fp[$fp].'.ta', 'r+b');
+		$f = fopen($this->fp[$fp] . '.ta', 'r+b');
 		//fseek($f, $this->bytesToSeek($fp, $header, $fileId));
 		$offset = $this->bytesToSeek($fp, $header, $fileId);
 
 		//edit the record
 		$cHeader = count($header) - 8;
-		for($i=1;$i<=$cHeader;$i++) {
+		for($i = 1; $i <= $cHeader; $i++) {
 			fseek($f, $offset);
 			$field = "";
 
-			if(isset($recArr[$header[$i]["fName"]])) {
+			if (isset($recArr[$header[$i]["fName"]])) {
 				$field = $recArr[$header[$i]["fName"]];
 
-				if($header[$i]["fType"] == "memo") {
+				if ($header[$i]["fType"] == "memo") {
 					$this->deleteMemo($fp, trim(fread($f, $header[$i]["fLength"])), $header);
 					fseek($f, $offset);
 					$field = $this->writeMemo($fp, $field, $header);
-				} elseif($header[$i]["fType"] == "string") {
+				} elseif ($header[$i]["fType"] == "string") {
 					//$field = preg_replace("/[^a-z0-9 ,.:?/#]/i", "", $field);
 					$field = substr($field, 0, $header[$i]["fLength"]);
-				} elseif($header[$i]["fType"] == "number") {
+				} elseif ($header[$i]["fType"] == "number") {
 					$field = preg_replace("/[^0-9.-]/i", "", $field);
 					$field = substr($field, 0, $header[$i]["fLength"]);
-				} elseif($header[$i]["fType"] == "id") {
+				} elseif ($header[$i]["fType"] == "id") {
 					$theId = trim(fread($f, $header[$i]["fLength"]));
 					fseek($f, $offset);
 					$field = $theId;
 				}
 
-				$field = $field.str_repeat(" ", $header[$i]["fLength"] - strlen($field));
+				$field = $field . str_repeat(" ", $header[$i]["fLength"] - strlen($field));
 				fwrite($f, $field);
 			}
 
@@ -898,9 +948,10 @@ class tdb {
 		}
 
 		fclose($f);
+		if (isset($this->_query[$fp]))
+            unset($this->_query[$fp]);
 
-		if(isset($this->_query[$fp])) unset($this->_query[$fp]);
-		return true;
+        return true;
 	}
 
 	/**
@@ -911,32 +962,37 @@ class tdb {
 	 * @param bool $runRebuild[Optional]
 	 * @return bool
 	 */
-	function delete($fp, $id) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function delete($fp, $id)
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
-		if(FALSE === ($fileId = $this->fileIdById($fp, $id))) {
+		if (($fileId = $this->fileIdById($fp, $id)) === false) {
 			$this->sendError(E_WARNING, "Unable to execute delete().  Unable to retrieve fileID", __LINE__);
-			return false;
+
+            return false;
 		}
 
 		$header = array();
 		$this->readHeader($fp, $header);
-
-		$f = fopen($this->fp[$fp].'.ta', 'r+b');
+		$f = fopen($this->fp[$fp] . '.ta', 'r+b');
 		fseek($f, $this->bytesToSeek($fp, $header, $fileId));
 
 		//Gather memo fps
 		$offset = 0;
-		for($i=1, $hmax=(count($header)-8);$i<=$hmax;$i++) {
-			if($header[$i]["fType"] == "memo") {
+
+		for ($i = 1, $hmax = (count($header) - 8); $i <= $hmax; $i++) {
+			if ($header[$i]["fType"] == "memo") {
 				fseek($f, $offset, SEEK_CUR);
 				$this->deleteMemo($fp, trim(fread($f, $header[$i]["fLength"])), $header);
 				$offset = 0;
-			} else $offset += $header[$i]["fLength"];
+			} else
+                $offset += $header[$i]["fLength"];
 		}
+
 		//erase the record
 		fseek($f, $this->bytesToSeek($fp, $header, $fileId));
-		fwrite($f, chr(24).$header['lastBlank'].str_repeat(" ", ($header["recLen"] - (strlen($header['lastBlank']) + 1))));
+		fwrite($f, chr(24) . $header['lastBlank'] . str_repeat(" ", ($header["recLen"] - (strlen($header['lastBlank']) + 1))));
 		//fwrite($f, chr(24).$header['lastBlank']);
 		$this->_header[$fp]['lastBlank'] = $fileId;
 		fseek($f, $header['blankPos']);
@@ -945,15 +1001,16 @@ class tdb {
 		fclose($f);
 
 		$ref_data = chr(31).$this->get_ref_data($fp);
-		$ref_data = substr(str_replace(chr(31).$id.':'.$fileId.chr(31), chr(31), $ref_data), 1);
-		$f = fopen($this->fp[$fp].'.ref', 'wb');
+		$ref_data = substr(str_replace(chr(31) . $id . ':' . $fileId . chr(31), chr(31), $ref_data), 1);
+		$f = fopen($this->fp[$fp] . '.ref', 'wb');
 		$this->_ref[$fp] = $ref_data;
 		fwrite($f, $ref_data);
 		fclose($f);
 
+		if (isset($this->_query[$fp]))
+            unset($this->_query[$fp]);
 
-		if(isset($this->_query[$fp])) unset($this->_query[$fp]);
-		return true;
+        return true;
 	}
 
 	/**
@@ -964,10 +1021,13 @@ class tdb {
 	 * @param string $direction[Optional]
 	 * @return bool
 	 */
-	function sortAndBuild($fp, $fieldName, $direction="ASC") {
+	public function sortAndBuild($fp, $fieldName, $direction = "ASC")
+    {
 		$this->sendError(E_USER_NOTICE, 'tdb::sortAndBuild() function obsolete.  Update scripts accordingly', __LINE__);
-		return $this->sort($fp, $fieldName, $direction);
+
+        return $this->sort($fp, $fieldName, $direction);
 	}
+
 	//new sys not avail.
 	/**
 	* Sorts records in a specific order based on a field
@@ -977,51 +1037,58 @@ class tdb {
 	* @param string $direction[Optional]
 	* @return bool
 	*/
-	function sort($fp, $fieldName, $direction="ASC") {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function sort($fp, $fieldName, $direction = "ASC")
+    {
+		if ($this->check(__LINE__, $fp) === false)
+            return false;
 
 		$header = array();
 		$this->readHeader($fp, $header);
-
 		$sortFieldIndex = 0;
 		$sortType = ""; //numeric or string
 
 		//first make sure this fieldname exists
 		$exists = false;
-		for($i=1;$i<=count($header)-8;$i++) {
-			if($header[$i]["fName"] == $fieldName) {
+
+        for ($i = 1; $i <= count($header) - 8; $i++) {
+			if ($header[$i]["fName"] == $fieldName) {
 				$sortFieldIndex = $i;
 				$exists = true;
 				break;
 			}
 		}
+
 		unset($i);
 
-		if($exists) {
-			if($header[$sortFieldIndex]["fType"] == "number" ||  $header[$sortFieldIndex]["fType"] == "id") {
+		if ($exists) {
+			if ($header[$sortFieldIndex]["fType"] == "number" ||  $header[$sortFieldIndex]["fType"] == "id") {
 				$sortType = SORT_NUMERIC;
-			} elseif($header[$sortFieldIndex]["fType"] == "string") {
+			} elseif ($header[$sortFieldIndex]["fType"] == "string") {
 				$sortType = SORT_STRING;
 			} else {
 				$this->sendError(E_USER_WARNING, "You can only sort the following field types: number, id, and string", __LINE__);
-				return false;
+
+                return false;
 			}
 		} else {
 			$this->sendError(E_USER_WARNING, "The field '$fieldName' does not exist", __LINE__);
-			return false;
+
+            return false;
 		}
 
 		//build the sorting array
 		$arrById = array();
 
 		$row = $this->listRec($fp, 1);
-		for($i=0;$i<count($row);$i++) {
+		for ($i = 0; $i < count($row); $i++) {
 			$arrById[$row[$i][$fieldName]] = $row[$i]['id'];
 		}
 
 		//sort
-		if($direction == "ASC") ksort($arrById, $sortType);
-		elseif($direction == "DESC") krsort($arrById, $sortType);
+		if ($direction == "ASC")
+            ksort($arrById, $sortType);
+		elseif($direction == "DESC")
+            krsort($arrById, $sortType);
 
 		reset($arrById);
 
@@ -1029,7 +1096,8 @@ class tdb {
 		$ref_data = $this->get_ref_data($fp);
 		$refArrOld = explode(chr(31), substr($ref_data, 0, -1));
 		$refArr = array();
-		foreach($refArrOld as $refArrTmp) {
+
+        foreach ($refArrOld as $refArrTmp) {
 			$refTmp = explode(':', $refArrTmp);
 			$refArr[$refTmp[0]] = $refArrTmp;
 		}
@@ -1041,11 +1109,13 @@ class tdb {
 		 $id = $arrInfo["key"] + 1;
 		 $new_ref .= $refArr[$id].":".($i + 1).chr(31);
 		 }*/
-		foreach($arrById as $arrInfo) {
-			$new_ref .= $refArr[$arrInfo].chr(31);
+
+		foreach ($arrById as $arrInfo) {
+			$new_ref .= $refArr[$arrInfo] . chr(31);
 		}
+
 		$this->_ref[$fp] = $new_ref;
-		$f = fopen($this->fp[$fp].'.ref', 'wb');
+		$f = fopen($this->fp[$fp] . '.ref', 'wb');
 		fwrite($f, $new_ref);
 		fclose($f);
 
@@ -1056,7 +1126,8 @@ class tdb {
 	 * Obsolete function
 	 *
 	 */
-	function reBuild() {
+	public function reBuild()
+    {
 		$this->sendError(E_USER_NOTICE, 'tdb::reBuild() function obsolete.  Update scripts accordingly', __LINE__);
 	}
 
@@ -1067,78 +1138,83 @@ class tdb {
 	 * @param array input
 	 * @return bool false on fail, int ID on success
 	 */
-	function add($fp, $recArr) {
-		if(FALSE === $this->check(__LINE__, $fp)) return false;
+	public function add($fp, $recArr)
+    {
+		if($this->check(__LINE__, $fp) === false)
+            return false;
 
 		$header = array();
 		$this->readHeader($fp, $header);
-
 		$header["curId"]++;
 
 		//update the cache curId as well
 		$this->_header[$fp]["curId"]++;
 
-		if($header["curId"] > 5000000) {
+		if ($header["curId"] > 5000000) {
 			$this->sendError(E_WARNING, "Maximum records reached (5,000,000) aborting...", __LINE__);
-			return false;
+
+            return false;
 		}
 
 		$record = "";
-		for($i=1, $cHeader = (count($header) - 8);$i<=$cHeader;$i++) {
-			if(isset($recArr[$header[$i]["fName"]])) $field = $recArr[$header[$i]["fName"]];
-			else $field = "";
 
-			if($header[$i]["fType"] == "memo") {
+        for ($i = 1, $cHeader = (count($header) - 8); $i <= $cHeader; $i++) {
+			if (isset($recArr[$header[$i]["fName"]]))
+                $field = $recArr[$header[$i]["fName"]];
+			else
+                $field = "";
+
+			if ($header[$i]["fType"] == "memo") {
 				$field = $this->writeMemo($fp, $field, $header);
-			} elseif($header[$i]["fType"] == "string") {
+			} elseif ($header[$i]["fType"] == "string") {
 				//$field = preg_replace("/[^a-z0-9 ,.:?/#]/i", "", $field);
 				//$field = substr($field, 0, $header[$i]["fLength"]);
-			} elseif($header[$i]["fType"] == "number") {
+			} elseif ($header[$i]["fType"] == "number") {
 				$field = preg_replace("/[^0-9.-]/i", "", $field);
 				//$field = substr($field, 0, $header[$i]["fLength"]);
-			} elseif($header[$i]["fType"] == "id") {
+			} elseif ($header[$i]["fType"] == "id") {
 				$field = $header["curId"];
 			}
 
 			$field = substr($field, 0, $header[$i]["fLength"]);
-			$field = $field.str_repeat(" ", $header[$i]["fLength"] - strlen($field));
+			$field = $field . str_repeat(" ", $header[$i]["fLength"] - strlen($field));
 			$record[] = $field;
 		}
 
 		$record = implode("", $record);
 
-		if(strlen($record) != $header["recLen"]) {
+		if (strlen($record) != $header["recLen"]) {
 			$this->sendError(E_ERROR, "There was an error adding the record.", __LINE__);
-			return false;
+
+            return false;
 		}
 
-		if($header['lastBlank'] != -1) {
+		if ($header['lastBlank'] != -1) {
 			$fileId = $header['lastBlank'];
-		} elseif(isset($this->_fileId[$fp])) {
+		} elseif (isset($this->_fileId[$fp])) {
 			$this->_fileId[$fp]++;
 			$fileId = $this->_fileId[$fp];
 		} else {
-			$fileId = (filesize($this->fp[$fp].'.ta') - $header["recPos"]) / $header["recLen"] + 1;
+			$fileId = (filesize($this->fp[$fp] . '.ta') - $header["recPos"]) / $header["recLen"] + 1;
 			$this->_fileId[$fp] = $fileId;
 		}
 
-		$f = fopen($this->fp[$fp].'.ref', 'ab');
-
+		$f = fopen($this->fp[$fp] . '.ref', 'ab');
 		flock($f, 2);
-		fwrite($f, $header["curId"].":".$fileId.chr(31));
+		fwrite($f, $header["curId"] . ":" . $fileId . chr(31));
 		flock($f, 3);
-		if(isset($this->_ref[$fp])) $this->_ref[$fp] .= $header["curId"].":".$fileId.chr(31);
+
+		if (isset($this->_ref[$fp]))
+            $this->_ref[$fp] .= $header["curId"] . ":" . $fileId . chr(31);
 
 		fclose($f);
-
-		$f = fopen($this->fp[$fp].'.ta', 'r+b');
-
+		$f = fopen($this->fp[$fp] . '.ta', 'r+b');
 		flock($f, 2);
-
 		fseek($f, $header["idPos"]);
 		fwrite($f, $header["curId"]);
 
-		if($header['lastBlank'] == -1) fseek($f, 0, SEEK_END);
+		if ($header['lastBlank'] == -1)
+            fseek($f, 0, SEEK_END);
 		else {
 			fseek($f, $this->bytesToSeek($fp, $header, $fileId));
 			$nextBlank = ltrim(fread($f, 8), chr(24));
@@ -1148,11 +1224,15 @@ class tdb {
 			$this->_header[$fp]['lastBlank'] = (int)trim($nextBlank);
 			fseek($f, $this->bytesToSeek($fp, $header, $fileId));
 		}
+
 		fwrite($f, $record);
 		flock($f, 3);
 		fclose($f);
-		if(!in_array($this->fp[$fp], $this->editedTable)) $this->editedTable[] = $this->fp[$fp];
-		return $header["curId"];
+
+		if (!in_array($this->fp[$fp], $this->editedTable))
+            $this->editedTable[] = $this->fp[$fp];
+
+        return $header["curId"];
 	}
 
 	/**
@@ -1789,12 +1869,12 @@ class tdb {
 	 * @param int $line[Optional]
 	 */
 	function sendError($errno, $errMsg, $line = '') {
-		if(TDB_ERROR_INCLUDE_ORIGIN == TRUE) {
+		if(self::TDB_ERROR_INCLUDE_ORIGIN == TRUE) {
 			$error_trace = debug_backtrace();
 			$error_origin = '  Executed on '.$error_trace[count($error_trace) -1]['file'].' at line '.$error_trace[count($error_trace) -1]['line'].'.';
 			$errMsg .= $error_origin;
 		}
-		if(TDB_PRINT_ERRORS === TRUE) print('<b>Text Database Error</b>: '.$errMsg. ((($line != null || $line != '') && (TDB_ERROR_INCLUDE_ORIGIN === false)) ? ' near line '.$line : '').'<br />');
+		if(self::TDB_PRINT_ERRORS === TRUE) print('<b>Text Database Error</b>: '.$errMsg. ((($line != null || $line != '') && (self::TDB_ERROR_INCLUDE_ORIGIN === false)) ? ' near line '.$line : '').'<br />');
 		elseif($this->error_handler !== FALSE) call_user_func_array($this->error_handler, array($errno, $errMsg, 'tdb.class.php', $line));
 		else trigger_error('<b>Text Database Error</b>: '.$errMsg. (($line != null || $line != '') ? ' near line '.$line : ''));
 	}

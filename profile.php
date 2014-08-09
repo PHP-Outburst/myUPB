@@ -9,7 +9,6 @@
  */
 
 require_once('./includes/upb.initialize.php');
-require_once('./includes/class/upload.class.php');
 
 if(!isset($_GET['action']) || $_GET['action'] == '') $_GET['action'] = 'edit';
 if ($_GET['action'] == "get" || $_GET['action'] == 'view') $where = "Member Profile";
@@ -93,7 +92,7 @@ if (isset($_POST["u_edit"])) {
 				$upload_err = "The dimensions of the uploaded avatar are too big.<br>The maximum dimensions are ".$_REGIST['avatarupload_dim']."px by ".$_REGIST['avatarupload_dim']."px";
 				else
 				{
-					$upload = new upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
+					$upload = new Upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
 					$uploadId = $upload->storeFile($_FILES["avatar2file"]);
 				}
 			}
@@ -121,8 +120,7 @@ if (isset($_POST["u_edit"])) {
 			$id = substr($user[0]['avatar'], 26);
 			if(ctype_digit($id)) {
 				if(!isset($upload)) {
-					require_once('./includes/class/upload.class.php');
-					$upload = new upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
+					$upload = new Upload(DB_DIR, $_REGIST["avatarupload_size"], $_CONFIG["fileupload_location"]);
 				}
 				$upload->deleteFile($id);
 			}
@@ -268,7 +266,7 @@ if (isset($_POST["u_edit"])) {
 		} else {
 			$fRecs = $tdb->listRec("forums", 1);
 			if(!empty($fRecs[0])) {
-				$posts_tdb = new tdb(DB_DIR, "posts");
+				$posts_tdb = new Tdb(DB_DIR, "posts");
 				foreach($fRecs as $fRec) {
 					if ((int)$_COOKIE["power_env"] < $fRec["view"]) {
 						continue;
@@ -550,8 +548,7 @@ if (isset($_POST["u_edit"])) {
 		<td colspan='6' class='area_2' style='text-align:center;font-weight:bold;padding:20px;'>you have no bookmarked topics</td>
 	</tr>";
 	} else {
-		require_once('./includes/class/posts.class.php');
-		$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+		$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 		while(list(, $tmp) = each($topics)) {
 			list($f_id, $t_id) = explode(',', $tmp);
 			$posts_tdb->setFp("topics", $f_id."_topics");

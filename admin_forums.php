@@ -9,12 +9,10 @@
  */
 
 require_once("./includes/upb.initialize.php");
-require_once("./includes/class/upload.class.php");
-require_once("./includes/class/posts.class.php");
 
 $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin_forums.php'>Manage Forums</a>";
 require_once('./includes/header.php');
-$post_tdb = new functions(DB_DIR, "posts.tdb");
+$post_tdb = new TdbFunctions(DB_DIR, "posts.tdb");
 if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 	if(!isset($_GET['action'])) $_GET['action'] = '';
 	if ($_GET["action"] == "edit_cat") {
@@ -72,7 +70,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 					foreach($forums as $forum) {
 						$fRec = $tdb->get("forums", $forum["id"]);
 						$cRec = $tdb->get("cats", $_GET['id']);
-						$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+						$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 						$posts_tdb->setFp("topics", $forum["id"]."_topics");
 						$posts_tdb->setFp("posts", $forum["id"]);
 						//$posts_tdb->set_topic($tRec);
@@ -264,7 +262,7 @@ if ($tdb->is_logged_in() && $_COOKIE["power_env"] >= 3) {
 			if ($_POST["verify"] == "Ok") {
 				$fRec = $tdb->get("forums", $_GET["id"]);
 				$cRec = $tdb->get("cats", $fRec[0]["cat"]);
-				$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+				$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 				$posts_tdb->setFp("topics", $_GET["id"]."_topics");
 				$posts_tdb->setFp("posts", $_GET["id"]);
 				//$posts_tdb->set_topic($tRec);

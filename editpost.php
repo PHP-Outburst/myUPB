@@ -5,8 +5,7 @@
 // Version: 2.0
 // Using textdb Version: 4.3.2
 require_once("./includes/upb.initialize.php");
-require_once("./includes/class/posts.class.php");
-$posts_tdb = new posts(DB_DIR, "posts.tdb");
+$posts_tdb = new Posts(DB_DIR, "posts.tdb");
 $posts_tdb->setFp("topics", $_GET["id"]."_topics");
 $posts_tdb->setFp("posts", $_GET["id"]);
 //$fRec = $tdb->get("forums", $_GET["id"]);
