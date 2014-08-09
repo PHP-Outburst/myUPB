@@ -1,0 +1,5 @@
+{
+    "require": {
+        "pclzip/pclzip": "dev-master"
+    }
+}
