@@ -161,13 +161,13 @@ if (empty($tRecs[0]['id'])) {
 				if($user_id === false) $status_config = array('statuscolor' => '9d865e');
 				else
 				{
-					$status_config = status($user_id);
+					$status_config = PostingFunctions::status($user_id);
 					$statuscolor = $status_config['statuscolor'];
 				}
 			}
 			$user_data = $tdb->get('users', $tRec["user_id"], array('level','posts'));
 			if($user_data === false) $status_config = array('statuscolor' => '9d865e');
-			else $status_config = status($user_data);
+			else $status_config = PostingFunctions::status($user_data);
 			echo "
 		<tr>
 			<td class='area_2' onmouseover=\"this.className='area_2_over'\" onmouseout=\"this.className='area_2'\">

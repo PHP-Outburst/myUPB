@@ -18,11 +18,11 @@ $table_color = "area_1";
 
 $user = $tdb->get("users", $pmRec[0]["from"]);
 
-$status_config = status($user);
+$status_config = PostingFunctions::status($user);
 $status = $status_config['status'];
 $statuscolor = $status_config['statuscolor'];
 
-$message = display_msg($pmRec[0]["message"]);
+$message = PostingFunctions::display_msg($pmRec[0]["message"]);
 echo "
 		<table id='simple_table' style='background-color:#ffffff;' cellspacing='12'>
 			<tr>

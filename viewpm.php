@@ -5,7 +5,6 @@
 // Addon Created by J. Moore aka Rebles
 // Using textdb Version: 4.2.3
 require_once('./includes/upb.initialize.php');
-require_once('./includes/inc/post.inc.php');
 $where = "<a href='pmsystem.php'>Messenger</a>";
 if ($_POST["action"] == "close") die('<html><body Onload="window.close()"> </body></html>');
 if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_GET["section"] == "inbox" || $_GET["section"] == "outbox")) {
@@ -97,12 +96,12 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 	$table_color = $table1;
 
 	if ($user[0]["sig"] != "") $user[0]["sig"] = "
-			<div class='signature'>".UPBcoding(filterLanguage($user[0]["sig"], $_CONFIG))."</div>";
-	$status_config = status($user);
+			<div class='signature'>".PostingFunctions::UPBcoding(PostingFunctions::filterLanguage($user[0]["sig"], $_CONFIG))."</div>";
+	$status_config = PostingFunctions::status($user);
 	$status = $status_config['status'];
 	$statuscolor = $status_config['statuscolor'];
 
-	$message = display_msg(encode_text($pmRec[0]["message"]));
+	$message = PostingFunctions::display_msg(PostingFunctions::encode_text($pmRec[0]["message"]));
 	echo "
 			<tr>
 				<th style='width:15%;'><div class='post_name'><a href='profile.php?action=get&id=".$user[0]["id"]."'>".$user[0]["user_name"]."</a></div></th>

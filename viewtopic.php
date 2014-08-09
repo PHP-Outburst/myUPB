@@ -106,10 +106,10 @@ foreach($pRecs as $pRec) {
 			$pRec['user_id'] = '0';
 		}
 		if ($user[0]["sig"] != "") {
-			$sig = display_msg($user[0]["sig"]);
+			$sig = PostingFunctions::display_msg($user[0]["sig"]);
 			$sig = "<div class='signature'>$sig</div>";
 		}
-		$status_config = status($user);
+		$status_config = PostingFunctions::status($user);
 		$status = $status_config['status'];
 		$statuscolor = $status_config['statuscolor'];
 		$statusrank = $status_config['rank'];
@@ -142,7 +142,7 @@ foreach($pRecs as $pRec) {
 	if ((int)$_COOKIE["power_env"] >= (int)$fRec[0]["reply"] and $tRec[0]['locked'] != 1) $reply = "<div class='button_pro1'><a href='newpost.php?id=".$_GET["id"]."&amp;t=0&amp;t_id=".$_GET["t_id"]."&amp;page=".$vars['page']."'>Add Reply</a></div>";
 	else $reply = "";
 
-	$msg = display_msg($pRec['message']);
+	$msg = PostingFunctions::display_msg($pRec['message']);
 	$msg .= "<div id='{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}-attach'>".$tdb->getUploads($_GET['id'],$_GET['t_id'],$pRec['id'],$pRec['upload_id'],$_CONFIG['fileupload_location'],$pRec['user_id'])."</div>";
 	echo "
 			<tr>

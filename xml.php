@@ -39,7 +39,7 @@ if (!isset($_GET['t_id'])) {
 		$xml .= "<item>
 		<title>".MiscFunctions::xml_clean($tRec['subject'])."</title>
 		<link>".MiscFunctions::xml_clean($newurl)."</link>
-		<description>".MiscFunctions::xml_clean(format_text(filterLanguage($post[0]['message'])))."</description>
+		<description>".MiscFunctions::xml_clean(PostingFunctions::format_text(PostingFunctions::filterLanguage($post[0]['message'])))."</description>
 		<guid isPermaLink=\"false\">".MiscFunctions::xml_clean($url)."</guid>
 		</item>";
 	}
@@ -66,7 +66,7 @@ if (!isset($_GET['t_id'])) {
 		$xml .= "<item>
 	  <title>Post by ".MiscFunctions::xml_clean($pRec['user_name'])." on ".MiscFunctions::xml_clean(gmdate("M d, Y @ g:i:s a", DateCustom::user_date($pRec["date"])))."</title>
 	  <link>".MiscFunctions::xml_clean($newurl)."</link>
-	  <description>".MiscFunctions::xml_clean(format_text(filterLanguage($pRec['message'])))."</description>
+	  <description>".MiscFunctions::xml_clean(PostingFunctions::format_text(PostingFunctions::filterLanguage($pRec['message'])))."</description>
 	  <guid isPermaLink=\"false\">".MiscFunctions::xml_clean($url)."</guid>
 	  </item>";
 	}

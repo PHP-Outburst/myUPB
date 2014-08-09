@@ -55,7 +55,7 @@ if ($pRecs[0]["id"] == "") {
 
 			$x--;
 		}
-		$msg = format_text(filterLanguage(UPBcoding($pRec["message"]), $_CONFIG));
+		$msg = PostingFunctions::format_text(PostingFunctions::filterLanguage(PostingFunctions::UPBcoding($pRec["message"]), $_CONFIG));
 		echo "
 				<div class='simple_head' style='text-align:left;'>".$pRec["user_name"]."</div>";
 		echo "

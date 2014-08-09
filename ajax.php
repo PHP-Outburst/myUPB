@@ -19,14 +19,14 @@ switch ($ajax_type)
 			$output .= "<input type='hidden' id='userid' name='userid' value='".$_POST["userid"]."'>";
 			$output .= "<input type='hidden' id='threadid' name='threadid' value='".$_POST["threadid"]."'>";
 			$output .= "<input type='hidden' id='postid' name='postid' value='".$_POST["postid"]."'>";
-			$output .= "<textarea name='newedit' id='newedit' cols='60' rows='18'>".format_text(encode_text($pRec[0]['message']),'edit')."</textarea><br>";
+			$output .= "<textarea name='newedit' id='newedit' cols='60' rows='18'>".PostingFunctions::format_text(PostingFunctions::encode_text($pRec[0]['message']),'edit')."</textarea><br>";
 			$output .= "\n<input type='button' onclick='javascript:getEdit(document.getElementById(\"quickedit\"),\"".$_POST['divname']."\");'\' name='qedit' value='Save'>";
 			$output .= "\n<input type='button' name='cancel_edit' onClick=\"javascript:getPost('".$_POST["userid"]."','".$_POST["forumid"]."-".$_POST["threadid"]."-".$_POST["postid"]."','cancel');\" value='Cancel'>";
 			$output .= "\n<input type='submit' name='submit' value='Advanced'>";
 			$output .= "</form>";
 		}
 		else
-		$output = display_msg($pRec[0]['message']);
+		$output = PostingFunctions::display_msg($pRec[0]['message']);
 
 		echo $output;
 
@@ -44,10 +44,10 @@ switch ($ajax_type)
 		if($pRec[0]["user_id"] != $_COOKIE["id_env"] && $_COOKIE["power_env"] < 2) MiscFunctions::exitPage("You are not authorized to edit this post.");
 		$msg = "";
 
-		$msg = display_msg(encode_text($_POST['newedit']));
-		$msg = display_msg($_POST['newedit']);
+		$msg = PostingFunctions::display_msg(PostingFunctions::encode_text($_POST['newedit']));
+		$msg = PostingFunctions::display_msg($_POST['newedit']);
 		$msg .= "<div id='{$_POST["forumid"]}-{$_POST['threadid']}-{$_POST['postid']}-attach'>".$tdb->getUploads($_POST["forumid"],$_POST['threadid'],$pRec[0]['id'],$pRec[0]['upload_id'],$_CONFIG['fileupload_location'],$pRec[0]['user_id'])."</div>";
-		$dbmsg = encode_text(stripslashes($attach_msg.$_POST["newedit"]),ENT_NOQUOTES);
+		$dbmsg = PostingFunctions::encode_text(stripslashes($attach_msg.$_POST["newedit"]),ENT_NOQUOTES);
 
 		$posts_tdb->edit("posts", $_POST["postid"], array("message" => $dbmsg, "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => DateCustom::mkdate()));
 		//clearstatcache();
@@ -90,7 +90,7 @@ switch ($ajax_type)
 			$email_mode = false;
 			$isWatching = false;
 		}
-		$msg = encode_text(stripslashes($_POST["newentry"]));
+		$msg = PostingFunctions::encode_text(stripslashes($_POST["newentry"]));
 		$tdb->edit("forums", $_POST["id"], array("posts" => ((int)$fRec[0]["posts"] + 1)));
 
 		$p_id = $posts_tdb->add("posts", array(
@@ -206,10 +206,10 @@ switch ($ajax_type)
 					$pRec['user_id'] = '0';
 				}
 				if ($user[0]["sig"] != "") {
-					$sig = format_text(filterLanguage(UPBcoding($user[0]["sig"]), $_CONFIG));
+					$sig = PostingFunctions::format_text(PostingFunctions::filterLanguage(PostingFunctions::UPBcoding($user[0]["sig"]), $_CONFIG));
 					$sig = "<div class='signature'>$sig</div>";
 				}
-				$status_config = status($user);
+				$status_config = PostingFunctions::status($user);
 				$status = $status_config['status'];
 				$statuscolor = $status_config['statuscolor'];
 				$statusrank = $status_config['rank'];
@@ -234,7 +234,7 @@ switch ($ajax_type)
 			if ((int)$_COOKIE["power_env"] >= (int)$fRec[0]["reply"] and $tRec[0]['locked'] != 1) $reply = "<div class='button_pro1'><a href='newpost.php?id=".$_POST["id"]."&t=0&t_id=".$_POST["t_id"]."&page=$page'>Add Reply</a></div>";
 			else $reply = "";
 
-			$msg = display_msg($pRec["message"]);
+			$msg = PostingFunctions::display_msg($pRec["message"]);
 			$msg .= "<div id='{$_GET['id']}-{$_GET['t_id']}-{$pRec['id']}-attach'>".$tdb->getUploads($_GET['id'],$_GET['t_id'],$pRec['id'],$pRec['upload_id'],$_CONFIG['fileupload_location'],$pRec['user_id'])."</div>";
 
 			$output .= "
@@ -503,7 +503,7 @@ switch ($ajax_type)
 		}
 		else
 		{
-			$_POST['username'] = format_text(encode_text(trim($_POST['username'])));
+			$_POST['username'] = PostingFunctions::format_text(PostingFunctions::encode_text(trim($_POST['username'])));
 			if ($_POST['area'] == 'changeuser')
 			$newline = '&nbsp';
 			else
@@ -532,7 +532,7 @@ switch ($ajax_type)
 		break 1;
 
 	case "emailvalid" :
-		$_POST['email'] = format_text(encode_text(trim($_POST['email'])));
+		$_POST['email'] = PostingFunctions::format_text(PostingFunctions::encode_text(trim($_POST['email'])));
 		if (trim($_POST['email']) == "")
 		{
 			$reply .= "<br><img src='images/cross.gif' alt='' title='' style='vertical-align: middle;'>Email Address Required";
@@ -561,8 +561,8 @@ switch ($ajax_type)
 		break 1;
 
 	case "emailcheck" :
-		$_POST['email1'] = format_text(encode_text(trim($_POST['email1'])));
-		$_POST['email2'] = format_text(encode_text(trim($_POST['email2'])));
+		$_POST['email1'] = PostingFunctions::format_text(PostingFunctions::encode_text(trim($_POST['email1'])));
+		$_POST['email2'] = PostingFunctions::format_text(PostingFunctions::encode_text(trim($_POST['email2'])));
 		 
 		if (trim($_POST['email1']) != trim($_POST['email2']))
 		{
@@ -580,13 +580,13 @@ switch ($ajax_type)
 	case "sig":
 		if ($_POST['status'] == "set")
 		{
-			$sig = display_msg(encode_text($_POST["sig"]));
+			$sig = PostingFunctions::display_msg(PostingFunctions::encode_text($_POST["sig"]));
 			$sig_title = "<strong>Signature Preview:</strong><br>To save this signature press Submit below";
 		}
 		else
 		{
 			$rec = $tdb->get("users", $_POST["id"]);
-			$sig = display_msg($rec[0]['sig']);
+			$sig = PostingFunctions::display_msg($rec[0]['sig']);
 			$sig_title = "<strong>Current Signature:</strong>";
 		}
 		echo $sig."<!--divider-->".$sig_title;
@@ -619,7 +619,7 @@ switch ($ajax_type)
 		else
 		{
 			MiscFunctions::echoTableHeading("Post Preview", $_CONFIG);
-			$msg = display_msg(encode_text($_POST["message"]));
+			$msg = PostingFunctions::display_msg(PostingFunctions::encode_text($_POST["message"]));
 			echo "<tr><td class='area_2'><div class='msg_block'>".$msg."</div></td></tr>";
 			MiscFunctions::echoTableFooter(SKIN_DIR);
 		}

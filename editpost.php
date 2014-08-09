@@ -21,7 +21,7 @@ if (!($tdb->is_logged_in())) MiscFunctions::exitPage("<div class='alert'><div cl
 if ($pRec[0]["user_id"] != $_COOKIE["id_env"] && $_COOKIE["power_env"] < 2) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>You do not have the rights to perform this action.</div></div>");
 if (isset($_POST["message"])) {
-	$posts_tdb->edit("posts", $_GET["p_id"], array("message" => encode_text(stripslashes($_POST["message"])), "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => DateCustom::mkdate()));
+	$posts_tdb->edit("posts", $_GET["p_id"], array("message" => PostingFunctions::encode_text(stripslashes($_POST["message"])), "edited_by_id" => $_COOKIE["id_env"], "edited_by" => $_COOKIE["user_env"], "edited_date" => DateCustom::mkdate()));
 	echo "
 						<div class='alert_confirm'>
 						<div class='alert_confirm_text'>
@@ -42,8 +42,8 @@ if (isset($_POST["message"])) {
 				<td class='area_1' style='padding:8px;' valign='top'><strong>Message:</strong>";
 
 	echo "<div style='text-align:center;'></div></td>
-				<td class='area_2'>".bbcodebuttons('look1')."<textarea name='message' id='look1'>".format_text(encode_text($pRec[0]['message']),'edit')."</textarea>
-					<div style='padding:8px;'>".getSmilies('look1')."</div></td>
+				<td class='area_2'>".PostingFunctions::bbcodebuttons('look1')."<textarea name='message' id='look1'>".PostingFunctions::format_text(PostingFunctions::encode_text($pRec[0]['message']),'edit')."</textarea>
+					<div style='padding:8px;'>".PostingFunctions::getSmilies('look1')."</div></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>

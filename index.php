@@ -124,7 +124,7 @@ if ($cRecs[0]["id"] == "") {
 								$v_icon = "off.png";
 							} else {
 								$user_data = $tdb->basicQuery('users','user_name',$tRec[0]["user_name"], 1, 1,array('level','posts'));
-								$status_config = status($user_data);
+								$status_config = PostingFunctions::status($user_data);
 								$when = "<span class='date'>".gmdate("M d, Y g:i:s a", DateCustom::user_date($tRec[0]["last_post"]))."</span><br /><strong>In:</strong>&nbsp;<strong><a href='viewtopic.php?id=".$fRec["id"]."&amp;t_id=".$tRec[0]["id"]."'>".$tRec[0]["subject"]."</a></strong><br /><strong>By:</strong> ";
 								if ($tRec[0]["user_id"] != "0") $when .= "<span class='link_2'><a href='profile.php?action=get&amp;id=".$tRec[0]["user_id"]."'  style='color : #".$status_config['statuscolor'].";'>".$tRec[0]["user_name"]."</a></span>";
 								else $when .= "a ".$tRec[0]["user_name"]."";

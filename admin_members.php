@@ -173,7 +173,7 @@ if($_GET['action'] == 'confirm') {
 			echo "<i>yesterday</i>";
 			else
 			echo gmdate("Y-m-d", DateCustom::user_date($user['date_added']))."</td>";
-			$sig = str_replace('<br><br>', '',format_text(filterLanguage($user["sig"])));
+			$sig = str_replace('<br><br>', '',PostingFunctions::format_text(PostingFunctions::filterLanguage($user["sig"])));
 			print "<td class='area_1'><a href='{$user['homepage']}' target='_blank'>{$user['homepage']}</a></td>
                 <td class='area_2'><i>".substr($sig, 0, (50 - strlen(strip_tags($sig)))).(((50 - strlen(strip_tags($sig))) > 0) ? '': "...")."</i></td>
 			</tr>";
@@ -595,7 +595,7 @@ elseif($_GET["action"] == "delete") {
 			$bList = file(DB_DIR."/banneduser.dat");
 			foreach($users as $user) {
 				$lastvisit = $user['lastvisit'];
-				$status_config = status(array(0 => array('level'=>$user['level'],'posts'=>$user['posts'])));
+				$status_config = PostingFunctions::status(array(0 => array('level'=>$user['level'],'posts'=>$user['posts'])));
 				$status = $status_config['status'];
 			 $statuscolor = $status_config['statuscolor'];
 				//if(gmdate('Y-m-d', $lastvisit) == gmdate('Y-m-d')) $lastvisit =

@@ -271,7 +271,7 @@ if($_GET['action'] == 'favorite') {
 			</tr>";
 			$x = 1;
 			foreach($pRecs as $pRec) {
-				$msg = format_text(UPBcoding(filterLanguage($pRec["message"], $_CONFIG)));
+				$msg = PostingFunctions::format_text(PostingFunctions::UPBcoding(PostingFunctions::filterLanguage($pRec["message"], $_CONFIG)));
 				if ($x == 0) {
 					$table_color = $table1;
 
@@ -431,7 +431,7 @@ if($_GET['action'] == 'favorite') {
 			$x = 1;
 			unset($pRecs[0]);
 			foreach($pRecs as $pRec) {
-				$msg = format_text(UPBcoding(filterLanguage($pRec["message"], $_CONFIG)));
+				$msg = PostingFunctions::format_text(PostingFunctions::UPBcoding(PostingFunctions::filterLanguage($pRec["message"], $_CONFIG)));
 				echo "
 			<tr>
 				<td class='footer_3' colspan='3'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>

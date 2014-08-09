@@ -43,7 +43,7 @@ if ($tdb->is_logged_in()) {
 	} else {
 		foreach($users as $user) {
 			//$array[0] = ;
-			$status_config = status(array(0 => array('level'=>$user['level'],'posts'=>$user['posts'])));
+			$status_config = PostingFunctions::status(array(0 => array('level'=>$user['level'],'posts'=>$user['posts'])));
 			$status = $status_config['status'];
 			$statuscolor = $status_config['statuscolor'];
 

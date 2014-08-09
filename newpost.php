@@ -12,7 +12,7 @@ $posts_tdb->setFp("posts", $_GET["id"]);
 $message = "";
 if (!empty($_POST))
 {
-	$message = stripslashes(format_text(encode_text($_POST['newentry']),'edit'));
+	$message = stripslashes(PostingFunctions::format_text(PostingFunctions::encode_text($_POST['newentry']),'edit'));
 	$message = str_replace(array("<x>","&lt;x&gt;"),"",$message);
   foreach ($_POST as $key => $value)
 	{
@@ -41,8 +41,8 @@ if (!($_GET["id"] != "" && ctype_digit($_GET["id"]))) MiscFunctions::exitPage("<
 if (!($_GET["t_id"] != "" && ctype_digit($_GET["t_id"]) || $_GET["t"] != 0)) MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 		<strong>Caution!</strong></div><div style='padding:4px;'>Invalid Topic ID/Information.</div></div>");
 if ($_POST["a"] == "1") {
-	if (isset($_POST['subject'])) $_POST['subject'] = encode_text(stripslashes($_POST["subject"]));
-	$_POST['message'] = encode_text(stripslashes($_POST["message"]));
+	if (isset($_POST['subject'])) $_POST['subject'] = PostingFunctions::encode_text(stripslashes($_POST["subject"]));
+	$_POST['message'] = PostingFunctions::encode_text(stripslashes($_POST["message"]));
 	if ($_POST["icon"] == "") MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
 			<strong>Caution!</strong></div><div style='padding:4px;'>Please select a message icon.</div></div>");
 	if ($_GET["t"] == 1 && trim($_POST["subject"]) == "") MiscFunctions::exitPage("<div class='alert'><div class='alert_text'>
@@ -273,7 +273,7 @@ if ($_POST["a"] == "1") {
 						<div class='footer'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></div>
 					</div><br />";
 	}
-	$icons = message_icons();
+	$icons = PostingFunctions::message_icons();
 
 	echo "
 			<form action='newpost.php?id=".$_GET["id"]."&t=".$_GET["t"]."&quote=".$_GET["quote"]."&t_id=".$_GET["t_id"]."&page=".$_GET["page"]."' method='POST' name='newentry' enctype='multipart/form-data' onSubmit='return validate_$check();'>
@@ -301,8 +301,8 @@ if ($_POST["a"] == "1") {
 			echo "
 					<div style='text-align:center;'></div></td>
 				<td class='area_2'>
-        ".bbcodebuttons('look1')."<textarea name='message' id='look1'>".$message."</textarea><br>
-					<span id='msg_err' class='err'></span><div style='padding:8px;'><fieldset><legend>Smilies</legend><div style='padding:8px;'>".getSmilies('look1')."</fieldset></div></td>
+        ".PostingFunctions::bbcodebuttons('look1')."<textarea name='message' id='look1'>".$message."</textarea><br>
+					<span id='msg_err' class='err'></span><div style='padding:8px;'><fieldset><legend>Smilies</legend><div style='padding:8px;'>".PostingFunctions::getSmilies('look1')."</fieldset></div></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='2'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>

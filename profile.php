@@ -38,7 +38,7 @@ if (isset($_POST["u_edit"])) {
 		}
 		else $ht = "<meta http-equiv='refresh' content='2;URL=profile.php'>";
 		if ($user[0]["email"] != $_POST["u_email"]) $rec["email"] = $_POST["u_email"];
-		if ($user[0]["u_sig"] != encode_text(chop($_POST["u_sig"]))) $rec["sig"] = encode_text(chop($_POST["u_sig"]));
+		if ($user[0]["u_sig"] != PostingFunctions::encode_text(chop($_POST["u_sig"]))) $rec["sig"] = PostingFunctions::encode_text(chop($_POST["u_sig"]));
 		if ($_POST['u_sig'] == "")
 		$rec['sig'] = "";
 		if (substr(trim(strtolower($_POST["u_site"])), 0, 7) != "http://") $_POST["u_site"] = "http://".$_POST["u_site"];
@@ -163,7 +163,7 @@ if (isset($_POST["u_edit"])) {
 			MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'This user was either deleted or not found.', ALERT_MSG)),
 			true);
 		}
-		$status_config = status($rec);
+		$status_config = PostingFunctions::status($rec);
 		$status = $status_config['status'];
 		$statuscolor = $status_config['statuscolor'];
 		$statusrank = $status_config['rank'];
@@ -251,7 +251,7 @@ if (isset($_POST["u_edit"])) {
 		if (@$rec[0]["sig"] != "") echo "
 						<div class='pro_sig_name'>".$rec[0]["user_name"]."'s Signature:</div>
 						<div class='pro_sig_area'>
-							<div class='pro_signature'>".format_text(UPBcoding(filterLanguage($rec[0]["sig"], $_CONFIG)))."</div>
+							<div class='pro_signature'>".PostingFunctions::format_text(PostingFunctions::UPBcoding(PostingFunctions::filterLanguage($rec[0]["sig"], $_CONFIG)))."</div>
 						</div>"; 
 		echo "              </div>
                         </td>
@@ -307,7 +307,7 @@ if (isset($_POST["u_edit"])) {
 									$page = ceil($countpost / $_CONFIG["posts_per_page"]);
 								}
 
-								$msg = display_msg($pRec['message'], '', true);
+								$msg = PostingFunctions::display_msg($pRec['message'], '', true);
 								$msg .= $tdb->getUploads($_GET['id'],$_GET['t_id'],$pRec['id'],$pRec['upload_id'],$_CONFIG['fileupload_location'],$pRec['user_id']);
 								echo "
                                 <tr>
@@ -498,10 +498,10 @@ if (isset($_POST["u_edit"])) {
 			</tr>
     <tr>
 				<td class='area_1' valign='top'><strong>Signature:</strong></td>
-				<td class='area_2'  colspan='3'>".bbcodebuttons('u_sig','sig')."<textarea id='u_sig' name='u_sig' cols='45' rows='10'>".format_text($rec[0]["sig"],'edit')."</textarea><br /><input type='button' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','set');\" value='Preview Signature' /></td></tr>
+				<td class='area_2'  colspan='3'>".PostingFunctions::bbcodebuttons('u_sig','sig')."<textarea id='u_sig' name='u_sig' cols='45' rows='10'>".PostingFunctions::format_text($rec[0]["sig"],'edit')."</textarea><br /><input type='button' onclick=\"javascript:sigPreview(document.getElementById('u_sig'),'".$_COOKIE['id_env']."','set');\" value='Preview Signature' /></td></tr>
       <tr>
 				<td class='area_1' valign='top'><div id='sig_title'><strong>Current Signature:</strong></div></td>
-				<td class='area_2'  colspan='3'><div style='display:inline;' id='sig_preview'>".display_msg($rec[0]["sig"])."</div></td>
+				<td class='area_2'  colspan='3'><div style='display:inline;' id='sig_preview'>".PostingFunctions::display_msg($rec[0]["sig"])."</div></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='4'><img src='".SKIN_DIR."/images/spacer.gif' alt='' title='' /></td>

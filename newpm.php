@@ -5,7 +5,6 @@
 // Addon Created by J. Moore aka Rebles
 // Using textdb Version: 4.4.2
 require_once("./includes/upb.initialize.php");
-require_once("./includes/inc/post.inc.php");
 $where = "<a href='pmsystem.php'>Messenger</a> ".$_CONFIG["where_sep"]." New message";
 if ($tdb->is_logged_in() === false) MiscFunctions::exitPage("You are not even Logged in.");
 $PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
@@ -127,7 +126,7 @@ if (isset($_GET["r_id"]) && is_numeric($_GET["r_id"])) {
 	$hed = "New Topic";
 	$iframe = "";
 }
-$icons = message_icons();
+$icons = PostingFunctions::message_icons();
 
 //commented out PM blocking system
 if($_GET["to"] == $_COOKIE["id_env"])
@@ -189,10 +188,10 @@ else
 					<div style='text-align:center;margin-top:20px;margin-bottom:20px;'>";
 	echo "</div>
 					<div style='text-align:center;'></div></td>
-				<td class='area_2'>".bbcodebuttons('look1')."
+				<td class='area_2'>".PostingFunctions::bbcodebuttons('look1')."
         <textarea name='message' id='look1'>".$msg."</textarea><br>
 					<span id='msg_err' class='err'></span>
-					<div style='padding:8px;'>".getSmilies('look1')."</div></td>
+					<div style='padding:8px;'>".PostingFunctions::getSmilies('look1')."</div></td>
 			</tr>
 			<tr>
 				<td class='footer_3' colspan='6'><img src='./skins/default/images/spacer.gif' alt='' title='' /></td>
