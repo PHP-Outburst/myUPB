@@ -1,4 +1,6 @@
 <?php
+$loader = require 'vendor/autoload.php';
+$loader->add('', 'classes');
 function RemoveXSS($val) {
 	$before_val = $val;
 	
@@ -127,8 +129,7 @@ if(function_exists("date_default_timezone_set")) {
 }
 
 require_once("./includes/inc/defines.inc.php");
-require_once("./includes/class/error.class.php");
-$errorHandler = new errorhandler();
+$errorHandler = new ErrorHandler();
 //set_error_handler(array(&$errorHandler, 'add_error'));
 error_reporting(E_ALL ^ E_NOTICE);
 
@@ -149,10 +150,7 @@ if(file_exists(DB_DIR.'/banneduser.dat')) {
 	die(MINIMAL_BODY_HEADER.str_replace('__TITLE__', 'Notice:', str_replace('__MSG__', 'You have been banned from this bulletin board.<br>'.ALERT_GENERIC_MSG, ALERT_MSG)).MINIMAL_BODY_FOOTER);
 }
 
-require_once("./includes/class/tdb.class.php");
 require_once("./includes/class/config.class.php");
-require_once("./includes/class/func.class.php");
-
 require_once('./includes/inc/post.inc.php');
 require_once("./includes/inc/func.inc.php");
 require_once("./includes/inc/date.inc.php");
@@ -169,7 +167,7 @@ if(!file_exists(DB_DIR."/main.tdb"))
 }
 
 if(file_exists(DB_DIR."/main.tdb")) {
-	$tdb = new functions(DB_DIR.'/', 'main.tdb');
+	$tdb = new TdbFunctions(DB_DIR.'/', 'main.tdb');
 	//$tdb->define_error_handler(array(&$errorHandler, 'add_error'));
 	$tdb->setFp('users', 'members');
 	$tdb->setFp('forums', 'forums');

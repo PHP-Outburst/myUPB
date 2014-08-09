@@ -7,8 +7,7 @@
 // Ultimate PHP Board Topic display
 require_once('./includes/upb.initialize.php');
 require_once('./includes/header_simple.php');
-require_once('./includes/class/posts.class.php');
-$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 //check if the id exists
 if (!(is_numeric($_GET["id"]) && $posts_tdb->isTable($_GET["id"]))) die("Invalid Id");
 if (!isset($_GET["id"]) || !is_numeric($_GET["id"])) exitPage("Invalid Forum ID", false, true, true);

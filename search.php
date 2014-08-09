@@ -12,7 +12,7 @@
 require_once('./includes/upb.initialize.php');
 $where = "Search";
 require_once('./includes/header.php');
-$posts_tdb = new functions(DB_DIR.'/', "posts.tdb");
+$posts_tdb = new TdbFunctions(DB_DIR.'/', "posts.tdb");
 $sText = '';
 if (isset($_GET['q'])) $sText = $_GET['q'];
 if (!$tdb->is_logged_in()) $_COOKIE["power_env"] = 0;

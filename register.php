@@ -184,7 +184,7 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 
 
 	// If each user sends and receives one PM a day, their table will last 67.2 years
-	$temp_tdb = new tdb(DB_DIR."/", "privmsg.tdb");
+	$temp_tdb = new Tdb(DB_DIR."/", "privmsg.tdb");
 	$pmT_num = ceil($id / 100);
 	if (FALSE === $temp_tdb->isTable($pmT_num)) $temp_tdb->createTable($pmT_num, array(array("box", "string", 6), array("from", "number", 7), array("to", "number", 7), array("icon", "string", 10), array("subject", "memo"), array("date", "number", 14), array("message", "memo"), array("id", "id")));
 	$temp_tdb->cleanup();

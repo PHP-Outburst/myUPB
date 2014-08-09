@@ -105,7 +105,7 @@ if ($_POST['next'] == 0) {
 		), 2048);
 	}
 
-	$post_tdb = new tdb(DB_DIR, 'posts');
+	$post_tdb = new Tdb(DB_DIR, 'posts');
 	$tableList = $post_tdb->getTableList();
 	foreach($tableList as $table) {
 		// Remove the database name from the tablename
@@ -134,8 +134,7 @@ if ($_POST['next'] == 0) {
 	$config_tdb->addField('config', array('data_type', 'string', 7));
 	print "<P>New fields added to the tables.";
 
-	require_once('./includes/class/posts.class.php');
-	$post_tdb = new posts(DB_DIR, 'main');
+	$post_tdb = new Posts(DB_DIR, 'main');
 	if($post_tdb->isTable('trackforums')) $post_tdb->removeTable('trackforums');
 	if($post_tdb->isTable('tracktopics')) $post_tdb->removeTable('tracktopics');
 

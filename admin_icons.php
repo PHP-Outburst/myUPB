@@ -9,7 +9,7 @@ require_once("./includes/upb.initialize.php");
 
 $where = "<a href='admin.php'>Admin</a> ".$_CONFIG["where_sep"]." <a href='admin_icons.php'>Manage Post Icons</a>";
 require_once('./includes/header.php');
-$bdb = new tdb(DB_DIR.'/','bbcode.tdb');
+$bdb = new Tdb(DB_DIR.'/','bbcode.tdb');
 $bdb->setFP('icons','icons');
 
 if(!(isset($_COOKIE["user_env"]) && isset($_COOKIE["uniquekey_env"]) && isset($_COOKIE["power_env"]) && isset($_COOKIE["id_env"]))) {

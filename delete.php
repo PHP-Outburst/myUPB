@@ -5,9 +5,7 @@
 // Version: 2.0
 // Using textdb Version: 4.3.2
 require_once("./includes/upb.initialize.php");
-require_once("./includes/class/posts.class.php");
-require_once("./includes/class/upload.class.php");
-$post_tdb = new posts(DB_DIR, "posts.tdb");
+$post_tdb = new Posts(DB_DIR, "posts.tdb");
 $post_tdb->setFp("topics", $_GET["id"]."_topics");
 $post_tdb->setFp("posts", $_GET["id"]);
 if ($_GET["t"] == 1) $where = "Delete a Topic";
@@ -33,7 +31,7 @@ if ($_GET["t"] == 1) {
 					
 				$upload_ids = explode(",",$pRec[0]['upload_id']);
 
-				$upload = new upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
+				$upload = new Upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
 
 				foreach ($upload_ids as $upload_id)
 				$upload->deleteFile($upload_id);
@@ -82,7 +80,7 @@ if ($_GET["t"] == 1) {
 
 			$upload_ids = explode(",",$pRec[0]['upload_id']);
 
-			$upload = new upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
+			$upload = new Upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
 
 			foreach ($upload_ids as $upload_id)
 			$upload->deleteFile($upload_id);

@@ -10,8 +10,6 @@
  * @author Chris Kent <online@chris-kent.co.uk>
  */
 
-include_once(dirname( __FILE__ )."/../includes/class/posts.class.php");
-
 /**
  * This function kind of has blind success. It attempts to scan through the topics
  * and find any that have users monitoring it. Once found, makes a query to match
@@ -28,7 +26,7 @@ function updateMonitorTopics_v2_2_7()
 	
 	$success = true;
 	
-	$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+	$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 	$fRecs = $tdb->listRec("forums", 1);
 	
 	if($fRecs !== false)
@@ -150,7 +148,7 @@ function populateUploadDbFileOrigin_v2_2_7()
 	
 	$success = true;
 	
-	$posts_tdb = new posts(DB_DIR."/", "posts.tdb");
+	$posts_tdb = new Posts(DB_DIR."/", "posts.tdb");
 	$fRecs = $tdb->listRec("forums", 1);
 	
 	foreach ($fRecs as $fRec)

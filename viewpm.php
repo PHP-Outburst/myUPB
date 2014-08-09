@@ -9,7 +9,7 @@ require_once('./includes/inc/post.inc.php');
 $where = "<a href='pmsystem.php'>Messenger</a>";
 if ($_POST["action"] == "close") die('<html><body Onload="window.close()"> </body></html>');
 if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_GET["section"] == "inbox" || $_GET["section"] == "outbox")) {
-	$PrivMsg = new functions(DB_DIR."/", "privmsg.tdb");
+	$PrivMsg = new TdbFunctions(DB_DIR."/", "privmsg.tdb");
 	$PrivMsg->setFp("CuBox", ceil($_COOKIE["id_env"]/120));
 	$options = "";
 	if ($_GET["section"] == "inbox") {
