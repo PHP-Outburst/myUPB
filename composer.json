@@ -1,5 +1,6 @@
 {
     "require": {
-        "pclzip/pclzip": "dev-master"
+        "pclzip/pclzip": "dev-master",
+        "geshi/geshi": "dev-master"
     }
 }
