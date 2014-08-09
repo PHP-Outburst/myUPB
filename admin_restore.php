@@ -53,7 +53,6 @@ if ($_GET['action'] == 'backup') {
 	// TODO: replace this code with the UPB_BackupDatabase::backup() call
 	
 	$filename = 'upbdatabackup_v'.UPB_VERSION.'_'.date("m").'.'.date("d").'.'.date("Y").'.'.time().'.zip';
-	require_once('./includes/lib/pclzip.lib.php');
 	$zip = new PclZip(DB_DIR.'/backup/'.$filename);
 	//generate a file list for our backup
 	$dir = opendir(DB_DIR);
@@ -107,7 +106,6 @@ if ($_GET['action'] == 'backup') {
 				$tar->current_dir($current_dir);
 				$tar->extract_files($new_db_dir);
 				chdir($current_dir);*/
-			require_once('./includes/lib/pclzip.lib.php');
 			$zip = new PclZip(DB_DIR.'/backup/'.$_GET['file']);
 			$zip->extract(PCLZIP_OPT_PATH, $new_db_dir);
 			$success = false;

@@ -11,10 +11,6 @@
  * @author ???
  */
 
-
-// Compression utility
-include_once(dirname( __FILE__ )."/../../lib/pclzip.lib.php");
-
 // We need the DB_DIR
 include_once(dirname( __FILE__ )."/../../../config.php");
 
