@@ -150,7 +150,6 @@ if(file_exists(DB_DIR.'/banneduser.dat')) {
 	die(MINIMAL_BODY_HEADER.str_replace('__TITLE__', 'Notice:', str_replace('__MSG__', 'You have been banned from this bulletin board.<br>'.ALERT_GENERIC_MSG, ALERT_MSG)).MINIMAL_BODY_FOOTER);
 }
 
-require_once("./includes/class/config.class.php");
 require_once('./includes/inc/post.inc.php');
 require_once("./includes/inc/func.inc.php");
 require_once("./includes/inc/date.inc.php");
