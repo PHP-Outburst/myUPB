@@ -5,7 +5,7 @@ require_once('./includes/header_simple.php');
 echo "<div id='simple_border'>
 			<div class='simple_head'>Viewing additional smilies</div>
 			<div class='simple_sub_smilie'>Click on a smilie image below to have it added to your post.</div>
-			<table id='simple_table' style='background-color:#ffffff;' cellspacing='12'><tr>";
+			<table id='simple_table' cellspacing='12'><tr>";
 
 $bdb = new Tdb(DB_DIR.'/','bbcode.tdb');
 $bdb->setFp("smilies","smilies");
