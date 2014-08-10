@@ -41,21 +41,24 @@ DELETE update.php, update1_0.php, update1.x-2.0.php, update2_2_1.php, update2_2_
 See the changelog.txt file for details of bug fixes, new features and skin changes
 
 == Used Engines ==
-
+ Xajax
 http://www.xajax-project.org/
-https://github.com/Xajax/Xajax
 --
- smarty-php
-Smarty Template Language for PHP 
-http://www.smarty.net/
-http://www.smarty.net/download
-https://code.google.com/p/smarty-php/
-http://code.google.com/p/smarty-php/source/browse/trunk/distribution/change_log.txt
-https://github.com/smarty-php/smarty
-from  Monte Ohrt <monte at ohrt dot com > and Uwe Tews
+
+ Composer
+https://getcomposer.org/
 --
- cool-php-captcha
+
+
+ Cool-php-captcha
 https://code.google.com/p/cool-php-captcha/
+--
+
+
+ GeSHi
+http://qbnz.com/highlighter/
+--
+
 
 === About MyUPB Forum ===
 

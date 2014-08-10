@@ -17,6 +17,8 @@ v2.2.8 Changelog - ??/??/201?
 
 == NEW FEATURES ==
 # Now using HTML5 and CSS3
+# Added composer
+# Removed Smarty
 
 
 == SKIN CHANGES ==
