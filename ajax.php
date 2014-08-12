@@ -382,7 +382,7 @@ switch ($ajax_type)
 		$tdb->setFp('cats', 'categories');
 
 		$cRecs = $tdb->listRec("cats", 1);
-		$config_tdb->clearcache();
+		$config_tdb->clearCache();
 
 		$query = $config_tdb->basicQuery('config','name',"admin_catagory_sorting");
 
