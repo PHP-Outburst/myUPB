@@ -825,8 +825,12 @@ switch($_POST["add"]{0}) {
 </div>
 <br />
 <div class='copy'>Powered by myUPB&nbsp;&nbsp;&middot;&nbsp;&nbsp;<a
-	href='http://www.myupb.com/'>PHP Outburst</a> &nbsp;&nbsp;&copy;2002 -
-2009</div>
+	href='http://www.myupb.com/'>PHP Outburst</a> &nbsp;&nbsp;&copy;2002 -<?php echo date("Y",time()); ?><br/><br/>
+<a rel="license"
+	href="http://creativecommons.org/licenses/by-nc-sa/3.0/"><img
+	alt="Creative Commons License"
+	src="http://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png"/>
+	</a>
 </div>
 </body>
 </html>
