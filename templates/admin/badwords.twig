@@ -1,0 +1,66 @@
+{% extends "admin/_main.twig" %}
+
+{%  block adminContent %}
+    <div class="main_cat_wrapper">
+        <div class="cat_area_1">
+            <a href="admin.php">Admin</a> <b>::</b> <a href="admin_badwords.php">Manage Filtered Language</a>
+        </div>
+        <table class="main_table">
+            <tbody>
+                <tr>
+                    <th>Admin Panel Navigation</th>
+                </tr>
+                <tr>
+                    <td class="area_2" style="padding:20px;" valign="top">
+                        {% include 'admin/_navigation.twig' %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="footer">
+            <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+        </div>
+    </div>
+
+    <br />
+
+    <div id="tabstyle_2">
+        <ul>
+            <li>
+                <a href="admin_badwords.php?action=addnew" title="Add a new word?"><span>Add a new word?</span></a>
+            </li>
+        </ul>
+    </div>
+
+    <div style="clear:both;"></div>
+
+    <div class="main_cat_wrapper">
+        <div class="cat_area_1">Filtered Words</div>
+        <table class="main_table">
+            <tbody>
+                <tr>
+                    <th style="width:65%;">Word</th>
+                    <th>Option</th>
+                </tr>
+
+                {% if words|length == 0 %}
+                    <tr>
+                        <td class="area_2" style="text-align:center; font-weight:bold; padding:12px; line-height:20px;" colspan="2">No words found</td>
+                    </tr>
+                {% else %}
+                    {% for word in words %}
+                        <tr>
+                            <td class="area_1" style="padding:8px;"><strong>{{ word }}</strong></td>
+                            <td class="area_2" style="padding:8px;"><a href="admin_badwords.php?action=delete&word={{ word }}">Delete</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+
+            </tbody>
+        </table>
+        <div class="footer">
+            <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+        </div>
+    </div>
+    <br />
+{% endblock %}

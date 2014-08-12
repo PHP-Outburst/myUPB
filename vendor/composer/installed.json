@@ -45,15 +45,15 @@
         "source": {
             "type": "git",
             "url": "https://github.com/GeSHi/geshi-1.0.git",
-            "reference": "4895d6d58860c254a8b83501660116ac1a86c265"
+            "reference": "0a0c7f9760d861c33810f976c92d526cf3aba678"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/GeSHi/geshi-1.0/zipball/4895d6d58860c254a8b83501660116ac1a86c265",
-            "reference": "4895d6d58860c254a8b83501660116ac1a86c265",
+            "url": "https://api.github.com/repos/GeSHi/geshi-1.0/zipball/0a0c7f9760d861c33810f976c92d526cf3aba678",
+            "reference": "0a0c7f9760d861c33810f976c92d526cf3aba678",
             "shasum": ""
         },
-        "time": "2014-06-30 20:55:03",
+        "time": "2014-08-10 17:06:43",
         "type": "library",
         "installation-source": "source",
         "autoload": {
@@ -76,5 +76,64 @@
         ],
         "description": "Generic Syntax Highlighter",
         "homepage": "http://qbnz.com/highlighter/"
+    },
+    {
+        "name": "twig/twig",
+        "version": "v1.16.0",
+        "version_normalized": "1.16.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/fabpot/Twig.git",
+            "reference": "8ce37115802e257a984a82d38254884085060024"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/fabpot/Twig/zipball/8ce37115802e257a984a82d38254884085060024",
+            "reference": "8ce37115802e257a984a82d38254884085060024",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=5.2.4"
+        },
+        "time": "2014-07-05 12:19:05",
+        "type": "library",
+        "extra": {
+            "branch-alias": {
+                "dev-master": "1.16-dev"
+            }
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-0": {
+                "Twig_": "lib/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "BSD-3-Clause"
+        ],
+        "authors": [
+            {
+                "name": "Fabien Potencier",
+                "email": "fabien@symfony.com",
+                "homepage": "http://fabien.potencier.org",
+                "role": "Lead Developer"
+            },
+            {
+                "name": "Armin Ronacher",
+                "email": "armin.ronacher@active-4.com",
+                "role": "Project Founder"
+            },
+            {
+                "name": "Twig Team",
+                "homepage": "https://github.com/fabpot/Twig/graphs/contributors",
+                "role": "Contributors"
+            }
+        ],
+        "description": "Twig, the flexible, fast, and secure template language for PHP",
+        "homepage": "http://twig.sensiolabs.org",
+        "keywords": [
+            "templating"
+        ]
     }
 ]
