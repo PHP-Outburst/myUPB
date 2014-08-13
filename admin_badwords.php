@@ -15,14 +15,14 @@ require_once('./includes/header.php');
 if ($_GET['action'] == 'delete' && $_GET['word'] != '') {
     $words = array();
 
-	if ($_POST['verify'] == 'Ok') {
-		$words = explode(',', $_CONFIG['banned_words']);
+    if ($_POST['verify'] == 'Ok') {
+        $words = explode(',', $_CONFIG['banned_words']);
 
-		if (($index = array_search($_GET['word'], $words)) !== false) {
-			unset($words[$index]);
-			$words = implode(',', $words);
-			$config_tdb->editVars('config', array('banned_words' => $words));
-		}
+        if (($index = array_search($_GET['word'], $words)) !== false) {
+            unset($words[$index]);
+            $words = implode(',', $words);
+            $config_tdb->editVars('config', array('banned_words' => $words));
+        }
     }
 
     echo $twig->render('admin/badwords_delete.twig', array('words' => $words, '_COOKIE' => $_COOKIE, 'tdb' => $tdb,
@@ -38,7 +38,7 @@ if ($_GET['action'] == 'delete' && $_GET['word'] != '') {
     echo $twig->render('admin/badwords_add.twig', array('words' => $words, '_COOKIE' => $_COOKIE, 'tdb' => $tdb,
         '_POST' => $_POST, '_GET' => $_GET, 'SKIN_DIR' => SKIN_DIR, 'UPB_VERSION' => UPB_VERSION));
 } else {
-	$words = explode(',', $_CONFIG['banned_words']);
+    $words = explode(',', $_CONFIG['banned_words']);
 
     echo $twig->render('admin/badwords.twig', array('words' => $words, '_COOKIE' => $_COOKIE, 'tdb' => $tdb,
         'SKIN_DIR' => SKIN_DIR, 'UPB_VERSION' => UPB_VERSION));

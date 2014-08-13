@@ -1,0 +1,63 @@
+{% extends 'admin/_main.twig' %}
+
+{%  block adminContent %}
+    <div class="main_cat_wrapper">
+        <div class="cat_area_1">
+            <a href="admin.php">Admin</a> :: <a href="admin_baduser.php">Manage banned users</a>
+        </div>
+        <table class="main_table">
+            <tbody>
+                <tr>
+                    <th>Admin Panel Navigation</th>
+                </tr>
+                <tr>
+                    <td class="area_2" style="padding:20px;" valign="top">
+                        {% include 'admin/_navigation.twig' %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="footer">
+            <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+        </div>
+    </div>
+
+    <br />
+
+    <div id="tabstyle_2">
+        <ul>
+            <li>
+                <a href="admin_banuser.php?action=addnew" title="Add a banned user?"><span>Add a banned user?</span></a>
+            </li>
+        </ul>
+    </div>
+    <div style="clear:both;">
+    </div>
+    <div class="main_cat_wrapper">
+        <div class="cat_area_1">Manage banned users</div>
+        <table class="main_table">
+            <tbody>
+                <tr>
+                    <th colspan="3">Managing your banned members.</th>
+                </tr>
+                {% if userList.0|trim == '' %}
+                    <tr>
+                        <td class="area_2" style="text-align: center; font-weight: bold; padding: 12px; line-height: 20px;" colspan="3">No members banned.</td>
+                    </tr>
+                {% else %}
+                    {% for user in userList %}
+                        <tr>
+                            <td class="area_1" style="width:80%"><strong>{{ user }}</strong></td>
+                            <td class="area_2" style="width:10%"><a href="admin_banuser.php?action=edit&word={{ user }}">Edit</a></td>
+                            <td class="area_2" style="width:10%"><a href="admin_banuser.php?action=delete&word={{ user }}">Delete</a></td>
+                        </tr>
+                    {% endfor %}
+                {% endif %}
+            </tbody>
+        </table>
+        <div class="footer">
+            <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+        </div>
+    </div>
+    <br />
+{% endblock %}

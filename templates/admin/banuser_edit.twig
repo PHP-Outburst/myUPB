@@ -1,0 +1,68 @@
+{% extends 'admin/_main.twig' %}
+
+{%  block adminContent %}
+    {% if _POST.newword is defined %}
+        <div class="alert_confirm">
+            <div class="alert_confirm_text">
+                <strong>Editing banned user: {{ word }}!</strong>
+            </div>
+            <div style="padding: 4px;">
+                Done!
+            </div>
+        </div>
+        <meta http-equiv="refresh" content="1;URL=admin_banuser.php">
+    {% else %}
+        <div class="main_cat_wrapper">
+            <div class="cat_area_1">
+                Admin :: Manage banned users
+            </div>
+            <table class="main_table">
+                <tbody>
+                    <tr>
+                        <th>Admin Panel Navigation</th>
+                    </tr>
+                    <tr>
+                        <td class="area_2" style="padding: 20px;" valign="top">
+                            {% include 'admin/_navigation.twig' %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="footer">
+                <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+            </div>
+        </div>
+        <br />
+        {% if _POST.word is defined %}
+            <form action="admin_banuser.php?action=edit&word={{ _POST.word }}" method="post">
+        {% else %}
+            <form action="admin_banuser.php?action=edit&word={{ _GET.word }}" method="post">
+        {% endif %}
+
+            <div class="main_cat_wrapper">
+                <div class="cat_area_1">Changing banned username</div>
+                <table class="main_table">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">&nbsp;</th>
+                        </tr>
+                        <tr>
+                            <td class="area_1" style="width: 25%; padding: 8px;"><strong>Change a banned username to</strong></td>
+                            <td class="area_2"><input type="text" name="newword" value="{{ word }}" size="20" /></td>
+                        </tr>
+                        <tr>
+                            <td class="footer_3" colspan="2"><img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" /></td>
+                        </tr>
+                        <tr>
+                            <td class="footer_3a" colspan="2" style="text-align: center;"><input type="submit" value="Edit" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="footer">
+                    <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+                </div>
+            </div>
+            <br />
+        </form>
+    {% endif %}
+{% endblock %}
