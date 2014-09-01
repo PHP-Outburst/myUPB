@@ -24,20 +24,5 @@ a 'feature rich' forum and can be even better providing some of the errors and c
 
 If you would like to learn more about the project and the various releases then visit these sites:
 
-The official MyUPB forum want be renewed and mus be have an relaunch and 
-Halamix from http://halamix2.cba.pl have move the MyUPB Software on the Github repository at Jun 8, 2014 
-and have Build the "PHP Outburst Group" Outburst, because now MyUPB in Freedom 
-and any can help with !
-Bill from http://www.basildon.com have Build an Programmer underground Forum for us on
-http://www.basildon.com/upb/index.php at .... ? ....
-Blackcrack from blackysgate.de build at Aug 11, 2014 an Offizially Webpage for MyUPB and build 
-some skins for MyUPB :) 
-clark-myupb it is honorific Owner and remains on lifetime the Chef !
-PHPCodex has Joined on Jul 19, 2014 get 6 contributions at 19 Juli ...
-Rouven,rwchhs aka DrKitarisu Joined on Sep 06, 2013 in the Team and have get 
-to this point 74 commits at Aug 10 2013 - Aug 10 2014 and make a really good work !
 
-
-it will go on and document here !
-Like a diary :)
 
