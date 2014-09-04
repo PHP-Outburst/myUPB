@@ -5,6 +5,9 @@
 // Website: http://www.myupb.com
 // Version: 2.0
 // Using textdb Version: 4.3.2
+error_reporting(E_ALL);  //If you have an error, enable this for errorseach 
+ini_set('display_errors', 1);  
+
 header ("refresh: 600");
 require_once("./includes/upb.initialize.php");
 
