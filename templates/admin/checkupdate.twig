@@ -1,0 +1,42 @@
+{% extends 'admin/_main.twig' %}
+
+{%  block adminContent %}
+    <div class="main_cat_wrapper">
+        <div class="cat_area_1">Admin :: checking for updates</div>
+        <table class="main_table">
+            <tbody>
+                <tr>
+                    <th>Admin Panel Navigation</th>
+                </tr>
+                <tr>
+                    <td class="area_2" style="padding: 20px;" valign="top">
+                        {% include 'admin/_navigation.twig' %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="footer">
+            <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+        </div>
+    </div>
+    <br />
+    <div class="main_cat_wrapper">
+        <div class="cat_area_1">Checking for myUPB updates</div>
+        <table class="main_table">
+            <tbody>
+                <tr>
+                    <td class="review_container">
+                        <div class="review_sub">
+                            <iframe src="http://www.myupb.com/upbcheckupdate.php?ver={{ UPB_VERSION }}"
+                                    class="review_frame" scrolling="auto" frameborder="0"></iframe>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="footer">
+            <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+        </div>
+    </div>
+    <br />
+{% endblock %}

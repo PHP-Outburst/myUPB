@@ -1,0 +1,76 @@
+{% extends 'admin/_main.twig' %}
+
+{%  block adminContent %}
+    {% if _POST.word != '' %}
+        <div class="alert_confirm">
+            <div class="alert_confirm_text">
+                <strong>Adding banned user: {{ _POST.word }}!</strong>
+            </div>
+            <div style="padding: 4px;">
+                Done!
+            </div>
+        </div>
+
+        {% if _POST.ref != '' %}
+            <meta http-equiv="refresh" content="1;URL={{ _POST.ref }}">
+        {% else %}
+            <meta http-equiv="refresh" content="1;URL=admin_banuser.php">
+        {% endif %}
+    {% else %}
+        <div class="main_cat_wrapper">
+            <div class="cat_area_1">Admin :: manage banned users</div>
+            <table class="main_table">
+                <tbody>
+                    <tr>
+                        <th>Admin Panel Navigation</th>
+                    </tr>
+                    <tr>
+                        <td class="area_2" style="padding:20px;" valign="top">
+                            {% include 'admin/_navigation.twig' %}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="footer">
+                <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+            </div>
+        </div>
+
+        <br />
+
+        <form action="admin_banuser.php?action=addnew" method="post">
+            <input type="hidden" name="ref" value="{{ _GET.ref }}" />
+            <div class="main_cat_wrapper">
+                <div class="cat_area_1">Banning a member</div>
+                    <table class="main_table">
+                        <tbody>
+                            <tr>
+                                <th colspan="2">&nbsp;</th>
+                            </tr>
+                            <tr>
+                                <td class="area_1" style="width: 25%; padding: 8px;">
+                                    <strong>Enter user name to be banned</strong>
+                                </td>
+                                <td class="area_2">
+                                    <input type="text" name="word" size="20" value="{{ _GET.newword }}"></td>
+                            </tr>
+                            <tr>
+                                <td class="footer_3" colspan="2">
+                                    <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="footer_3a" colspan="2" style="text-align:center;">
+                                    <input type="submit" value="Add to ban list">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                <div class="footer">
+                    <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+                </div>
+            </div>
+            <br />
+        </form>
+    {% endif %}
+{% endblock %}

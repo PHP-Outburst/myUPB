@@ -1,0 +1,53 @@
+{% extends '_layouts/master.twig' %}
+
+{% block mainContent %}
+    {% if _COOKIE.user_env is defined and _COOKIE.uniquekey_env is defined and _COOKIE.power_env is defined and _COOKIE.id_env is defined %}
+        {% if tdb.is_logged_in() and _COOKIE.power_env >= 3 %}
+
+            {%  block adminContent %}
+                <div class="main_cat_wrapper">
+                    <div class="cat_area_1">
+                        <a href="admin.php">Admin</a>
+                    </div>
+                    <table class="main_table">
+                        <tbody>
+                        <tr>
+                            <th>Admin Panel Navigation</th>
+                        </tr>
+                        <tr>
+                            <td class="area_2" style="padding:20px;" valign="top">
+                                {% include 'admin/_navigation.twig' %}
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="footer">
+                        <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+                    </div>
+                </div>
+
+                <br />
+            {% endblock %}
+
+        {% else %}
+            <div class="alert">
+                <div class="alert_text">
+                    <strong>Access Denied!!</strong>
+                </div>
+                <div style="padding:4px;">
+                    You are not authorized to be here.
+                </div>
+            </div>
+        {% endif %}
+
+    {% else %}
+        <div class="alert">
+            <div class="alert_text">
+                <strong>Step Five Failed!</strong>
+            </div>
+            <div style="padding:4px;">
+                You are not logged in or not authorized to be here. <meta http-equiv="refresh" content="2;URL=login.php?ref=admin.php">
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

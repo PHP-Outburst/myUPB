@@ -1,0 +1,22 @@
+        {# the header part will go here eventually; for now, header.php will still have to be require()'d #}
+
+        {% block mainContent %}
+        {% endblock %}
+
+        {# this is what footer.php used to be - so please don't include that file anymore! #}
+        <footer>
+            <div class="copy">
+                <a href="http://forum.myupb.com/">Powered by myUPB v{{ UPB_VERSION }}</a>&nbsp;&nbsp;&middot;&nbsp;&nbsp;
+                &copy;
+                <a href="https://github.com/PHP-Outburst" target="_blank" title="at GitHub.com">PHP Outburst</a>
+                2002 - {{ "now"|date('Y') }}
+                <br />
+                <br />
+                <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/">
+                    <img alt="Creative Commons License" src="http://i.creativecommons.org/l/by-nc-sa/3.0/80x15.png" />
+                </a>
+            </div>
+        </footer>
+    </div>
+</body>
+</html>

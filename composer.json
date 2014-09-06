@@ -1,6 +1,7 @@
 {
     "require": {
         "pclzip/pclzip": "dev-master",
-        "geshi/geshi": "dev-master"
+        "geshi/geshi": "dev-master",
+        "twig/twig": "1.*"
     }
 }

@@ -1,0 +1,42 @@
+{% extends 'admin/_main.twig' %}
+
+{%  block adminContent %}
+    {% if _POST['newword'] != '' %}
+        <div class="alert_confirm">
+            <div class="alert_confirm_text">
+                <strong>Redirecting:</strong>
+            </div>
+            <div style="padding:4px;">
+                adding new word... Done!
+            </div>
+        </div>
+        <meta http-equiv="refresh" content="1;URL=admin_badwords.php">
+    {% else %}
+        <form action="admin_badwords.php?action=addnew" method="post">
+            <div class="main_cat_wrapper">
+                <div class="cat_area_1">Adding a filtered word</div>
+                <table class="main_table">
+                    <tbody>
+                        <tr>
+                            <th colspan="2">Add the word you wish to be censored below</th>
+                        </tr>
+                        <tr>
+                            <td class="area_1" style="width:35%; padding:12px;"><strong>New filtered word</strong></td>
+                            <td class="area_2"><input type="text" name="newword" size="20" /></td>
+                        </tr>
+                        <tr>
+                            <td class="footer_3" colspan="2"><img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" /></td>
+                        </tr>
+                        <tr>
+                            <td class="footer_3a" colspan="2" style="text-align:center;"><input type="submit" value="Add"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="footer">
+                    <img src="{{ SKIN_DIR }}/images/spacer.gif" alt="" title="" />
+                </div>
+            </div>
+            <br />
+        </form>
+    {% endif %}
+{% endblock %}

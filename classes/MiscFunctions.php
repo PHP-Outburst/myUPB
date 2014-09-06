@@ -416,7 +416,7 @@ class MiscFunctions
         $timezones['11'] = '(GMT +11:00) Magadan, Solomon Islands, New Caledonia';
         $timezones['12'] = '(GMT +12:00) Auckland, Wellington, Fiji, Kamchatka';
 
-        $output = '\n<select name="' . $timezone_field_string . '" id="u_timezone">\n';
+        $output = '<select name="' . $timezone_field_string . '" id="u_timezone">';
         $set = (float)$current; //convert to a float for comparison with keys
 
         foreach ($timezones as $key => $places) {
@@ -426,10 +426,10 @@ class MiscFunctions
             if ($set == $diff)
                 $output .= ' selected="selected"';
 
-            $output .= '>$places</option>\n';
+            $output .= '>' . $places . '</option>';
         }
 
-        $output .= '</select>\n';
+        $output .= '</select>';
 
         return $output;
     }

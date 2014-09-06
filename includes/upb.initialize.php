@@ -1,6 +1,10 @@
 <?php
 $loader = require 'vendor/autoload.php';
 $loader->add('', 'classes');
+
+$twigLoader = new Twig_Loader_Filesystem('templates');
+$twig = new Twig_Environment($twigLoader, array());
+
 function RemoveXSS($val) {
 	$before_val = $val;
 	

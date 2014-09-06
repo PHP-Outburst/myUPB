@@ -1,0 +1,39 @@
+{% extends 'admin/_main.twig' %}
+
+{%  block adminContent %}
+    {% if _POST.verify == 'Ok' %}
+        <div class="alert_confirm">
+            <div class="alert_confirm_text">
+                <strong>deleting user from ban list</strong>
+            </div>
+            <div style="padding:4px;">
+                <meta http-equiv="refresh" content="1;URL=admin_badwords.php">
+            </div>
+        </div>
+
+        {% if _POST.ref != '' %}
+            <meta http-equiv="refresh" content="1;URL={{ _POST.ref }}">
+        {% else %}
+            <meta http-equiv="refresh" content="1;URL=admin_banuser.php">
+        {% endif %}
+    {% elseif _POST.verify == 'Cancel' %}
+        {% if _POST.ref != '' %}
+            <meta http-equiv="refresh" content="1;URL={{ _POST.ref }}">
+        {% else %}
+            <meta http-equiv="refresh" content="1;URL=admin_banuser.php">
+        {% endif %}
+    {% else %}
+        <form action="admin_banuser.php?action=delete&word={{ _GET.word }}" method="post">
+            <div class="alert">
+                <div class="alert_text">
+                    <strong>Are you sure you want to remove "<b>{{ _GET.word }}</b>" </b> from the banned users list?</strong>
+                    <input type="hidden" name="ref" value="{{ _GET.ref }}" />
+                </div>
+                <div style="padding:4px;">
+                    <input type="submit" name="verify" value="Ok" />
+                    <input type="submit" name="verify" value="Cancel" />
+                </div>
+            </div>
+        </form>
+    {% endif %}
+{% endblock %}
