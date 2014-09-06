@@ -170,7 +170,7 @@ if(file_exists(DB_DIR."/main.tdb")) {
 	$tdb->setFp("uploads", "uploads");
 
 	//UPB's main Vars
-	$config_tdb = new configSettings();
+	$config_tdb = new ConfigSettings();
 	$config_tdb->setFp("config", "config");
 	$config_tdb->setFp("ext_config", "ext_config");
 
