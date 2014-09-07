@@ -257,11 +257,11 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 	if ((bool)$_REGIST['security_code'] && !$tdb->is_logged_in())
 	echo "<br /><span class='description'>A confirmation e-mail is sent to the email address that you provide.</span>";
 	echo "</td>
-				<td class='area_2'><input type='text' name='u_email' size='40' onblur=\"ValidEmail(this.value);\"><span class='err' id='emailvalid'></span></td>
+				<td class='area_2'><input type=\"email\" name='u_email' size='40' onblur=\"ValidEmail(this.value);\"><span class='err' id='emailvalid'></span></td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Confirm E-mail Address:</strong> <span style='color:$required;'>*</span></td>
-				<td class='area_2'><input type='text' name='u_email2' size='40' onblur=\"CheckEmail(document.registration.u_email.value,this.value);\"><span class='err' id='emailcheck'></span></td>
+				<td class='area_2'><input type=\"text\" name='u_email2' size='40' onblur=\"CheckEmail(document.registration.u_email.value,this.value);\"><span class='err' id='emailcheck'></span></td>
 			</tr>
 			<tr>
 				<td class='area_1'>
