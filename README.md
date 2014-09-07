@@ -11,7 +11,7 @@ Unofficial Forum for programmers is on <br>
 http://www.basildon.com/upb/<br>
 <br>
 actual Server Requirements :<br>
-PHP Version : 5.?<br>
+PHP Version : 5.3<br>
 other Requirements :<br>
 <br>
 <b>About MyUPB:</b><br>
