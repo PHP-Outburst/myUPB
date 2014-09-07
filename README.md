@@ -8,12 +8,12 @@ Official Forum is on <br>
 http://forum.myupb.com/ 
 
 Unofficial Forum for programmers is on <br>
-http://www.basildon.com/upb/
-
-actual Server Requirements :
-PHP Version : 5.?
-other Requirements :
-
+http://www.basildon.com/upb/<br>
+<br>
+actual Server Requirements :<br>
+PHP Version : 5.?<br>
+other Requirements :<br>
+<br>
 <b>About MyUPB:</b><br>
 <br>
 MyUPB Forum software was first released in 2002, its initials is an acronym of Ultimate PHP Board.
