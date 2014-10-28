@@ -64,9 +64,9 @@ confirmed. You can now log into the bulletin board.</div>
 
 	if($email_status) {
 		?>
-<div class='alert_confirm'>
-<div class='alert_confirm_text'><strong>Attention:</strong></div>
-<div style='padding: 4px;'>A reconfirmation e-mail was successfully sent
+<div class ='alert_confirm'>
+<div class ='alert_confirm_text'><strong>Attention:</strong></div>
+<div style ='padding: 4px;'>A reconfirmation e-mail was successfully sent
 to your e-mail address on file. It should arrive in 2 - 5 minutes. If it
 doesn't arrive please check your Junk Mail folder. If you haven't
 received it after a short while please contact an administrator.</div>
@@ -84,6 +84,9 @@ MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replac
 if (empty($_POST["show_email"])) $_POST["show_email"] = "";
 if (empty($_POST["email_list"])) $_POST["email_list"] = "";
 if (!isset($_POST["submit"])) $_POST["submit"] = "";
+//---bot honeypot start
+if(isset($_POST['email']) && $_POST['email']) {  };
+//---bot honeypot end
 
 if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 	if (!$tdb->is_logged_in() && (empty($_SESSION['captcha']) || strtolower(trim($_REQUEST['captcha'])) != $_SESSION['captcha'])) //checks cool php captcha, repaired registering as admin/mod
@@ -91,8 +94,10 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 	$_POST["u_login"] = strip_tags($_POST["u_login"]);
 	$_POST["u_login"] = trim($_POST["u_login"]);
 
+
 	if ($_POST["u_login"] == '' || $_POST["u_email"] == '')
 	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'You did not fill in all required fields. (*)', ALERT_MSG)), true);
+
 
 	if($_POST['u_email'] != $_POST['u_email2'])
 	MiscFunctions::exitPage(str_replace('__TITLE__', ALERT_GENERIC_TITLE, str_replace('__MSG__', 'Your e-mails do not match.', ALERT_MSG)), true);
@@ -257,7 +262,15 @@ if (isset($_POST['submit']) && $_POST["submit"] == "Submit") {
 	if ((bool)$_REGIST['security_code'] && !$tdb->is_logged_in())
 	echo "<br /><span class='description'>A confirmation e-mail is sent to the email address that you provide.</span>";
 	echo "</td>
-				<td class='area_2'><input type=\"email\" name='u_email' size='40' onblur=\"ValidEmail(this.value);\"><span class='err' id='emailvalid'></span></td>
+				<td class='area_2'>";
+//-----bot honeypot mail start
+echo "
+<p style='display:none;'>
+  <label for='email'>youre Mail be not ask, please write there nothing!:</label>
+  <input id='email' name='email' size='60' value='' />
+</p>";
+//-----bot honeypot mail end
+echo "<input type=\"email\" name='u_email' size='40' onblur=\"ValidEmail(this.value);\"><span class='err' id='emailvalid'></span></td>
 			</tr>
 			<tr>
 				<td class='area_1'><strong>Confirm E-mail Address:</strong> <span style='color:$required;'>*</span></td>
