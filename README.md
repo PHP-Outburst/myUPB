@@ -18,6 +18,9 @@ other Requirements :<br>
 <br>
 MyUPB Forum software was first released in 2002, its initials is an acronym of Ultimate PHP Board.
 It was written by a small team of software developers working under the banner PHP Outburst headed by Tim Hoeppner aka Pilot and supported by Jerroyd Moore aka Rebles.
+
+Originally Pilot stopped work on the project for several years and handed it off to Excorcist aka Ben Woods. During this time Excorcist served as the head of the project for several years until Pilot rejoined the project serving as the project head. Developers ServerGuy and Rebles joined during the time that Excorcist was leading the project. ServerGuy and Rebles were crucial to the project's success at the time and between the three of them, MyUPB matured significantly.
+
 Other developers were Jono345, The Ripper, Codex and Clark, who joined in April 2007.<br>
 <br>
 Although the team continued to expand its features MySQL based forums had become a cheap and attractive alternative which lead to a decline in the number of sites using MyUPB.
