@@ -3,16 +3,10 @@
 *.ta
 *.dat
 *.tdb
-data_53e641d8ade712.85518896/.htaccess
-data_53e641d8ade712.85518896/ip.log
-data_53e641d8ade712.85518896/constants.php
-uploads_53e641d8affe30.12436392/.htaccess
-uploads_53e641d8affe30.12436392/index.html
-.idea/vcs.xml
-.idea/.name
-.idea/MyUPB-autoload.iml
-.idea/scopes/scope_settings.xml
-*.xml
+data_*/
+uploads_*/
+.idea/
 config.php
 composer.lock
-vendor/.git
+vendor/.git #not sure why this was added
+
