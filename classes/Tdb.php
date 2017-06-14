@@ -1156,7 +1156,7 @@ class Tdb
             return false;
 		}
 
-		$record = "";
+		$record = [];
 
         for ($i = 1, $cHeader = (count($header) - 8); $i <= $cHeader; $i++) {
 			if (isset($recArr[$header[$i]["fName"]]))
@@ -1905,3 +1905,4 @@ class Tdb
 	}
 }
 ?>
+
