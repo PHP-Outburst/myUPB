@@ -1,18 +1,21 @@
 my Ultimate PHP Board
 ========
-or myUPB <br>
+or just myUPB <br>
 Ultimate PHP Board is a flat-file forum for anyone who need fast and modern forum without using mySQL.
 
+Development:  
+[Slack invitation link](https://join.slack.com/myupb/shared_invite/MTk3NjIyMzEzNDQyLTE0OTc0NDQ5NTEtM2M3YjEwYWRjYw)  
+[Trello board](https://trello.com/b/auAFMLCa/myupb-228)
 
 Official Forum is on <br>
-http://forum.myupb.com/ 
+http://forum.myupb.com/
 
 Unofficial Forum for programmers is on <br>
 http://www.basildon.com/upb/<br>
 <br>
 actual Server Requirements :<br>
-PHP Version : 5.3<br>
-other Requirements :<br>
+PHP Version: 5.3<br>
+other Requirements:<br>
 <br>
 <b>About MyUPB:</b><br>
 <br>
@@ -30,14 +33,16 @@ Progress since then has been slow with the original team retiring from the proje
 <br>
 Now, since may 2014 new group of developers is working on myUPB v.2.2.8.
 We decided to store code on Github where you can see how much work we did since 2.2.7 version.
-<br>
-Some of the new things are:<br>
+  
+Some of the new things are:  
+
 - new Captcha (thanks for Cool-php-captcha team)
 - many bugfixes (there is still much to do)
 - html5 and css3 (in 2.2.8 we want to use new technologies)
   - partially changed obsolete html tags to new ones (or css)
-<br>
-Todo:<br>
+  
+Todo:
+
 - fix all errors! :)
 - new skins
 - internationalisation

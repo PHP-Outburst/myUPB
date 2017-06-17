@@ -45,7 +45,7 @@ class PostingFunctions
 
     public static function encode_text($text)
     {
-        $string = str_replace(array('<','>','<x>'),array('&lt;','&gt;',''),$text);
+        $string = htmlspecialchars($text, ENT_QUOTES);
         return $string;
     }
 

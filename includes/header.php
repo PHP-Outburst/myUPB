@@ -149,8 +149,7 @@ echo "<!DOCTYPE html>
 <link rel='stylesheet' type='text/css' href='".SKIN_DIR."/css/style.css' />
 <link rel='stylesheet' type='text/css' href='skins/disabled.css' />
 <script type='text/javascript' src='./includes/scripts.js'></script>
-<script type='text/javascript' src='./includes/301a.js'></script>
-<!--this is unfinished and (probably) unstable version of TheirUPB fork. Use at own risk!-->";
+<script type='text/javascript' src='./includes/301a.js'></script>";
 
 // Check if an xajax object exists
 if(isset($xajax))
