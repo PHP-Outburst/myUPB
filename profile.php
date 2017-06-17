@@ -110,7 +110,7 @@ if (isset($_POST["u_edit"])) {
 		elseif(isset($_POST['avatar']) && $_POST['avatar'] != '') {
 			$new_av = MiscFunctions::xml_clean($_POST['avatar']);
 			$ext = pathinfo($new_av, PATHINFO_EXTENSION);
-			if (!in_array($new_av,$exts) or $ext == "")
+			if (!in_array($ext,$exts) or $ext == "")
 				$upload_err = "The avatar is not a valid image file. File must be a gif,jpg, jpeg or png. Avatar has not been updated";
 			else
 				$rec['avatar'] = $new_av;

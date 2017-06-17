@@ -14,7 +14,7 @@ $where = "Search";
 require_once('./includes/header.php');
 $posts_tdb = new TdbFunctions(DB_DIR.'/', "posts.tdb");
 $sText = '';
-if (isset($_GET['q'])) $sText = $_GET['q'];
+if (isset($_GET['q'])) $sText = PostingFunctions::encode_text($_GET['q']);
 if (!$tdb->is_logged_in()) $_COOKIE["power_env"] = 0;
 //build our forum list for selecting which forums to search from
 $form_cats = $tdb->listRec("cats", 1);
@@ -62,8 +62,8 @@ echo "
 MiscFunctions::echoTableFooter(SKIN_DIR);
 				echo "</form>";
 				//end form
-				if (isset($_GET['q']) && trim($_GET['q']) != "" || trim($_GET["q"]) == "" && trim($_GET["user"]) != "") {
-					$forums = array();
+				if (isset($_GET['q']) && trim(PostingFunctions::encode_text($_GET['q'])) != "" || trim(PostingFunctions::encode_text($_GET["q"])) == "" && trim(PostingFunctions::encode_text($_GET["user"])) != "") {
+                    $forums = array();
 					$fRecs = $tdb->listRec("forums", 1);
 					if ($_GET["forums_req"] == "all") {
 						for($i = 0, $fmax = count($fRecs); $i < count($fRecs); $i++) {
@@ -76,17 +76,9 @@ MiscFunctions::echoTableFooter(SKIN_DIR);
 					}
 					if (isset($_GET["intopic"])) $intopic = TRUE;
 					else $intopic = FALSE;
-					$sText = $_GET['q'];
-					$sText = str_replace(",", "", $sText);
-					$sText = str_replace(".", "", $sText);
-					$sText = str_replace(";", "", $sText);
-					$sText = str_replace("?", "", $sText);
-					$sText = str_replace("\"", "", $sText);
-					$sText = str_replace("\'", "", $sText);
-					$sText = str_replace("+", "", $sText);
-					$sText = str_replace("-", "", $sText);
+					$sText = trim(PostingFunctions::encode_text($_GET['q']));
 					$words = explode(" ", $sText);
-					$userParam = $_GET["user"];
+					$userParam = trim(PostingFunctions::encode_text($_GET["user"]));
 					$sTopics = array();
 					foreach($words as $word) {
 						if ($_GET["req"] == "OR" && $userParam != "") $sTopics[] = "subject?'{$word}'&&user_name='{$userParam}'";
@@ -220,7 +212,7 @@ MiscFunctions::echoTableFooter(SKIN_DIR);
 						}
 					}
 				}
-				if (empty($resultTopics) && empty($resultPosts) && isset($_GET["q"]) && strlen(trim($_GET["q"])) > 0) {
+				if (empty($resultTopics) && empty($resultPosts) && isset($_GET["q"]) && strlen(trim(PostingFunctions::encode_text($_GET["q"]))) > 0) {
 					echo "<div class='alert'><div class='alert_text'>
 <strong>Search failed!</strong></div><div style='padding:4px;'>......No results found......</div></div>";
 				}
