@@ -13,6 +13,7 @@ v2.2.8 Changelog - ??/??/201?
 == BUG FIXES ==
 # Fixed underlining in Firefox
 # Added missing smilies
+#PHP7 support
 
 
 == NEW FEATURES ==
