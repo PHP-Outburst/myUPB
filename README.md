@@ -5,7 +5,7 @@ Ultimate PHP Board is a flat-file forum for anyone who need fast and modern foru
 
 Development:  
 [Slack invitation link](https://join.slack.com/myupb/shared_invite/MTk3NjIyMzEzNDQyLTE0OTc0NDQ5NTEtM2M3YjEwYWRjYw)  
-[Trello board](https://trello.com/b/auAFMLCa/myupb-228)
+[Development flow](hhttps://github.com/PHP-Outburst/myUPB/projects/1)
 
 Official Forum is on <br>
 http://forum.myupb.com/
