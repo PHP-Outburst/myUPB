@@ -27,7 +27,7 @@ if (isset($_POST["u_name"]) && isset($_POST["u_pass"])) {
 				if($_REGIST['reg_approval']) {
 					$reg_approvals = $tdb->query('users', "reg_code?'reg_'", 1, -1);
 					$_SESSION['reg_approval_count'] = ((!empty($reg_approvals[0])) ? count($reg_approvals) : 0);
-					$_SESSION['reg_approval_lastcheck'] = mktime(); //Use only if reg_approval_count == 0
+					$_SESSION['reg_approval_lastcheck'] = time(); //Use only if reg_approval_count == 0
 				} else {
 					$_SESSION['reg_approval_count'] = 0;
 					$_SESSION['reg_approval_lastcheck'] = 0;
