@@ -123,13 +123,13 @@ if (!$tdb->is_logged_in()) {
 	fseek($f, (((int)$_COOKIE["id_env"] * 2) - 2));
 	$new_pm = fread($f, 2);
 	fclose($f);
-	if ((int)$new_pm != 0) $pm_alert = "-&nbsp;<img src=\"images/new.gif\"> <a href='pmsystem.php?section=inbox'><strong>".$new_pm."</strong> new PMs in your inbox</a>";
+	if ((int)$new_pm != 0) $pm_alert = "-&nbsp;<img src=\"images/new.jpg\"> <a href='pmsystem.php?section=inbox'><strong>".$new_pm."</strong> new PMs in your inbox</a>";
 	else $pm_alert = "-&nbsp;<img src=\"images/old.gif\"> No new messages";
 	$mark_all_read = "<a href='setallread.php'>Mark all posts read</a>";
 	if ($_COOKIE["power_env"] >= 3) {
 		$adminlink = "<a href='admin.php'>Admin Panel</a>&nbsp;&middot;";
 		if($_REGIST['reg_approval']) {
-			if($_SESSION['reg_approval_count'] == 0 && mktime() > ($_SESSION['reg_approval_lastcheck']+300)) {//Check every 5 mins IF count == 0
+			if($_SESSION['reg_approval_count'] == 0 && time() > ($_SESSION['reg_approval_lastcheck']+300)) {//Check every 5 mins IF count == 0
 				$users = $tdb->query('users', "reg_code?'reg_'", 1, -1);
 				$_SESSION['reg_approval_count'] = ((!empty($users[0])) ? count($users) : 0);
 			}
