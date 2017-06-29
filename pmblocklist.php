@@ -135,7 +135,7 @@ if ($_GET["action"] == "" || 1==1) {
 					<li><a href='pmsystem.php?section=outbox'><span>View Outbox</span></a></li>
 					<li><a href='pmblocklist.php'><span>Manage Blocked Users</span></a></li>
 					<!--<li><a href='pmblocklist.php?action=adduser'><span>Block a User</span></a></li>-->
-	i			</ul>
+				</ul>
 			</div>
 			<div style='clear:both;'></div>";
 	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
