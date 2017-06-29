@@ -47,7 +47,7 @@ if ($_GET["action"] == "add") {
 		if ($after == "done") {
 			MiscFunctions::exitPage($echo, true);
 		} elseif($action == "close" || $after == "close") {
-			irequire_once('./includes/header.php');
+			require_once('./includes/header.php');
 			echo $echo;
 			require_once('./includes/footer.php');
 			MiscFunctions::redirect("viewpm.php?action=close", "3");
