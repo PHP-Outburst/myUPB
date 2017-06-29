@@ -32,7 +32,7 @@ if ($_GET["action"] == "add") {
 	} else {
 		if ($void == "") {
 			$blockedIds = array();
-			iPrivateMessaging::addUsersPMBlockedList($_COOKIE["id_env"]);
+			PrivateMessaging::addUsersPMBlockedList($_COOKIE["id_env"]);
 		}
 	}
 	if ($void == "") {
