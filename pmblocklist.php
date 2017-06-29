@@ -141,7 +141,7 @@ if ($_GET["action"] == "" || 1==1) {
 	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 				<tr>
-					<th style='width:80%'><font face='$font_face' size='$font_m' color='$font_color_header'>Users</th>
+					<th style='width:80%'><font face='$font_face' size='$font_m' color='$font_color_header'>Users</font></th>
 					<th style='width:20%;text-align:center;'>UnBlock?</th>
 				</tr>
 			<form action='$PHP_SELF' method='POST' onSubmit='submitonce(this)' enctype='multipart/form-data'><input type='hidden' name='action' value='unblock'>";
