@@ -25,7 +25,6 @@ if ($_GET["action"] == "add") {
 	}
 	$blockedIds = PrivateMessaging::getUsersPMBlockedList($_COOKIE["id_env"]);
 	if (!empty($blockedIds)) {
-		//print_r($blockedIds);
 		if (true === (in_array($user[0]["id"], $blockedIds))) {
 			$void .= '1';
 			$echo .= $user[0]["user_name"]." is already blocked<br />";
@@ -64,7 +63,7 @@ if ($_GET["action"] == "add") {
 		MiscFunctions::exitPage(strlen($void)." error(s) occured:<br />".$echo, true);
 	}
 	unset($rec, $user, $ck, $k, $void, $new, $f, $i);
-} elseif($_GET["action"] == "unblock") {
+} elseif($_POST["action"] == "unblock") {
 	$blockedIds = PrivateMessaging::getUsersPMBlockedList($_COOKIE["id_env"]);
 	MiscFunctions::deleteWhiteIndex($blockedIds);
 	$keep = array();
@@ -124,7 +123,7 @@ if ($_GET["action"] == "add") {
 					echo "</td>";
 					MiscFunctions::echoTableFooter(SKIN_DIR);
 }
-if ($_GET["action"] == "") {
+if ($_GET["action"] == "" || 1==1) {
 	$where = "<a href='pmsystem.php'>Private Msg</a> ".$_CONFIG["where_sep"]." Manage Blocked Users";
 	require_once('./includes/header.php');
 	if (!isset($echo)) $echo = "<br />";
@@ -142,10 +141,10 @@ if ($_GET["action"] == "") {
 	MiscFunctions::echoTableHeading(str_replace($_CONFIG["where_sep"], $_CONFIG["table_sep"], $where), $_CONFIG);
 	echo "
 				<tr>
-					<th style='width:80%'><font face='$font_face' size='$font_m' color='$font_color_header'>Users</th>
-					<th style='width:20%;text-align:center;>UnBlock?</th>
+					<th style='width:80%'><font face='$font_face' size='$font_m' color='$font_color_header'>Users</font></th>
+					<th style='width:20%;text-align:center;'>UnBlock?</th>
 				</tr>
-			<	form action='$PHP_SELF' method='POST' onSubmit='submitonce(this)' enctype='multipart/form-data'><input type='hidden' name='action' value='unban'>";
+			<form action='$PHP_SELF' method='POST' onSubmit='submitonce(this)' enctype='multipart/form-data'><input type='hidden' name='action' value='unblock'>";
 	$none = 0;
 	$count = 0;
 	if (FALSE !== ($blockedIds = PrivateMessaging::getUsersPMBlockedList($_COOKIE["id_env"]))) {

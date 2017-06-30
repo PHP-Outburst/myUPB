@@ -71,8 +71,9 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 	}
 	if (!isset($pmRec) || $pmRec == "" || !is_array($pmRec)) $pmRec = $PrivMsg->get("CuBox", $_GET["id"]);
 	$user = $tdb->get("users", $pmRec[0][$users_id]);
+
 	if ($_GET["section"] == "inbox") {
-		if(in_array($_COOKIE['id_env'], getUsersPMBlockedList($pmRec[0][$users_id]))) $reply_disabled = " DISABLED";
+		if(in_array($_COOKIE['id_env'], PrivateMessaging::getUsersPMBlockedList($pmRec[0][$users_id]))) $reply_disabled = " DISABLED";
 		else $reply_disabled = '';
 		if($user[0]['level'] > 1) $block_disabled = " DISABLED";
 		else $block_disabled = "";
@@ -105,7 +106,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 	echo "
 			<tr>
 				<th style='width:15%;'><div class='post_name'><a href='profile.php?action=get&id=".$user[0]["id"]."'>".$user[0]["user_name"]."</a></div></th>
-				<th style='width:85%;'><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pmRec[0]["icon"]."' alt='' title='' /></div><div style='line-height:15px;margin-right:4px;'>&nbsp;&nbsp;PM Sent: ".gmdate("M d, Y g:i:s a", user_date($pmRec[0]["date"]))."</div></th>
+				<th style='width:85%;'><div style='float:left;'><img src='".SKIN_DIR."/icons/post_icons/".$pmRec[0]["icon"]."' alt='' title='' /></div><div style='line-height:15px;margin-right:4px;'>&nbsp;&nbsp;PM Sent: ".gmdate("M d, Y g:i:s a", DateCustom::user_date($pmRec[0]["date"]))."</div></th>
 			</tr>
 				<tr>
 					<td class='area_1' valign='top'>";
@@ -117,7 +118,7 @@ if ($tdb->is_logged_in() && isset($_GET["id"]) && is_numeric($_GET["id"]) && ($_
 							<strong>Posts:</strong> ".$user[0]["posts"]."
 							<br />
 							<strong>Registered:</strong><br />
-							".gmdate("Y-m-d", user_date($user[0]["date_added"]))."
+							".gmdate("Y-m-d", DateCustom::user_date($user[0]["date_added"]))."
 						</div>
 						<br />
 						<div class='post_info_extra'>";
