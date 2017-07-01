@@ -1,4 +1,35 @@
-This is the changelog for this product's working copy.
+v2.2.8 Changelog - unreleased (still in development)
+
+== IMPORTANT ==
+# This version is still in development and it may be unstable.
+
+
+== SECURITY FIX ==
+# Replaced old captcha with cool-php-captcha
+# Fixed CVE-2015-2217 - XSS vulnerabilities on search page and in avatar upload
+# Fixed user-input sanitization (in progress)
+
+
+== BUG FIXES ==
+# Fixed underlining in Firefox
+# Added missing smilies
+# PHP7 support
+# Fixed Private Messages system & unblocking
+# Fixed built-in avatar chooser
+
+
+== NEW FEATURES ==
+# Now using HTML5 and CSS3
+# Added composer
+# Removed Smarty
+
+
+== SKIN CHANGES ==
+# add info about what have been moved from html to css maybe
+
+
+
+-------------------------
 
 v2.2.7 Changelog - 23/12/2010
 
