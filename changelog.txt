@@ -6,7 +6,7 @@ v2.2.8 Changelog - unreleased (still in development)
 
 == SECURITY FIX ==
 # Replaced old captcha with cool-php-captcha
-# Fixed XSS in search
+# Fixed CVE-2015-2217 - XSS vulnerabilities on search page and in avatar upload
 # Fixed user-input sanitization (in progress)
 
 
