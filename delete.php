@@ -28,14 +28,17 @@ if ($_GET["t"] == 1) {
 
 			foreach($p_ids as $p_id) {
 				$pRec = $post_tdb->get('posts', $p_id);
-					
-				$upload_ids = explode(",",$pRec[0]['upload_id']);
+
+				$upload_ids = [];
+				if($pRec[0]['upload_id']!="") {
+					$upload_ids = explode(",",$pRec[0]['upload_id']);
+				}
 
 				$upload = new Upload(DB_DIR, $_CONFIG["fileupload_size"],$_CONFIG["fileupload_location"]);
 
 				foreach ($upload_ids as $upload_id)
-				$upload->deleteFile($upload_id);
-				 
+					$upload->deleteFile($upload_id);
+
 				if (!isset($subtract_user_post_count[$pRec[0]['user_id']])) {
 					$subtract_user_post_count[$pRec[0]['user_id']] = 1;
 				}

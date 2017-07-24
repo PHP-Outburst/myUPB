@@ -28,7 +28,7 @@ class Upload extends Tdb
         $this->initialized = false;
         $this->uploadLoc = $uploadLoc;
         // Initialize the TextDb object
-        $this->tdb($dir . '/', 'main.tdb');
+        parent::__construct($dir . '/', 'main.tdb');
 
         // Check if the upload mod has been installed
         if (!file_exists($dir . '/main_uploads.ta'))
