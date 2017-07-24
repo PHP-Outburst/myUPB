@@ -16,6 +16,7 @@ v2.2.8 Changelog - unreleased (still in development)
 # PHP7 support
 # Fixed Private Messages system & unblocking
 # Fixed built-in avatar chooser
+# Fixed removing topics with no files in them
 
 
 == NEW FEATURES ==
