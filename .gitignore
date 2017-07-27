@@ -3,9 +3,11 @@
 *.ta
 *.dat
 *.tdb
+*.kdev4
 data_*/
 uploads_*/
 .idea/
+.kdev4/
 config.php
 composer.lock
 vendor/.git #not sure why this was added
