@@ -1067,6 +1067,12 @@ function changeCheckboxValue(checked, object) {
                     }
                 }
 
+function check_all_confirm(object) {
+    var checkboxes=document.getElementsByName("id[]");
+    var checked = object.checked;
+    checkboxes.forEach(function(checkbox) { checkbox.checked = checked });
+}
+
 function replaceSubstring(inputString, fromString, toString) {
       var temp = inputString;
    if (fromString == "") {
