@@ -17,7 +17,8 @@ v2.2.8 Changelog - unreleased (still in development)
 # Fixed Private Messages system & unblocking
 # Fixed built-in avatar chooser
 # Fixed removing topics with no files in them
-# fixed checkbox in manage users
+# Fixed checkbox in manage users
+# New youtube embedding code (#54)
 
 
 == NEW FEATURES ==
